@@ -78,8 +78,8 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 	int i;
 	for (i=0; i<sampleFrames; i++)
 	{
-		*out1 = *in1 + AWGN_generator() / 32767.0f;
-		*out2 = *in2 + AWGN_generator() / 32767.0f;
+		*out1 = *in1 + AWGN_generator() / 65536;
+		*out2 = *in2 + AWGN_generator() / 65536;
 		*in1++;
 		*in2++;
 		*out1++;
