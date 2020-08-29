@@ -7,11 +7,57 @@
 #endif
 
 AWGNDither::AWGNDither (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 0, 0)
+: AudioEffectX (audioMaster, 0, 1)
 {
 	// init
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
+	BitDepth = 0.5;
+}
+
+void AWGNDither::setParameter (VstInt32 index, float value)
+{
+	BitDepth = value;
+}
+
+void AWGNDither::setParameterAutomated (VstInt32 index, float value)
+{
+	BitDepth = value;
+}
+
+float AWGNDither::getParameter (VstInt32 index)
+{
+	return BitDepth;
+}
+
+void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
+{
+	if (BitDepth >= 0.0 && BitDepth <= 0.25)
+	{
+		strcpy (text, "8");
+	}
+	else if (BitDepth >= 0.25 && BitDepth <= 0.5)
+	{
+		strcpy (text, "16");
+	}
+	else if (BitDepth >= 0.5 && BitDepth <= 0.75)
+	{
+		strcpy (text, "24");
+	}
+	else if (BitDepth >= 0.75 && BitDepth <= 1.0)
+	{
+		strcpy (text, "32");
+	}
+}
+
+void AWGNDither::getParameterLabel (VstInt32 index, char* label)
+{
+	strcpy (label, "Bits");
+}
+
+void AWGNDither::getParameterName (VstInt32 index, char* text)
+{
+	strcpy (text, "BitDepth");
 }
 
 bool AWGNDither::getEffectName (char* name)
@@ -78,8 +124,26 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 	int i;
 	for (i=0; i<sampleFrames; i++)
 	{
-		*out1 = *in1 + AWGN_generator() / 65536;
-		*out2 = *in2 + AWGN_generator() / 65536;
+		if (BitDepth >= 0.0 && BitDepth <= 0.25)
+		{
+			*out1 = *in1 + AWGN_generator() / 256;
+			*out2 = *in2 + AWGN_generator() / 256;
+		}
+		else if (BitDepth >= 0.25 && BitDepth <= 0.5)
+		{
+			*out1 = *in1 + AWGN_generator() / 65536;
+			*out2 = *in2 + AWGN_generator() / 65536;
+		}
+		else if (BitDepth >= 0.5 && BitDepth <= 0.75)
+		{
+			*out1 = *in1 + AWGN_generator() / 16777216;
+			*out2 = *in2 + AWGN_generator() / 16777216;
+		}
+		else if (BitDepth >= 0.75 && BitDepth <= 1.0)
+		{
+			*out1 = *in1 + AWGN_generator() / 4294967296;
+			*out2 = *in2 + AWGN_generator() / 4294967296;
+		}
 		*in1++;
 		*in2++;
 		*out1++;
