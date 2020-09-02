@@ -9,6 +9,7 @@ enum
 	kDither,
 	kQuantize,
 	kOnlyError,
+	kAutoDither,
 	kNumParams
 };
 
@@ -35,6 +36,7 @@ private:
 	float Dither;
 	float Quantize;
 	float OnlyError;
+	float AutoDither;
 	float AWGN_generator();
 };
 

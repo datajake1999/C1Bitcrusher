@@ -16,6 +16,7 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	Dither = 1;
 	Quantize = 0;
 	OnlyError = 0;
+	AutoDither = 0;
 }
 
 void AWGNDither::setParameter (VstInt32 index, float value)
@@ -37,6 +38,10 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	else if (index == kOnlyError)
 	{
 		OnlyError = value;
+	}
+	else if (index == kAutoDither)
+	{
+		AutoDither = value;
 	}
 }
 
@@ -60,6 +65,10 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		OnlyError = value;
 	}
+	else if (index == kAutoDither)
+	{
+		AutoDither = value;
+	}
 }
 
 float AWGNDither::getParameter (VstInt32 index)
@@ -79,6 +88,10 @@ float AWGNDither::getParameter (VstInt32 index)
 	else if (index == kOnlyError)
 	{
 		return OnlyError;
+	}
+	else if (index == kAutoDither)
+	{
+		return AutoDither;
 	}
 	return 0;
 }
@@ -122,6 +135,17 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kAutoDither)
+	{
+		if (AutoDither >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 }
 
 void AWGNDither::getParameterLabel (VstInt32 index, char* label)
@@ -149,6 +173,10 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	else if (index == kOnlyError)
 	{
 		strcpy (text, "OnlyError");
+	}
+	else if (index == kAutoDither)
+	{
+		strcpy (text, "AutoDither");
 	}
 }
 
@@ -221,10 +249,24 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 		if (Dither >= 0.5)
 		{
 			float noise[2];
-			noise[0] = AWGN_generator() / powf(2, BitDepth);
-			*out1 = *in1 + noise[0];
-			noise[1] = AWGN_generator() / powf(2, BitDepth);
-			*out2 = *in2 + noise[1];
+			if (*out1 == 0 && AutoDither >= 0.5)
+			{
+				noise[0] = 0;
+			}
+			else
+			{
+				noise[0] = AWGN_generator() / powf(2, BitDepth);
+			}
+			*out1 = *out1 + noise[0];
+			if (*out2 == 0 && AutoDither >= 0.5)
+			{
+				noise[1] = 0;
+			}
+			else
+			{
+				noise[1] = AWGN_generator() / powf(2, BitDepth);
+			}
+			*out2 = *out2 + noise[1];
 		}
 		if (Quantize >= 0.5)
 		{
