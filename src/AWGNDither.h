@@ -8,6 +8,7 @@ enum
 	kBitDepth = 0,
 	kDither,
 	kQuantize,
+	kOnlyError,
 	kNumParams
 };
 
@@ -33,6 +34,7 @@ private:
 	float BitDepth;
 	float Dither;
 	float Quantize;
+	float OnlyError;
 	float AWGN_generator();
 };
 

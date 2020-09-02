@@ -15,6 +15,7 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	BitDepth = 16;
 	Dither = 1;
 	Quantize = 0;
+	OnlyError = 0;
 }
 
 void AWGNDither::setParameter (VstInt32 index, float value)
@@ -32,6 +33,10 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	else if (index == kQuantize)
 	{
 		Quantize = value;
+	}
+	else if (index == kOnlyError)
+	{
+		OnlyError = value;
 	}
 }
 
@@ -51,6 +56,10 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		Quantize = value;
 	}
+	else if (index == kOnlyError)
+	{
+		OnlyError = value;
+	}
 }
 
 float AWGNDither::getParameter (VstInt32 index)
@@ -66,6 +75,10 @@ float AWGNDither::getParameter (VstInt32 index)
 	else if (index == kQuantize)
 	{
 		return Quantize;
+	}
+	else if (index == kOnlyError)
+	{
+		return OnlyError;
 	}
 	return 0;
 }
@@ -98,6 +111,17 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kOnlyError)
+	{
+		if (OnlyError >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 }
 
 void AWGNDither::getParameterLabel (VstInt32 index, char* label)
@@ -121,6 +145,10 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	else if (index == kQuantize)
 	{
 		strcpy (text, "Quantize");
+	}
+	else if (index == kOnlyError)
+	{
+		strcpy (text, "OnlyError");
 	}
 }
 
@@ -212,7 +240,14 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			quantized[0] = *out1 * (powf(2, BitDepth) / 2);
 			quantized[0] = floorf(quantized[0]);
 			quantized[0] = quantized[0] / (powf(2, BitDepth) / 2);
-			*out1 = quantized[0];
+			if (OnlyError >= 0.5)
+			{
+				*out1 = *out1 - quantized[0];
+			}
+			else
+			{
+				*out1 = quantized[0];
+			}
 			if (*out2 > 1.0)
 			{
 				*out2 = 1.0;
@@ -224,7 +259,14 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			quantized[1] = *out2 * (powf(2, BitDepth) / 2);
 			quantized[1] = floorf(quantized[1]);
 			quantized[1] = quantized[1] / (powf(2, BitDepth) / 2);
-			*out2 = quantized[1];
+			if (OnlyError >= 0.5)
+			{
+				*out2 = *out2 - quantized[1];
+			}
+			else
+			{
+				*out2 = quantized[1];
+			}
 		}
 		*in1++;
 		*in2++;
