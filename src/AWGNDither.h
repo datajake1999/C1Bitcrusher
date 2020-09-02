@@ -10,6 +10,9 @@ enum
 	kQuantize,
 	kOnlyError,
 	kAutoDither,
+	kInGain,
+	kOutGain,
+	kDitherGain,
 	kNumParams
 };
 
@@ -37,6 +40,9 @@ private:
 	float Quantize;
 	float OnlyError;
 	float AutoDither;
+	float InGain;
+	float OutGain;
+	float DitherGain;
 	float AWGN_generator();
 };
 

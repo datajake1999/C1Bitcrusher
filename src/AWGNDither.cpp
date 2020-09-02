@@ -17,6 +17,9 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	Quantize = 0;
 	OnlyError = 0;
 	AutoDither = 0;
+	InGain = 1;
+	OutGain = 1;
+	DitherGain = 1;
 }
 
 void AWGNDither::setParameter (VstInt32 index, float value)
@@ -42,6 +45,18 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	else if (index == kAutoDither)
 	{
 		AutoDither = value;
+	}
+	else if (index == kInGain)
+	{
+		InGain = value;
+	}
+	else if (index == kOutGain)
+	{
+		OutGain = value;
+	}
+	else if (index == kDitherGain)
+	{
+		DitherGain = value;
 	}
 }
 
@@ -69,6 +84,18 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		AutoDither = value;
 	}
+	else if (index == kInGain)
+	{
+		InGain = value;
+	}
+	else if (index == kOutGain)
+	{
+		OutGain = value;
+	}
+	else if (index == kDitherGain)
+	{
+		DitherGain = value;
+	}
 }
 
 float AWGNDither::getParameter (VstInt32 index)
@@ -92,6 +119,18 @@ float AWGNDither::getParameter (VstInt32 index)
 	else if (index == kAutoDither)
 	{
 		return AutoDither;
+	}
+	else if (index == kInGain)
+	{
+		return InGain;
+	}
+	else if (index == kOutGain)
+	{
+		return OutGain;
+	}
+	else if (index == kDitherGain)
+	{
+		return DitherGain;
 	}
 	return 0;
 }
@@ -146,6 +185,18 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kInGain)
+	{
+		float2string (InGain, text, kVstMaxParamStrLen);
+	}
+	else if (index == kOutGain)
+	{
+		float2string (OutGain, text, kVstMaxParamStrLen);
+	}
+	else if (index == kDitherGain)
+	{
+		float2string (DitherGain, text, kVstMaxParamStrLen);
+	}
 }
 
 void AWGNDither::getParameterLabel (VstInt32 index, char* label)
@@ -153,6 +204,18 @@ void AWGNDither::getParameterLabel (VstInt32 index, char* label)
 	if (index == kBitDepth)
 	{
 		strcpy (label, "Bits");
+	}
+	else if (index == kInGain)
+	{
+		strcpy (label, "F");
+	}
+	else if (index == kOutGain)
+	{
+		strcpy (label, "F");
+	}
+	else if (index == kDitherGain)
+	{
+		strcpy (label, "F");
 	}
 }
 
@@ -177,6 +240,18 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	else if (index == kAutoDither)
 	{
 		strcpy (text, "AutoDither");
+	}
+	else if (index == kInGain)
+	{
+		strcpy (text, "InGain");
+	}
+	else if (index == kOutGain)
+	{
+		strcpy (text, "OutGain");
+	}
+	else if (index == kDitherGain)
+	{
+		strcpy (text, "DitherGain");
 	}
 }
 
@@ -244,8 +319,8 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 	int i;
 	for (i=0; i<sampleFrames; i++)
 	{
-		*out1 = *in1;
-		*out2 = *in2;
+		*out1 = *in1 * InGain;
+		*out2 = *in2 * InGain;
 		if (Dither >= 0.5)
 		{
 			float noise[2];
@@ -257,6 +332,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				noise[0] = AWGN_generator() / powf(2, BitDepth);
 			}
+			noise[0] = noise[0] * DitherGain;
 			*out1 = *out1 + noise[0];
 			if (*out2 == 0 && AutoDither >= 0.5)
 			{
@@ -266,6 +342,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				noise[1] = AWGN_generator() / powf(2, BitDepth);
 			}
+			noise[1] = noise[1] * DitherGain;
 			*out2 = *out2 + noise[1];
 		}
 		if (Quantize >= 0.5)
@@ -310,6 +387,8 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 				*out2 = quantized[1];
 			}
 		}
+		*out1 = *out1 * OutGain;
+		*out2 = *out2 * OutGain;
 		*in1++;
 		*in2++;
 		*out1++;
