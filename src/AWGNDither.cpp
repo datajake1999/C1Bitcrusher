@@ -164,8 +164,11 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 		*out2 = *in2;
 		if (Dither >= 0.5)
 		{
-			*out1 = *in1 + AWGN_generator() / powf(2, BitDepth);
-			*out2 = *in2 + AWGN_generator() / powf(2, BitDepth);
+			float noise[2];
+			noise[0] = AWGN_generator() / powf(2, BitDepth);
+			*out1 = *in1 + noise[0];
+			noise[1] = AWGN_generator() / powf(2, BitDepth);
+			*out2 = *in2 + noise[1];
 		}
 		*in1++;
 		*in2++;
