@@ -7,6 +7,7 @@ enum
 {
 	kBitDepth = 0,
 	kDither,
+	kQuantize,
 	kNumParams
 };
 
@@ -31,6 +32,7 @@ public:
 private:
 	float BitDepth;
 	float Dither;
+	float Quantize;
 	float AWGN_generator();
 };
 
