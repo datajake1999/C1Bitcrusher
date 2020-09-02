@@ -7,46 +7,93 @@
 #endif
 
 AWGNDither::AWGNDither (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 0, 1)
+: AudioEffectX (audioMaster, 0, kNumParams)
 {
 	// init
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	BitDepth = 16;
+	Dither = 1;
 }
 
 void AWGNDither::setParameter (VstInt32 index, float value)
 {
-	BitDepth = value*32;
-	if (BitDepth > 32) BitDepth = 32;
-	else if (BitDepth < 1) BitDepth = 1;
+	if (index == kBitDepth)
+	{
+		BitDepth = value*32;
+		if (BitDepth > 32) BitDepth = 32;
+		else if (BitDepth < 1) BitDepth = 1;
+	}
+	else if (index == kDither)
+	{
+		Dither = value;
+	}
 }
 
 void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 {
-	BitDepth = value*32;
-	if (BitDepth > 32) BitDepth = 32;
-	else if (BitDepth < 1) BitDepth = 1;
+	if (index == kBitDepth)
+	{
+		BitDepth = value*32;
+		if (BitDepth > 32) BitDepth = 32;
+		else if (BitDepth < 1) BitDepth = 1;
+	}
+	else if (index == kDither)
+	{
+		Dither = value;
+	}
 }
 
 float AWGNDither::getParameter (VstInt32 index)
 {
-	return BitDepth/32;
+	if (index == kBitDepth)
+	{
+		return BitDepth/32;
+	}
+	else if (index == kDither)
+	{
+		return Dither;
+	}
+	return 0;
 }
 
 void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 {
-	float2string (BitDepth, text, kVstMaxParamStrLen);
+	if (index == kBitDepth)
+	{
+		float2string (BitDepth, text, kVstMaxParamStrLen);
+	}
+	else if (index == kDither)
+	{
+		if (Dither >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 }
 
 void AWGNDither::getParameterLabel (VstInt32 index, char* label)
 {
-	strcpy (label, "Bits");
+	if (index == kBitDepth)
+	{
+		strcpy (label, "Bits");
+	}
 }
 
 void AWGNDither::getParameterName (VstInt32 index, char* text)
 {
-	strcpy (text, "BitDepth");
+	if (index == kBitDepth)
+	{
+		strcpy (text, "BitDepth");
+	}
+	else if (index == kDither)
+	{
+		strcpy (text, "Dither");
+	}
 }
 
 bool AWGNDither::getEffectName (char* name)
@@ -113,8 +160,13 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 	int i;
 	for (i=0; i<sampleFrames; i++)
 	{
-		*out1 = *in1 + AWGN_generator() / powf(2, BitDepth);
-		*out2 = *in2 + AWGN_generator() / powf(2, BitDepth);
+		*out1 = *in1;
+		*out2 = *in2;
+		if (Dither >= 0.5)
+		{
+			*out1 = *in1 + AWGN_generator() / powf(2, BitDepth);
+			*out2 = *in2 + AWGN_generator() / powf(2, BitDepth);
+		}
 		*in1++;
 		*in2++;
 		*out1++;

@@ -3,6 +3,13 @@
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 
+enum
+{
+	kBitDepth = 0,
+	kDither,
+	kNumParams
+};
+
 class AWGNDither;
 
 class AWGNDither : public AudioEffectX
@@ -23,6 +30,7 @@ public:
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 private:
 	float BitDepth;
+	float Dither;
 	float AWGN_generator();
 };
 
