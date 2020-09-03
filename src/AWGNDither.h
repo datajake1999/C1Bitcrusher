@@ -44,6 +44,9 @@ private:
 	float OutGain;
 	float DitherGain;
 	float AWGN_generator();
+	float noise[2];
+	float quantized[2];
+	float error[2];
 };
 
 #endif

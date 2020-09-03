@@ -323,7 +323,6 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 		*out2 = *in2 * InGain;
 		if (Dither >= 0.5)
 		{
-			float noise[2];
 			if (*out1 == 0 && AutoDither >= 0.5)
 			{
 				noise[0] = 0;
@@ -347,8 +346,6 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 		}
 		if (Quantize >= 0.5)
 		{
-			float quantized[2];
-			float error[2];
 			if (*out1 > 1.0)
 			{
 				*out1 = 1.0;
