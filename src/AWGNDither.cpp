@@ -420,7 +420,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			quantized[0] = *out1 * (powf(2, BitDepth) / 2);
 			quantized[0] = floorf(quantized[0]);
 			quantized[0] = quantized[0] / (powf(2, BitDepth) / 2);
-			error[0] = *out1 - quantized[0];
+			error[0] = quantized[0] - *out1;
 			if (OnlyError >= 0.5)
 			{
 				*out1 = error[0];
@@ -444,7 +444,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			quantized[1] = *out2 * (powf(2, BitDepth) / 2);
 			quantized[1] = floorf(quantized[1]);
 			quantized[1] = quantized[1] / (powf(2, BitDepth) / 2);
-			error[1] = *out2 - quantized[1];
+			error[1] = quantized[1] - *out2;
 			if (OnlyError >= 0.5)
 			{
 				*out2 = error[1];
