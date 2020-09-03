@@ -20,6 +20,12 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	InGain = 1;
 	OutGain = 1;
 	DitherGain = 1;
+	noise[0] = 0;
+	noise[1] = 0;
+	quantized[0] = 0;
+	quantized[1] = 0;
+	error[0] = 0;
+	error[1] = 0;
 }
 
 void AWGNDither::setParameter (VstInt32 index, float value)
