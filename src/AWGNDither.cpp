@@ -14,12 +14,14 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	setNumOutputs (2);	// stereo output
 	BitDepth = 16;
 	Dither = 1;
+	NoiseShaping = 0;
 	Quantize = 0;
 	OnlyError = 0;
 	AutoDither = 0;
 	InGain = 1;
 	OutGain = 1;
 	DitherGain = 1;
+	NoiseShapingGain = 1;
 	noise[0] = 0;
 	noise[1] = 0;
 	quantized[0] = 0;
@@ -40,6 +42,10 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	{
 		Dither = value;
 	}
+	else if (index == kNoiseShaping)
+	{
+		NoiseShaping = value;
+	}
 	else if (index == kQuantize)
 	{
 		Quantize = value;
@@ -63,6 +69,10 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	else if (index == kDitherGain)
 	{
 		DitherGain = value;
+	}
+	else if (index == kNoiseShapingGain)
+	{
+		NoiseShapingGain = value;
 	}
 }
 
@@ -78,6 +88,10 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		Dither = value;
 	}
+	else if (index == kNoiseShaping)
+	{
+		NoiseShaping = value;
+	}
 	else if (index == kQuantize)
 	{
 		Quantize = value;
@@ -102,6 +116,10 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		DitherGain = value;
 	}
+	else if (index == kNoiseShapingGain)
+	{
+		NoiseShapingGain = value;
+	}
 }
 
 float AWGNDither::getParameter (VstInt32 index)
@@ -113,6 +131,10 @@ float AWGNDither::getParameter (VstInt32 index)
 	else if (index == kDither)
 	{
 		return Dither;
+	}
+	else if (index == kNoiseShaping)
+	{
+		return NoiseShaping;
 	}
 	else if (index == kQuantize)
 	{
@@ -138,6 +160,10 @@ float AWGNDither::getParameter (VstInt32 index)
 	{
 		return DitherGain;
 	}
+	else if (index == kNoiseShapingGain)
+	{
+		return NoiseShapingGain;
+	}
 	return 0;
 }
 
@@ -150,6 +176,17 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 	else if (index == kDither)
 	{
 		if (Dither >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
+	else if (index == kNoiseShaping)
+	{
+		if (NoiseShaping >= 0.5)	
 		{
 			strcpy (text, "ON");
 		}
@@ -203,6 +240,10 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 	{
 		float2string (DitherGain, text, kVstMaxParamStrLen);
 	}
+	else if (index == kNoiseShapingGain)
+	{
+		float2string (NoiseShapingGain, text, kVstMaxParamStrLen);
+	}
 }
 
 void AWGNDither::getParameterLabel (VstInt32 index, char* label)
@@ -223,6 +264,10 @@ void AWGNDither::getParameterLabel (VstInt32 index, char* label)
 	{
 		strcpy (label, "F");
 	}
+	else if (index == kNoiseShapingGain)
+	{
+		strcpy (label, "F");
+	}
 }
 
 void AWGNDither::getParameterName (VstInt32 index, char* text)
@@ -234,6 +279,10 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	else if (index == kDither)
 	{
 		strcpy (text, "Dither");
+	}
+	else if (index == kNoiseShaping)
+	{
+		strcpy (text, "NoiseShaping");
 	}
 	else if (index == kQuantize)
 	{
@@ -258,6 +307,10 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	else if (index == kDitherGain)
 	{
 		strcpy (text, "DitherGain");
+	}
+	else if (index == kNoiseShapingGain)
+	{
+		strcpy (text, "NoiseShapingGain");
 	}
 }
 
@@ -360,6 +413,10 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				*out1 = -1.0;
 			}
+			if (NoiseShaping >= 0.5)
+			{
+				*out1 = *out1 + error[0] * NoiseShapingGain;
+			}
 			quantized[0] = *out1 * (powf(2, BitDepth) / 2);
 			quantized[0] = floorf(quantized[0]);
 			quantized[0] = quantized[0] / (powf(2, BitDepth) / 2);
@@ -379,6 +436,10 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			else if (*out2 < -1.0)
 			{
 				*out2 = -1.0;
+			}
+			if (NoiseShaping >= 0.5)
+			{
+				*out2 = *out2 + error[1] * NoiseShapingGain;
 			}
 			quantized[1] = *out2 * (powf(2, BitDepth) / 2);
 			quantized[1] = floorf(quantized[1]);

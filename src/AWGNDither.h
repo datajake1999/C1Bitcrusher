@@ -7,12 +7,14 @@ enum
 {
 	kBitDepth = 0,
 	kDither,
+	kNoiseShaping,
 	kQuantize,
 	kOnlyError,
 	kAutoDither,
 	kInGain,
 	kOutGain,
 	kDitherGain,
+	kNoiseShapingGain,
 	kNumParams
 };
 
@@ -37,12 +39,14 @@ public:
 private:
 	float BitDepth;
 	float Dither;
+	float NoiseShaping;
 	float Quantize;
 	float OnlyError;
 	float AutoDither;
 	float InGain;
 	float OutGain;
 	float DitherGain;
+	float NoiseShapingGain;
 	float AWGN_generator();
 	float noise[2];
 	float quantized[2];
