@@ -405,6 +405,10 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 		}
 		if (Quantize >= 0.5)
 		{
+			if (NoiseShaping >= 0.5)
+			{
+				*out1 = *out1 - error[0] * NoiseShapingGain;
+			}
 			if (*out1 > 1.0)
 			{
 				*out1 = 1.0;
@@ -412,10 +416,6 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			else if (*out1 < -1.0)
 			{
 				*out1 = -1.0;
-			}
-			if (NoiseShaping >= 0.5)
-			{
-				*out1 = *out1 - error[0] * NoiseShapingGain;
 			}
 			quantized[0] = *out1 * (powf(2, BitDepth) / 2);
 			quantized[0] = floorf(quantized[0]);
@@ -429,6 +429,10 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				*out1 = quantized[0];
 			}
+			if (NoiseShaping >= 0.5)
+			{
+				*out2 = *out2 - error[1] * NoiseShapingGain;
+			}
 			if (*out2 > 1.0)
 			{
 				*out2 = 1.0;
@@ -436,10 +440,6 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			else if (*out2 < -1.0)
 			{
 				*out2 = -1.0;
-			}
-			if (NoiseShaping >= 0.5)
-			{
-				*out2 = *out2 - error[1] * NoiseShapingGain;
 			}
 			quantized[1] = *out2 * (powf(2, BitDepth) / 2);
 			quantized[1] = floorf(quantized[1]);
