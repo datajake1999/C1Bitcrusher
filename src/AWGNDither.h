@@ -48,6 +48,7 @@ private:
 	float DitherGain;
 	float NoiseShapingGain;
 	float AWGN_generator();
+	float QuantizeSample(float sample, float depth);
 	float noise[2];
 	float quantized[2];
 	float error[2];
