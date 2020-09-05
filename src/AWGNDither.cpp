@@ -369,20 +369,25 @@ float AWGNDither::AWGN_generator()
 
 }// end AWGN_generator()
 
+float AWGNDither::LimitSample(float sample, float value)
+{
+	if (sample > value)
+	{
+		sample = value;
+	}
+	else if (sample < value * -1)
+	{
+		sample = value * -1;
+	}
+	return sample;
+}
+
 float AWGNDither::QuantizeSample(float sample, float depth)
 {
-	if (sample > 1.0)
-	{
-		sample = 1.0;
-	}
-	else if (sample < -1.0)
-	{
-		sample = -1.0;
-	}
-	float quantized = sample * (powf(2, depth) / 2);
-	quantized = floorf(quantized);
-	quantized = quantized / (powf(2, depth) / 2);
-	return quantized;
+	sample = sample * (powf(2, depth) / 2);
+	sample = floorf(sample);
+	sample = sample / (powf(2, depth) / 2);
+	return sample;
 }
 
 void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
@@ -425,6 +430,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				*out1 = *out1 - error[0] * NoiseShapingGain;
 			}
+			*out1 = LimitSample(*out1, 1.0);
 			quantized[0] = QuantizeSample(*out1, BitDepth);
 			error[0] = quantized[0] - *out1;
 			if (OnlyError >= 0.5)
@@ -439,6 +445,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				*out2 = *out2 - error[1] * NoiseShapingGain;
 			}
+			*out2 = LimitSample(*out2, 1.0);
 			quantized[1] = QuantizeSample(*out2, BitDepth);
 			error[1] = quantized[1] - *out2;
 			if (OnlyError >= 0.5)
