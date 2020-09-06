@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#ifndef __AWGNDither__
-#include "AWGNDither.h"
+#ifndef __C1Bitcrusher__
+#include "C1Bitcrusher.h"
 #endif
 
-AWGNDither::AWGNDither (audioMasterCallback audioMaster)
+C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, 0, kNumParams)
 {
 	// init
@@ -33,7 +33,7 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	error[1] = 0;
 }
 
-void AWGNDither::setParameter (VstInt32 index, float value)
+void C1Bitcrusher::setParameter (VstInt32 index, float value)
 {
 	if (index == kBitDepth)
 	{
@@ -91,7 +91,7 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	}
 }
 
-void AWGNDither::setParameterAutomated (VstInt32 index, float value)
+void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 {
 	if (index == kBitDepth)
 	{
@@ -149,7 +149,7 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	}
 }
 
-float AWGNDither::getParameter (VstInt32 index)
+float C1Bitcrusher::getParameter (VstInt32 index)
 {
 	if (index == kBitDepth)
 	{
@@ -206,7 +206,7 @@ float AWGNDither::getParameter (VstInt32 index)
 	return 0;
 }
 
-void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
+void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 {
 	if (index == kBitDepth)
 	{
@@ -315,7 +315,7 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 	}
 }
 
-void AWGNDither::getParameterLabel (VstInt32 index, char* label)
+void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 {
 	if (index == kBitDepth)
 	{
@@ -343,7 +343,7 @@ void AWGNDither::getParameterLabel (VstInt32 index, char* label)
 	}
 }
 
-void AWGNDither::getParameterName (VstInt32 index, char* text)
+void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 {
 	if (index == kBitDepth)
 	{
@@ -399,37 +399,37 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	}
 }
 
-bool AWGNDither::getEffectName (char* name)
+bool C1Bitcrusher::getEffectName (char* name)
 {
-	strcpy (name, "AWGNDither");
+	strcpy (name, "C1Bitcrusher");
 	return true;
 }
 
-bool AWGNDither::getProductString (char* text)
+bool C1Bitcrusher::getProductString (char* text)
 {
-	strcpy (text, "AWGNDither");
+	strcpy (text, "C1Bitcrusher");
 	return true;
 }
 
-bool AWGNDither::getVendorString (char* text)
+bool C1Bitcrusher::getVendorString (char* text)
 {
 	strcpy (text, "Datajake");
 	return true;
 }
 
-float AWGNDither::RPDF()
+float C1Bitcrusher::RPDF()
 {
 	return rand() / 12288.0f;
 }
 
-float AWGNDither::TPDF()
+float C1Bitcrusher::TPDF()
 {
 	return RPDF() + RPDF();
 }
 
 #define PI 3.1415926536
 
-float AWGNDither::AWGN_generator()
+float C1Bitcrusher::AWGN_generator()
 {/* Generates additive white Gaussian Noise samples with zero mean and a standard deviation of 1. */
 
 	float temp1;
@@ -464,7 +464,7 @@ float AWGNDither::AWGN_generator()
 
 }// end AWGN_generator()
 
-float AWGNDither::DitherNoise()
+float C1Bitcrusher::DitherNoise()
 {
 	if (DitherType >= 0.0 && DitherType < 0.25)
 	{
@@ -480,7 +480,7 @@ float AWGNDither::DitherNoise()
 	}
 }
 
-float AWGNDither::ClipSample(float sample, float value)
+float C1Bitcrusher::ClipSample(float sample, float value)
 {
 	if (sample > value)
 	{
@@ -493,7 +493,7 @@ float AWGNDither::ClipSample(float sample, float value)
 	return sample;
 }
 
-float AWGNDither::QuantizeSample(float sample, float depth)
+float C1Bitcrusher::QuantizeSample(float sample, float depth)
 {
 	sample = sample * (powf(2, depth) / 2);
 	sample = floorf(sample);
@@ -501,7 +501,7 @@ float AWGNDither::QuantizeSample(float sample, float depth)
 	return sample;
 }
 
-void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
+void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
 {
 	float* in1 = inputs[0];
 	float* in2 = inputs[1];

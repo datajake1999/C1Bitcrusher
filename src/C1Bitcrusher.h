@@ -1,5 +1,5 @@
-#ifndef __AWGNDither__
-#define __AWGNDither__
+#ifndef __C1Bitcrusher__
+#define __C1Bitcrusher__
 
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 
@@ -21,12 +21,12 @@ enum
 	kNumParams
 };
 
-class AWGNDither;
+class C1Bitcrusher;
 
-class AWGNDither : public AudioEffectX
+class C1Bitcrusher : public AudioEffectX
 {
 public:
-	AWGNDither (audioMasterCallback audioMaster);
+	C1Bitcrusher (audioMasterCallback audioMaster);
 	virtual void setParameter (VstInt32 index, float value);
 	virtual void setParameterAutomated (VstInt32 index, float value);
 	virtual float getParameter (VstInt32 index);
