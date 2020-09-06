@@ -18,6 +18,8 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	Quantize = 0;
 	OnlyError = 0;
 	AutoDither = 0;
+	ClipPreQuantization = 1;
+	ClipValue = 1;
 	InGain = 1;
 	OutGain = 1;
 	DitherGain = 1;
@@ -57,6 +59,14 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	else if (index == kAutoDither)
 	{
 		AutoDither = value;
+	}
+	else if (index == kClipPreQuantization)
+	{
+		ClipPreQuantization = value;
+	}
+	else if (index == kClipValue)
+	{
+		ClipValue = value;
 	}
 	else if (index == kInGain)
 	{
@@ -104,6 +114,14 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		AutoDither = value;
 	}
+	else if (index == kClipPreQuantization)
+	{
+		ClipPreQuantization = value;
+	}
+	else if (index == kClipValue)
+	{
+		ClipValue = value;
+	}
 	else if (index == kInGain)
 	{
 		InGain = value;
@@ -147,6 +165,14 @@ float AWGNDither::getParameter (VstInt32 index)
 	else if (index == kAutoDither)
 	{
 		return AutoDither;
+	}
+	else if (index == kClipPreQuantization)
+	{
+		return ClipPreQuantization;
+	}
+	else if (index == kClipValue)
+	{
+		return ClipValue;
 	}
 	else if (index == kInGain)
 	{
@@ -228,6 +254,21 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kClipPreQuantization)
+	{
+		if (ClipPreQuantization >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
+	else if (index == kClipValue)
+	{
+		float2string (ClipValue, text, kVstMaxParamStrLen);
+	}
 	else if (index == kInGain)
 	{
 		float2string (InGain, text, kVstMaxParamStrLen);
@@ -251,6 +292,10 @@ void AWGNDither::getParameterLabel (VstInt32 index, char* label)
 	if (index == kBitDepth)
 	{
 		strcpy (label, "Bits");
+	}
+	else if (index == kClipValue)
+	{
+		strcpy (label, "F");
 	}
 	else if (index == kInGain)
 	{
@@ -295,6 +340,14 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	else if (index == kAutoDither)
 	{
 		strcpy (text, "AutoDither");
+	}
+	else if (index == kClipPreQuantization)
+	{
+		strcpy (text, "ClipPreQuantization");
+	}
+	else if (index == kClipValue)
+	{
+		strcpy (text, "ClipValue");
 	}
 	else if (index == kInGain)
 	{
@@ -369,7 +422,7 @@ float AWGNDither::AWGN_generator()
 
 }// end AWGN_generator()
 
-float AWGNDither::LimitSample(float sample, float value)
+float AWGNDither::ClipSample(float sample, float value)
 {
 	if (sample > value)
 	{
@@ -430,7 +483,10 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				*out1 = *out1 - error[0] * NoiseShapingGain;
 			}
-			*out1 = LimitSample(*out1, 1.0);
+			if (ClipPreQuantization >= 0.5)
+			{
+				*out1 = ClipSample(*out1, ClipValue);
+			}
 			quantized[0] = QuantizeSample(*out1, BitDepth);
 			error[0] = quantized[0] - *out1;
 			if (OnlyError >= 0.5)
@@ -445,7 +501,10 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			{
 				*out2 = *out2 - error[1] * NoiseShapingGain;
 			}
-			*out2 = LimitSample(*out2, 1.0);
+			if (ClipPreQuantization >= 0.5)
+			{
+				*out2 = ClipSample(*out2, ClipValue);
+			}
 			quantized[1] = QuantizeSample(*out2, BitDepth);
 			error[1] = quantized[1] - *out2;
 			if (OnlyError >= 0.5)

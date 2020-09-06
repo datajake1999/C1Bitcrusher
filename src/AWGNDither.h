@@ -11,6 +11,8 @@ enum
 	kQuantize,
 	kOnlyError,
 	kAutoDither,
+	kClipPreQuantization,
+	kClipValue,
 	kInGain,
 	kOutGain,
 	kDitherGain,
@@ -43,12 +45,14 @@ private:
 	float Quantize;
 	float OnlyError;
 	float AutoDither;
+	float ClipPreQuantization;
+	float ClipValue;
 	float InGain;
 	float OutGain;
 	float DitherGain;
 	float NoiseShapingGain;
 	float AWGN_generator();
-	float LimitSample(float sample, float value);
+	float ClipSample(float sample, float value);
 	float QuantizeSample(float sample, float depth);
 	float noise[2];
 	float quantized[2];
