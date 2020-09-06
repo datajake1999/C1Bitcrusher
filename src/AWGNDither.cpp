@@ -14,6 +14,7 @@ AWGNDither::AWGNDither (audioMasterCallback audioMaster)
 	setNumOutputs (2);	// stereo output
 	BitDepth = 16;
 	Dither = 1;
+	DitherType = 1;
 	NoiseShaping = 0;
 	Quantize = 0;
 	OnlyError = 0;
@@ -43,6 +44,10 @@ void AWGNDither::setParameter (VstInt32 index, float value)
 	else if (index == kDither)
 	{
 		Dither = value;
+	}
+	else if (index == kDitherType)
+	{
+		DitherType = value;
 	}
 	else if (index == kNoiseShaping)
 	{
@@ -98,6 +103,10 @@ void AWGNDither::setParameterAutomated (VstInt32 index, float value)
 	{
 		Dither = value;
 	}
+	else if (index == kDitherType)
+	{
+		DitherType = value;
+	}
 	else if (index == kNoiseShaping)
 	{
 		NoiseShaping = value;
@@ -149,6 +158,10 @@ float AWGNDither::getParameter (VstInt32 index)
 	else if (index == kDither)
 	{
 		return Dither;
+	}
+	else if (index == kDitherType)
+	{
+		return DitherType;
 	}
 	else if (index == kNoiseShaping)
 	{
@@ -208,6 +221,21 @@ void AWGNDither::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "OFF");
+		}
+	}
+	else if (index == kDitherType)
+	{
+		if (DitherType >= 0.0 && DitherType < 0.25)	
+		{
+			strcpy (text, "Rectangular");
+		}
+		else if (DitherType >= 0.25 && DitherType < 0.5)	
+		{
+			strcpy (text, "Triangular");
+		}
+		else
+		{
+			strcpy (text, "Gaussian");
 		}
 	}
 	else if (index == kNoiseShaping)
@@ -325,6 +353,10 @@ void AWGNDither::getParameterName (VstInt32 index, char* text)
 	{
 		strcpy (text, "Dither");
 	}
+	else if (index == kDitherType)
+	{
+		strcpy (text, "DitherType");
+	}
 	else if (index == kNoiseShaping)
 	{
 		strcpy (text, "NoiseShaping");
@@ -385,6 +417,16 @@ bool AWGNDither::getVendorString (char* text)
 	return true;
 }
 
+float AWGNDither::RPDF()
+{
+	return rand() / 12288.0f;
+}
+
+float AWGNDither::TPDF()
+{
+	return RPDF() + RPDF();
+}
+
 #define PI 3.1415926536
 
 float AWGNDither::AWGN_generator()
@@ -421,6 +463,22 @@ float AWGNDither::AWGN_generator()
 	return result;	// return the generated random sample to the caller
 
 }// end AWGN_generator()
+
+float AWGNDither::DitherNoise()
+{
+	if (DitherType >= 0.0 && DitherType < 0.25)
+	{
+		return RPDF();
+	}
+	else if (DitherType >= 0.25 && DitherType < 0.5)
+	{
+		return TPDF();
+	}
+	else
+	{
+		return AWGN_generator();
+	}
+}
 
 float AWGNDither::ClipSample(float sample, float value)
 {
@@ -462,7 +520,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			}
 			else
 			{
-				noise[0] = AWGN_generator() / powf(2, BitDepth);
+				noise[0] = DitherNoise() / powf(2, BitDepth);
 			}
 			noise[0] = noise[0] * DitherGain;
 			*out1 = *out1 + noise[0];
@@ -472,7 +530,7 @@ void AWGNDither::processReplacing (float** inputs, float** outputs, VstInt32 sam
 			}
 			else
 			{
-				noise[1] = AWGN_generator() / powf(2, BitDepth);
+				noise[1] = DitherNoise() / powf(2, BitDepth);
 			}
 			noise[1] = noise[1] * DitherGain;
 			*out2 = *out2 + noise[1];

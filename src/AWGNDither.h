@@ -7,6 +7,7 @@ enum
 {
 	kBitDepth = 0,
 	kDither,
+	kDitherType,
 	kNoiseShaping,
 	kQuantize,
 	kOnlyError,
@@ -41,6 +42,7 @@ public:
 private:
 	float BitDepth;
 	float Dither;
+	float DitherType;
 	float NoiseShaping;
 	float Quantize;
 	float OnlyError;
@@ -51,7 +53,10 @@ private:
 	float OutGain;
 	float DitherGain;
 	float NoiseShapingGain;
+	float RPDF();
+	float TPDF();
 	float AWGN_generator();
+	float DitherNoise();
 	float ClipSample(float sample, float value);
 	float QuantizeSample(float sample, float depth);
 	float noise[2];
