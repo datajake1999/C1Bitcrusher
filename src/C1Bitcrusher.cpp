@@ -522,8 +522,6 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			{
 				noise[0] = DitherNoise() / powf(2, BitDepth);
 			}
-			noise[0] = noise[0] * DitherGain;
-			*out1 = *out1 + noise[0];
 			if (*out2 == 0 && AutoDither >= 0.5)
 			{
 				noise[1] = 0;
@@ -532,7 +530,9 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			{
 				noise[1] = DitherNoise() / powf(2, BitDepth);
 			}
+			noise[0] = noise[0] * DitherGain;
 			noise[1] = noise[1] * DitherGain;
+			*out1 = *out1 + noise[0];
 			*out2 = *out2 + noise[1];
 		}
 		if (Quantize >= 0.5)
@@ -540,37 +540,25 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			if (NoiseShaping >= 0.5)
 			{
 				*out1 = *out1 - error[0] * NoiseShapingGain;
-			}
-			if (ClipPreQuantization >= 0.5)
-			{
-				*out1 = ClipSample(*out1, ClipValue);
-			}
-			quantized[0] = QuantizeSample(*out1, BitDepth);
-			error[0] = quantized[0] - *out1;
-			if (OnlyError >= 0.5)
-			{
-				*out1 = error[0];
-			}
-			else
-			{
-				*out1 = quantized[0];
-			}
-			if (NoiseShaping >= 0.5)
-			{
 				*out2 = *out2 - error[1] * NoiseShapingGain;
 			}
 			if (ClipPreQuantization >= 0.5)
 			{
+				*out1 = ClipSample(*out1, ClipValue);
 				*out2 = ClipSample(*out2, ClipValue);
 			}
+			quantized[0] = QuantizeSample(*out1, BitDepth);
 			quantized[1] = QuantizeSample(*out2, BitDepth);
+			error[0] = quantized[0] - *out1;
 			error[1] = quantized[1] - *out2;
 			if (OnlyError >= 0.5)
 			{
+				*out1 = error[0];
 				*out2 = error[1];
 			}
 			else
 			{
+				*out1 = quantized[0];
 				*out2 = quantized[1];
 			}
 		}
