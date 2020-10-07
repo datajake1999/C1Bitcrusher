@@ -480,37 +480,37 @@ float C1Bitcrusher::DitherNoise()
 	}
 }
 
-float C1Bitcrusher::ClipSample(float sample, float value)
+float C1Bitcrusher::ClipSample(float sample)
 {
-	if (sample > value)
+	if (sample > ClipValue)
 	{
-		sample = value;
+		sample = ClipValue;
 	}
-	else if (sample < value * -1)
+	else if (sample < ClipValue * -1)
 	{
-		sample = value * -1;
+		sample = ClipValue * -1;
 	}
 	return sample;
 }
 
-float C1Bitcrusher::QuantizeSample(float sample, float depth)
+float C1Bitcrusher::QuantizeSample(float sample)
 {
 	if (sample > 0)
 	{
-		sample = sample * (powf(2, depth) / 2 - 1);
+		sample = sample * (powf(2, BitDepth) / 2 - 1);
 	}
 	else
 	{
-		sample = sample * (powf(2, depth) / 2);
+		sample = sample * (powf(2, BitDepth) / 2);
 	}
 	sample = floorf(sample);
 	if (sample > 0)
 	{
-		sample = sample / (powf(2, depth) / 2 - 1);
+		sample = sample / (powf(2, BitDepth) / 2 - 1);
 	}
 	else
 	{
-		sample = sample / (powf(2, depth) / 2);
+		sample = sample / (powf(2, BitDepth) / 2);
 	}
 	return sample;
 }
@@ -558,11 +558,11 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			}
 			if (ClipPreQuantization >= 0.5)
 			{
-				*out1 = ClipSample(*out1, ClipValue);
-				*out2 = ClipSample(*out2, ClipValue);
+				*out1 = ClipSample(*out1);
+				*out2 = ClipSample(*out2);
 			}
-			quantized[0] = QuantizeSample(*out1, BitDepth);
-			quantized[1] = QuantizeSample(*out2, BitDepth);
+			quantized[0] = QuantizeSample(*out1);
+			quantized[1] = QuantizeSample(*out2);
 			error[0] = quantized[0] - *out1;
 			error[1] = quantized[1] - *out2;
 			if (OnlyError >= 0.5)

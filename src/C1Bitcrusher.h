@@ -57,8 +57,8 @@ private:
 	float TPDF();
 	float AWGN_generator();
 	float DitherNoise();
-	float ClipSample(float sample, float value);
-	float QuantizeSample(float sample, float depth);
+	float ClipSample(float sample);
+	float QuantizeSample(float sample);
 	float noise[2];
 	float quantized[2];
 	float error[2];
