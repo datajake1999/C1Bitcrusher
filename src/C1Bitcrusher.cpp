@@ -419,7 +419,7 @@ bool C1Bitcrusher::getVendorString (char* text)
 
 float C1Bitcrusher::RPDF()
 {
-	return rand() / 12288.0f;
+	return rand() / 8192.0f;
 }
 
 float C1Bitcrusher::TPDF()
