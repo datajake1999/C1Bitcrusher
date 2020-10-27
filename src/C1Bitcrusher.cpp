@@ -495,23 +495,9 @@ float C1Bitcrusher::ClipSample(float sample)
 
 float C1Bitcrusher::QuantizeSample(float sample)
 {
-	if (sample > 0)
-	{
-		sample = sample * (powf(2, BitDepth) / 2 - 1);
-	}
-	else
-	{
-		sample = sample * (powf(2, BitDepth) / 2);
-	}
+	sample = sample * (powf(2, BitDepth) / 2);
 	sample = floorf(sample);
-	if (sample > 0)
-	{
-		sample = sample / (powf(2, BitDepth) / 2 - 1);
-	}
-	else
-	{
-		sample = sample / (powf(2, BitDepth) / 2);
-	}
+	sample = sample / (powf(2, BitDepth) / 2);
 	return sample;
 }
 
