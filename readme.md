@@ -15,7 +15,7 @@ This is a bitcrusher plug-in with an emphasis on realism. It processes audio in 
 * Dither: Enable or disable dithering.
 * DitherType: The type of noise that is used for dithering.
 * NoiseShaping: Enable or disable noise shaping.
-* Quantization: Enable or disable the actual bit reduction.
+* Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
 * OnlyError: Only outputs the quantization noise.
 * AudoDither: If this is enabled, silent audio isn't dithered.
