@@ -10,6 +10,7 @@ enum
 	kDitherType,
 	kNoiseShaping,
 	kQuantize,
+	kQuantizationMode,
 	kOnlyError,
 	kAutoDither,
 	kClipPreQuantization,
@@ -45,6 +46,7 @@ private:
 	float DitherType;
 	float NoiseShaping;
 	float Quantize;
+	float QuantizationMode;
 	float OnlyError;
 	float AutoDither;
 	float ClipPreQuantization;

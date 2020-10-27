@@ -17,6 +17,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherType = 1;
 	NoiseShaping = 0;
 	Quantize = 1;
+	QuantizationMode = 0;
 	OnlyError = 0;
 	AutoDither = 0;
 	ClipPreQuantization = 1;
@@ -56,6 +57,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kQuantize)
 	{
 		Quantize = value;
+	}
+	else if (index == kQuantizationMode)
+	{
+		QuantizationMode = value;
 	}
 	else if (index == kOnlyError)
 	{
@@ -115,6 +120,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		Quantize = value;
 	}
+	else if (index == kQuantizationMode)
+	{
+		QuantizationMode = value;
+	}
 	else if (index == kOnlyError)
 	{
 		OnlyError = value;
@@ -170,6 +179,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kQuantize)
 	{
 		return Quantize;
+	}
+	else if (index == kQuantizationMode)
+	{
+		return QuantizationMode;
 	}
 	else if (index == kOnlyError)
 	{
@@ -258,6 +271,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "OFF");
+		}
+	}
+	else if (index == kQuantizationMode)
+	{
+		if (QuantizationMode >= 0.5)	
+		{
+			strcpy (text, "Round");
+		}
+		else
+		{
+			strcpy (text, "Truncate");
 		}
 	}
 	else if (index == kOnlyError)
@@ -364,6 +388,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kQuantize)
 	{
 		strcpy (text, "Quantize");
+	}
+	else if (index == kQuantizationMode)
+	{
+		strcpy (text, "QuantizationMode");
 	}
 	else if (index == kOnlyError)
 	{
@@ -496,7 +524,14 @@ float C1Bitcrusher::ClipSample(float sample)
 float C1Bitcrusher::QuantizeSample(float sample)
 {
 	sample = sample * powf(2, BitDepth-1);
-	sample = floorf(sample);
+	if (QuantizationMode >= 0.5)
+	{
+		sample = floorf(sample + 0.5f);
+	}
+	else
+	{
+		sample = floorf(sample);
+	}
 	sample = sample / powf(2, BitDepth-1);
 	return sample;
 }
