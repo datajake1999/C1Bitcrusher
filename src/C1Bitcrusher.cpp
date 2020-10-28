@@ -526,7 +526,10 @@ float C1Bitcrusher::QuantizeSample(float sample)
 	sample = sample * powf(2, BitDepth-1);
 	if (QuantizationMode >= 0.5)
 	{
+		if (sample >= 0)
 		sample = floorf(sample + 0.5f);
+		else
+		sample = ceilf(sample - 0.5f);
 	}
 	else
 	{
