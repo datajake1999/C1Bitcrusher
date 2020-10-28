@@ -275,13 +275,21 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kQuantizationMode)
 	{
-		if (QuantizationMode >= 0.5)	
+		if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)	
 		{
-			strcpy (text, "Round");
+			strcpy (text, "Floor");
+		}
+		else if (QuantizationMode >= 0.25 && QuantizationMode < 0.5)	
+		{
+			strcpy (text, "Ceiling");
+		}
+		else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)	
+		{
+			strcpy (text, "Truncate");
 		}
 		else
 		{
-			strcpy (text, "Truncate");
+			strcpy (text, "Round");
 		}
 	}
 	else if (index == kOnlyError)
@@ -524,19 +532,27 @@ float C1Bitcrusher::ClipSample(float sample)
 float C1Bitcrusher::QuantizeSample(float sample)
 {
 	sample = sample * powf(2, BitDepth-1);
-	if (QuantizationMode >= 0.5)
+	if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
 	{
-		if (sample >= 0)
-		sample = floorf(sample + 0.5f);
-		else
-		sample = ceilf(sample - 0.5f);
+		sample = floorf(sample);
 	}
-	else
+	else if (QuantizationMode >= 0.25 && QuantizationMode < 0.5)
+	{
+		sample = ceilf(sample);
+	}
+	else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)
 	{
 		if (sample >= 0)
 		sample = floorf(sample);
 		else
 		sample = ceilf(sample);
+	}
+	else
+	{
+		if (sample >= 0)
+		sample = floorf(sample + 0.5f);
+		else
+		sample = ceilf(sample - 0.5f);
 	}
 	sample = sample / powf(2, BitDepth-1);
 	return sample;
