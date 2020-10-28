@@ -17,7 +17,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherType = 1;
 	NoiseShaping = 0;
 	Quantize = 1;
-	QuantizationMode = 0;
+	QuantizationMode = 1;
 	OnlyError = 0;
 	AutoDither = 0;
 	ClipPreQuantization = 1;
