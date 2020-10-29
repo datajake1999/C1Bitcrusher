@@ -488,7 +488,11 @@ float C1Bitcrusher::RPDF()
 
 float C1Bitcrusher::TPDF()
 {
-	return RPDF() + RPDF();
+	float s1;
+	float s2;
+	s1 = rand() / (float)RAND_MAX;
+	s2 = rand() / (float)RAND_MAX;
+	return s1 + s2;
 }
 
 #define PI 3.1415926536
