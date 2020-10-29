@@ -531,7 +531,8 @@ float C1Bitcrusher::ClipSample(float sample)
 
 float C1Bitcrusher::QuantizeSample(float sample)
 {
-	sample = sample * powf(2, BitDepth-1);
+	float scale = powf(2, BitDepth-1);
+	sample = sample * scale;
 	if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
 	{
 		sample = floorf(sample);
@@ -554,7 +555,7 @@ float C1Bitcrusher::QuantizeSample(float sample)
 		else
 		sample = ceilf(sample - 0.5f);
 	}
-	sample = sample / powf(2, BitDepth-1);
+	sample = sample / scale;
 	return sample;
 }
 
