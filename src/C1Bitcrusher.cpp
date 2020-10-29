@@ -22,6 +22,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	AutoDither = 0;
 	ClipPreQuantization = 1;
 	ClipValue = 1;
+	ClipPostQuantization = 1;
 	InGain = 1;
 	OutGain = 1;
 	DitherGain = 1;
@@ -77,6 +78,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kClipValue)
 	{
 		ClipValue = value;
+	}
+	else if (index == kClipPostQuantization)
+	{
+		ClipPostQuantization = value;
 	}
 	else if (index == kInGain)
 	{
@@ -140,6 +145,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		ClipValue = value;
 	}
+	else if (index == kClipPostQuantization)
+	{
+		ClipPostQuantization = value;
+	}
 	else if (index == kInGain)
 	{
 		InGain = value;
@@ -199,6 +208,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kClipValue)
 	{
 		return ClipValue;
+	}
+	else if (index == kClipPostQuantization)
+	{
+		return ClipPostQuantization;
 	}
 	else if (index == kInGain)
 	{
@@ -329,6 +342,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	{
 		float2string (ClipValue, text, kVstMaxParamStrLen);
 	}
+	else if (index == kClipPostQuantization)
+	{
+		if (ClipPostQuantization >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 	else if (index == kInGain)
 	{
 		float2string (InGain, text, kVstMaxParamStrLen);
@@ -416,6 +440,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kClipValue)
 	{
 		strcpy (text, "ClipValue");
+	}
+	else if (index == kClipPostQuantization)
+	{
+		strcpy (text, "ClipPostQuantization");
 	}
 	else if (index == kInGain)
 	{
@@ -554,6 +582,17 @@ float C1Bitcrusher::QuantizeSample(float sample)
 		sample = floorf(sample + 0.5f);
 		else
 		sample = ceilf(sample - 0.5f);
+	}
+	if (ClipPostQuantization >= 0.5)
+	{
+		if (sample > scale - 1)
+		{
+			sample = scale - 1;
+		}
+		else if (sample < scale * -1)
+		{
+			sample = scale * -1;
+		}
 	}
 	sample = sample / scale;
 	return sample;

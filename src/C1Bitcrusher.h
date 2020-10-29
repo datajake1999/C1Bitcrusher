@@ -15,6 +15,7 @@ enum
 	kAutoDither,
 	kClipPreQuantization,
 	kClipValue,
+	kClipPostQuantization,
 	kInGain,
 	kOutGain,
 	kDitherGain,
@@ -51,6 +52,7 @@ private:
 	float AutoDither;
 	float ClipPreQuantization;
 	float ClipValue;
+	float ClipPostQuantization;
 	float InGain;
 	float OutGain;
 	float DitherGain;
