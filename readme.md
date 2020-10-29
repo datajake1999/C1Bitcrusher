@@ -18,7 +18,7 @@ This is a bitcrusher plug-in with an emphasis on realism. It processes audio in 
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
 * OnlyError: Only outputs the quantization noise.
-* AudoDither: If this is enabled, silent audio isn't dithered.
+* AutoDither: If this is enabled, silent audio isn't dithered.
 * ClipPreQuantization: Clips the audio before quantizing.
 * ClipValue: The maximum sample value allowed in the audio before quantizing.
 * InGain: Input gain of the plug-in.
