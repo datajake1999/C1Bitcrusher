@@ -15,7 +15,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	BitDepth = 16;
 	Dither = 1;
 	DitherType = 1;
-	NoiseShaping = 0;
+	NoiseShaping = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
 	OnlyError = 0;
