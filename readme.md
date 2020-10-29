@@ -21,6 +21,7 @@ This is a bitcrusher plug-in with an emphasis on realism. It processes audio in 
 * AutoDither: If this is enabled, silent audio isn't dithered.
 * ClipPreQuantization: Clips the audio before quantizing.
 * ClipValue: The maximum sample value allowed in the audio before quantizing.
+* ClipPostQuantization: Clips audio that is over 0 dB after quantizing.
 * InGain: Input gain of the plug-in.
 * OutGain: Output gain of the plug-in.
 * DitherGain: controls the over all affect of dithering.
