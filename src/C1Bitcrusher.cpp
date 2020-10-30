@@ -666,17 +666,17 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			*out1 = *out1 + noise[0];
 			*out2 = *out2 + noise[1];
 		}
-		if (ClipPreQuantization >= 0.5)
-		{
-			*out1 = ClipSample(*out1);
-			*out2 = ClipSample(*out2);
-		}
 		if (Quantize >= 0.5)
 		{
 			if (NoiseShaping >= 0.5)
 			{
 				*out1 = *out1 - error[0] * NoiseShapingGain;
 				*out2 = *out2 - error[1] * NoiseShapingGain;
+			}
+			if (ClipPreQuantization >= 0.5)
+			{
+				*out1 = ClipSample(*out1);
+				*out2 = ClipSample(*out2);
 			}
 			quantized[0] = QuantizeSample(*out1);
 			quantized[1] = QuantizeSample(*out2);
