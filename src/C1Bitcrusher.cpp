@@ -364,7 +364,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kClipValue)
 	{
-		float2string (ClipValue, text, kVstMaxParamStrLen);
+		dB2string (ClipValue, text, kVstMaxParamStrLen);
 	}
 	else if (index == kClipPostQuantization)
 	{
@@ -403,7 +403,7 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	}
 	else if (index == kClipValue)
 	{
-		strcpy (label, "F");
+		strcpy (label, "dB");
 	}
 	else if (index == kInGain)
 	{
