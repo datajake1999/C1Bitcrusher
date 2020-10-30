@@ -20,6 +20,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	QuantizationMode = 1;
 	OnlyError = 0;
 	AutoDither = 0;
+	InvertDither = 0;
 	ClipPreQuantization = 0;
 	ClipValue = 1;
 	ClipPostQuantization = 1;
@@ -70,6 +71,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kAutoDither)
 	{
 		AutoDither = value;
+	}
+	else if (index == kInvertDither)
+	{
+		InvertDither = value;
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -137,6 +142,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		AutoDither = value;
 	}
+	else if (index == kInvertDither)
+	{
+		InvertDither = value;
+	}
 	else if (index == kClipPreQuantization)
 	{
 		ClipPreQuantization = value;
@@ -200,6 +209,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kAutoDither)
 	{
 		return AutoDither;
+	}
+	else if (index == kInvertDither)
+	{
+		return InvertDither;
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -327,6 +340,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kInvertDither)
+	{
+		if (InvertDither >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 	else if (index == kClipPreQuantization)
 	{
 		if (ClipPreQuantization >= 0.5)	
@@ -432,6 +456,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kAutoDither)
 	{
 		strcpy (text, "AutoDither");
+	}
+	else if (index == kInvertDither)
+	{
+		strcpy (text, "InvertDither");
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -633,6 +661,11 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			}
 			noise[0] = noise[0] * DitherGain;
 			noise[1] = noise[1] * DitherGain;
+			if (InvertDither >= 0.5)
+			{
+				noise[0] = noise[0] * -1;
+				noise[1] = noise[1] * -1;
+			}
 			*out1 = *out1 + noise[0];
 			*out2 = *out2 + noise[1];
 		}
