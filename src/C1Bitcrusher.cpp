@@ -639,13 +639,9 @@ float C1Bitcrusher::QuantizeSample(float sample)
 	if (ClipPostQuantization >= 0.5)
 	{
 		if (sample > scale - 1)
-		{
-			sample = scale - 1;
-		}
+		sample = scale - 1;
 		else if (sample < scale * -1)
-		{
-			sample = scale * -1;
-		}
+		sample = scale * -1;
 	}
 	sample = sample / scale;
 	return sample;
