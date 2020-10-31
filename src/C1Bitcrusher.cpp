@@ -28,8 +28,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OutGain = 1;
 	DitherGain = 1;
 	NoiseShapingGain = 1;
-	noise[0] = 0;
-	noise[1] = 0;
 	quantized[0] = 0;
 	quantized[1] = 0;
 	error[0] = 0;
@@ -574,6 +572,25 @@ float C1Bitcrusher::DitherNoise()
 	}
 }
 
+float C1Bitcrusher::DitherSample(float sample)
+{
+	float noise;
+	if (sample == 0 && AutoDither >= 0.5)
+	{
+		noise = 0;
+	}
+	else
+	{
+		noise = DitherNoise() / powf(2, BitDepth);
+	}
+	noise = noise * DitherGain;
+	if (InvertDither >= 0.5)
+	{
+		noise = noise * -1;
+	}
+	return sample + noise;
+}
+
 float C1Bitcrusher::ClipSample(float sample)
 {
 	if (sample > ClipValue)
@@ -640,31 +657,8 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 		*out2 = *in2 * InGain;
 		if (Dither >= 0.5)
 		{
-			if (*out1 == 0 && AutoDither >= 0.5)
-			{
-				noise[0] = 0;
-			}
-			else
-			{
-				noise[0] = DitherNoise() / powf(2, BitDepth);
-			}
-			if (*out2 == 0 && AutoDither >= 0.5)
-			{
-				noise[1] = 0;
-			}
-			else
-			{
-				noise[1] = DitherNoise() / powf(2, BitDepth);
-			}
-			noise[0] = noise[0] * DitherGain;
-			noise[1] = noise[1] * DitherGain;
-			if (InvertDither >= 0.5)
-			{
-				noise[0] = noise[0] * -1;
-				noise[1] = noise[1] * -1;
-			}
-			*out1 = *out1 + noise[0];
-			*out2 = *out2 + noise[1];
+			*out1 = DitherSample(*out1);
+			*out2 = DitherSample(*out2);
 		}
 		if (Quantize >= 0.5)
 		{

@@ -63,9 +63,9 @@ private:
 	float TPDF();
 	float AWGN_generator();
 	float DitherNoise();
+	float DitherSample(float sample);
 	float ClipSample(float sample);
 	float QuantizeSample(float sample);
-	float noise[2];
 	float quantized[2];
 	float error[2];
 };
