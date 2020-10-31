@@ -28,10 +28,16 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OutGain = 1;
 	DitherGain = 1;
 	NoiseShapingGain = 1;
+	resume ();
+}
+
+void C1Bitcrusher::resume ()
+{
 	quantized[0] = 0;
 	quantized[1] = 0;
 	error[0] = 0;
 	error[1] = 0;
+	AudioEffectX::resume();
 }
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)

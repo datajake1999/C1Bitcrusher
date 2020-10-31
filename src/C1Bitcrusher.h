@@ -30,6 +30,7 @@ class C1Bitcrusher : public AudioEffectX
 {
 public:
 	C1Bitcrusher (audioMasterCallback audioMaster);
+	virtual void resume ();
 	virtual void setParameter (VstInt32 index, float value);
 	virtual void setParameterAutomated (VstInt32 index, float value);
 	virtual float getParameter (VstInt32 index);
