@@ -31,7 +31,6 @@ This is a bitcrusher plug-in with an emphasis on realism. It processes audio in 
 # Extra notes
 This plug-in has no User Interface of Its own, so the host application should provide a method of interacting with effect parameters.
 
-
 # License
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
