@@ -657,7 +657,7 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	{
 		*out1 = *in1 * InGain;
 		*out2 = *in2 * InGain;
-		if (Dither >= 0.5)
+		if (Dither >= 0.5 && NoiseShaping < 0.5)
 		{
 			*out1 = DitherSample(*out1);
 			*out2 = DitherSample(*out2);
@@ -674,8 +674,16 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 				*out1 = ClipSample(*out1);
 				*out2 = ClipSample(*out2);
 			}
-			quantized[0] = QuantizeSample(*out1);
-			quantized[1] = QuantizeSample(*out2);
+			if (Dither >= 0.5 && NoiseShaping >= 0.5)
+			{
+				quantized[0] = QuantizeSample(DitherSample(*out1));
+				quantized[1] = QuantizeSample(DitherSample(*out2));
+			}
+			else
+			{
+				quantized[0] = QuantizeSample(*out1);
+				quantized[1] = QuantizeSample(*out2);
+			}
 			error[0] = quantized[0] - *out1;
 			error[1] = quantized[1] - *out2;
 			if (OnlyError >= 0.5)
