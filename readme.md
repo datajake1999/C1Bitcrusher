@@ -1,6 +1,9 @@
 # What is this?
-This is a bitcrusher plug-in with an emphasis on realism. It processes audio in the same way as creating an audio file with a lower bit depth. To prove this, you can do the following test in Audacity.
+This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio in the same way as creating an audio file with a lower bit depth. To prove this, you can do the following test in Audacity.
 
+* Install the plug-in.
+* Open Audacity.
+* Enable the effect.
 * Open preferences and disable dithering.
 * Record or generate some audio.
 * Apply the effect with the default settings.
