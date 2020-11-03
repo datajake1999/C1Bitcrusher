@@ -33,9 +33,13 @@ Name: sl2; MessagesFile: "compiler:Languages\Slovenian.isl"
 Name: sp; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: uk; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
+[Components]
+Name: "VST32"; Description: "32-bit VST Plug-in"; Types: "full"
+Name: "VST64"; Description: "64-bit VST Plug-in"; Types: "full"; Check: Is64BitInstallMode
+
 [Files]
-Source: "Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}
-Source: "X64\Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_64}; Check: Is64BitInstallMode
+Source: "Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}; Components: VST32
+Source: "X64\Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: Is64BitInstallMode
 
 [Code]
 var
