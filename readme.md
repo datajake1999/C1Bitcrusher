@@ -29,7 +29,9 @@ This is a bitcrusher plug-in with an emphasis on realism. It processes audio in 
 * NoiseShapingGain: controls the over all affect of noise shaping.
 
 # Extra notes
-This plug-in has no User Interface of Its own, so the host application should provide a method of interacting with effect parameters.
+
+* This is only a VST2 compatible plug-in.
+* This plug-in has no User Interface of Its own, so the host application should provide a method of interacting with effect parameters.
 
 # License
     This library is free software; you can redistribute it and/or
