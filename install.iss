@@ -1,7 +1,9 @@
 [Setup]
 AppName=C1Bitcrusher
 AppVerName=C1Bitcrusher
-CreateAppDir=no
+DefaultDirName={pf}\C1Bitcrusher
+DefaultGroupName=C1Bitcrusher
+AllowNoIcons=yes
 OutputBaseFilename=C1Bitcrusher
 ArchitecturesInstallIn64BitMode=X64
 LicenseFile=LICENSE.TXT
@@ -34,12 +36,19 @@ Name: sp; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: uk; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Components]
+Name: "Docs"; Description: "Documentation"; Types: "full"
 Name: "VST32"; Description: "32-bit VST Plug-in"; Types: "full"
 Name: "VST64"; Description: "64-bit VST Plug-in"; Types: "full"; Check: Is64BitInstallMode
 
 [Files]
+Source: "LICENSE.TXT"; DestDir: "{app}"; Components: "Docs"
+Source: "readme.md"; DestDir: "{app}"; Components: "Docs"; DestName: "readme.txt"
 Source: "Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}; Components: VST32
 Source: "X64\Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: Is64BitInstallMode
+
+[Icons]
+Name: "{group}\Readme"; Filename: "{app}\readme.txt"; Components: "Docs"
+Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 
 [Code]
 var
