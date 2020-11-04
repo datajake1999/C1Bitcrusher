@@ -18,6 +18,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	NoiseShaping = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
+	NoiseShapingMode = 1;
 	OnlyError = 0;
 	DitherInError = 1;
 	AutoDither = 0;
@@ -68,6 +69,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kQuantizationMode)
 	{
 		QuantizationMode = value;
+	}
+	else if (index == kNoiseShapingMode)
+	{
+		NoiseShapingMode = value;
 	}
 	else if (index == kOnlyError)
 	{
@@ -143,6 +148,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		QuantizationMode = value;
 	}
+	else if (index == kNoiseShapingMode)
+	{
+		NoiseShapingMode = value;
+	}
 	else if (index == kOnlyError)
 	{
 		OnlyError = value;
@@ -214,6 +223,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kQuantizationMode)
 	{
 		return QuantizationMode;
+	}
+	else if (index == kNoiseShapingMode)
+	{
+		return NoiseShapingMode;
 	}
 	else if (index == kOnlyError)
 	{
@@ -333,6 +346,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "Round");
+		}
+	}
+	else if (index == kNoiseShapingMode)
+	{
+		if (NoiseShapingMode >= 0.0 && NoiseShapingMode < 0.5)	
+		{
+			strcpy (text, "Low");
+		}
+		else
+		{
+			strcpy (text, "High");
 		}
 	}
 	else if (index == kOnlyError)
@@ -476,6 +500,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kQuantizationMode)
 	{
 		strcpy (text, "QuantizationMode");
+	}
+	else if (index == kNoiseShapingMode)
+	{
+		strcpy (text, "NoiseShapingMode");
 	}
 	else if (index == kOnlyError)
 	{
@@ -694,8 +722,16 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 		{
 			if (NoiseShaping >= 0.5)
 			{
-				*out1 = *out1 - error[0] * NoiseShapingGain;
-				*out2 = *out2 - error[1] * NoiseShapingGain;
+				if (NoiseShapingMode >= 0.5)
+				{
+					*out1 = *out1 - error[0] * NoiseShapingGain;
+					*out2 = *out2 - error[1] * NoiseShapingGain;
+				}
+				else
+				{
+					*out1 = *out1 + error[0] * NoiseShapingGain;
+					*out2 = *out2 + error[1] * NoiseShapingGain;
+				}
 			}
 			if (ClipPreQuantization >= 0.5)
 			{
