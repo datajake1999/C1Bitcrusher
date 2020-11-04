@@ -19,6 +19,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Quantize = 1;
 	QuantizationMode = 1;
 	OnlyError = 0;
+	DitherInError = 1;
 	AutoDither = 0;
 	InvertDither = 0;
 	ClipPreQuantization = 0;
@@ -71,6 +72,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kOnlyError)
 	{
 		OnlyError = value;
+	}
+	else if (index == kDitherInError)
+	{
+		DitherInError = value;
 	}
 	else if (index == kAutoDither)
 	{
@@ -142,6 +147,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		OnlyError = value;
 	}
+	else if (index == kDitherInError)
+	{
+		DitherInError = value;
+	}
 	else if (index == kAutoDither)
 	{
 		AutoDither = value;
@@ -209,6 +218,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kOnlyError)
 	{
 		return OnlyError;
+	}
+	else if (index == kDitherInError)
+	{
+		return DitherInError;
 	}
 	else if (index == kAutoDither)
 	{
@@ -325,6 +338,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	else if (index == kOnlyError)
 	{
 		if (OnlyError >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
+	else if (index == kDitherInError)
+	{
+		if (DitherInError >= 0.5)	
 		{
 			strcpy (text, "ON");
 		}
@@ -456,6 +480,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kOnlyError)
 	{
 		strcpy (text, "OnlyError");
+	}
+	else if (index == kDitherInError)
+	{
+		strcpy (text, "DitherInError");
 	}
 	else if (index == kAutoDither)
 	{
@@ -657,7 +685,7 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	{
 		*out1 = *in1 * InGain;
 		*out2 = *in2 * InGain;
-		if (Dither >= 0.5 && NoiseShaping < 0.5)
+		if (Dither >= 0.5 && DitherInError < 0.5)
 		{
 			*out1 = DitherSample(*out1);
 			*out2 = DitherSample(*out2);
@@ -674,7 +702,7 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 				*out1 = ClipSample(*out1);
 				*out2 = ClipSample(*out2);
 			}
-			if (Dither >= 0.5 && NoiseShaping >= 0.5)
+			if (Dither >= 0.5 && DitherInError >= 0.5)
 			{
 				quantized[0] = QuantizeSample(DitherSample(*out1));
 				quantized[1] = QuantizeSample(DitherSample(*out2));

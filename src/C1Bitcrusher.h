@@ -12,6 +12,7 @@ enum
 	kQuantize,
 	kQuantizationMode,
 	kOnlyError,
+	kDitherInError,
 	kAutoDither,
 	kInvertDither,
 	kClipPreQuantization,
@@ -51,6 +52,7 @@ private:
 	float Quantize;
 	float QuantizationMode;
 	float OnlyError;
+	float DitherInError;
 	float AutoDither;
 	float InvertDither;
 	float ClipPreQuantization;

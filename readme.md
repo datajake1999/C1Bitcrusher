@@ -21,6 +21,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
 * OnlyError: Only outputs the quantization noise.
+* DitherInError: Treats dithering as part of the quantization noise.
 * AutoDither: If this is enabled, silent audio isn't dithered.
 * InvertDither: Inverts the dither noise.
 * ClipPreQuantization: Clips the audio before quantizing.
