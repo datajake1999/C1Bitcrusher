@@ -36,6 +36,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 # Extra notes
 
 * This is only a VST2 compatible plug-in.
+* This plug-in only supports 32-bit floating point processing.
 * This plug-in has no User Interface of Its own, so the host application should provide a method of interacting with effect parameters.
 * This project is developed directly with the VST SDK. As a result, this plug-in has a small footprint.
 
