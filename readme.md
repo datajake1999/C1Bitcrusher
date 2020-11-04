@@ -37,6 +37,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 
 * This is only a VST2 compatible plug-in.
 * This plug-in has no User Interface of Its own, so the host application should provide a method of interacting with effect parameters.
+* This project is developed directly with the VST SDK. As a result, this plug-in has a small footprint.
 
 # License
     This library is free software; you can redistribute it and/or
