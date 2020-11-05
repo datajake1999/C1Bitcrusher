@@ -28,7 +28,19 @@ compress: $(TARGET)
 decompress: $(TARGET).gz
 	gzip -d $(TARGET).gz
 
-.PHONY: clean
+.PHONY: clean help
 
 clean:
 	rm -f $(OBJS) $(TARGET)
+
+help:
+	@echo supported commands:
+	@echo make: compile and link the library
+	@echo make compile: compile source files into object code
+	@echo make link: link object code into shared library
+	@echo make install: install the library onto the system
+	@echo make uninstall: remove the library from the system
+	@echo make compress: compress the library into a gzip archive
+	@echo make decompress: decompress the library from a gzip archive
+	@echo make clean: remove object code and compiled library from working directory
+	@echo make help: list supported commands
