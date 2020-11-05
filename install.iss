@@ -6,8 +6,6 @@ DefaultGroupName=C1Bitcrusher
 AllowNoIcons=yes
 OutputBaseFilename=C1Bitcrusher
 ArchitecturesInstallIn64BitMode=X64
-LicenseFile=LICENSE.TXT
-InfoBeforeFile=readme.md
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
