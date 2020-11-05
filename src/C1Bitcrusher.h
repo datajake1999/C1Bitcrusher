@@ -9,9 +9,9 @@ enum
 	kDither,
 	kDitherType,
 	kNoiseShaping,
+	kNoiseShapingMode,
 	kQuantize,
 	kQuantizationMode,
-	kNoiseShapingMode,
 	kOnlyError,
 	kDitherInError,
 	kAutoDither,
@@ -50,9 +50,9 @@ private:
 	float Dither;
 	float DitherType;
 	float NoiseShaping;
+	float NoiseShapingMode;
 	float Quantize;
 	float QuantizationMode;
-	float NoiseShapingMode;
 	float OnlyError;
 	float DitherInError;
 	float AutoDither;

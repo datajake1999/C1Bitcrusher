@@ -16,9 +16,9 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Dither = 1;
 	DitherType = 1;
 	NoiseShaping = 1;
+	NoiseShapingMode = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
-	NoiseShapingMode = 1;
 	OnlyError = 0;
 	DitherInError = 1;
 	AutoDither = 0;
@@ -62,6 +62,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	{
 		NoiseShaping = value;
 	}
+	else if (index == kNoiseShapingMode)
+	{
+		NoiseShapingMode = value;
+	}
 	else if (index == kQuantize)
 	{
 		Quantize = value;
@@ -69,10 +73,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kQuantizationMode)
 	{
 		QuantizationMode = value;
-	}
-	else if (index == kNoiseShapingMode)
-	{
-		NoiseShapingMode = value;
 	}
 	else if (index == kOnlyError)
 	{
@@ -140,6 +140,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		NoiseShaping = value;
 	}
+	else if (index == kNoiseShapingMode)
+	{
+		NoiseShapingMode = value;
+	}
 	else if (index == kQuantize)
 	{
 		Quantize = value;
@@ -147,10 +151,6 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	else if (index == kQuantizationMode)
 	{
 		QuantizationMode = value;
-	}
-	else if (index == kNoiseShapingMode)
-	{
-		NoiseShapingMode = value;
 	}
 	else if (index == kOnlyError)
 	{
@@ -216,6 +216,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	{
 		return NoiseShaping;
 	}
+	else if (index == kNoiseShapingMode)
+	{
+		return NoiseShapingMode;
+	}
 	else if (index == kQuantize)
 	{
 		return Quantize;
@@ -223,10 +227,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kQuantizationMode)
 	{
 		return QuantizationMode;
-	}
-	else if (index == kNoiseShapingMode)
-	{
-		return NoiseShapingMode;
 	}
 	else if (index == kOnlyError)
 	{
@@ -318,6 +318,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kNoiseShapingMode)
+	{
+		if (NoiseShapingMode >= 0.0 && NoiseShapingMode < 0.5)	
+		{
+			strcpy (text, "Low");
+		}
+		else
+		{
+			strcpy (text, "High");
+		}
+	}
 	else if (index == kQuantize)
 	{
 		if (Quantize >= 0.5)	
@@ -346,17 +357,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "Round");
-		}
-	}
-	else if (index == kNoiseShapingMode)
-	{
-		if (NoiseShapingMode >= 0.0 && NoiseShapingMode < 0.5)	
-		{
-			strcpy (text, "Low");
-		}
-		else
-		{
-			strcpy (text, "High");
 		}
 	}
 	else if (index == kOnlyError)
@@ -493,6 +493,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	{
 		strcpy (text, "NoiseShaping");
 	}
+	else if (index == kNoiseShapingMode)
+	{
+		strcpy (text, "NoiseShapingMode");
+	}
 	else if (index == kQuantize)
 	{
 		strcpy (text, "Quantize");
@@ -500,10 +504,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kQuantizationMode)
 	{
 		strcpy (text, "QuantizationMode");
-	}
-	else if (index == kNoiseShapingMode)
-	{
-		strcpy (text, "NoiseShapingMode");
 	}
 	else if (index == kOnlyError)
 	{
