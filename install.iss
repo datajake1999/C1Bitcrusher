@@ -50,6 +50,9 @@ Source: "X64\Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_64}; Components
 Name: "{group}\Readme"; Filename: "{app}\readme.txt"; Components: "Docs"
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 
+[Messages]
+SelectDirLabel3=The documentation will be installed in the following folder.
+
 [Code]
 var
   VSTDirPage_32: TInputDirWizardPage;
