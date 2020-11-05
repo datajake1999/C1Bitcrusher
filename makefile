@@ -22,6 +22,12 @@ install: $(TARGET)
 uninstall: $(INSTDIR)/$(TARGET)
 	rm $(INSTDIR)/$(TARGET)
 
+compress: $(TARGET)
+	gzip $(TARGET)
+
+decompress: $(TARGET).gz
+	gzip -d $(TARGET).gz
+
 .PHONY: clean
 
 clean:
