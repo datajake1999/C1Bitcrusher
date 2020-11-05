@@ -8,12 +8,12 @@ enum
 	kBitDepth = 0,
 	kDither,
 	kDitherType,
+	kDitherInError,
 	kNoiseShaping,
 	kNoiseShapingMode,
 	kQuantize,
 	kQuantizationMode,
 	kOnlyError,
-	kDitherInError,
 	kAutoDither,
 	kInvertDither,
 	kClipPreQuantization,
@@ -49,12 +49,12 @@ private:
 	float BitDepth;
 	float Dither;
 	float DitherType;
+	float DitherInError;
 	float NoiseShaping;
 	float NoiseShapingMode;
 	float Quantize;
 	float QuantizationMode;
 	float OnlyError;
-	float DitherInError;
 	float AutoDither;
 	float InvertDither;
 	float ClipPreQuantization;

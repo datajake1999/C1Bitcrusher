@@ -15,12 +15,12 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	BitDepth = 16;
 	Dither = 1;
 	DitherType = 1;
+	DitherInError = 1;
 	NoiseShaping = 1;
 	NoiseShapingMode = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
 	OnlyError = 0;
-	DitherInError = 1;
 	AutoDither = 0;
 	InvertDither = 0;
 	ClipPreQuantization = 0;
@@ -58,6 +58,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	{
 		DitherType = value;
 	}
+	else if (index == kDitherInError)
+	{
+		DitherInError = value;
+	}
 	else if (index == kNoiseShaping)
 	{
 		NoiseShaping = value;
@@ -77,10 +81,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kOnlyError)
 	{
 		OnlyError = value;
-	}
-	else if (index == kDitherInError)
-	{
-		DitherInError = value;
 	}
 	else if (index == kAutoDither)
 	{
@@ -136,6 +136,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		DitherType = value;
 	}
+	else if (index == kDitherInError)
+	{
+		DitherInError = value;
+	}
 	else if (index == kNoiseShaping)
 	{
 		NoiseShaping = value;
@@ -155,10 +159,6 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	else if (index == kOnlyError)
 	{
 		OnlyError = value;
-	}
-	else if (index == kDitherInError)
-	{
-		DitherInError = value;
 	}
 	else if (index == kAutoDither)
 	{
@@ -212,6 +212,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	{
 		return DitherType;
 	}
+	else if (index == kDitherInError)
+	{
+		return DitherInError;
+	}
 	else if (index == kNoiseShaping)
 	{
 		return NoiseShaping;
@@ -231,10 +235,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kOnlyError)
 	{
 		return OnlyError;
-	}
-	else if (index == kDitherInError)
-	{
-		return DitherInError;
 	}
 	else if (index == kAutoDither)
 	{
@@ -307,6 +307,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "Gaussian");
 		}
 	}
+	else if (index == kDitherInError)
+	{
+		if (DitherInError >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 	else if (index == kNoiseShaping)
 	{
 		if (NoiseShaping >= 0.5)	
@@ -362,17 +373,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	else if (index == kOnlyError)
 	{
 		if (OnlyError >= 0.5)	
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-	}
-	else if (index == kDitherInError)
-	{
-		if (DitherInError >= 0.5)	
 		{
 			strcpy (text, "ON");
 		}
@@ -489,6 +489,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	{
 		strcpy (text, "DitherType");
 	}
+	else if (index == kDitherInError)
+	{
+		strcpy (text, "DitherInError");
+	}
 	else if (index == kNoiseShaping)
 	{
 		strcpy (text, "NoiseShaping");
@@ -508,10 +512,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kOnlyError)
 	{
 		strcpy (text, "OnlyError");
-	}
-	else if (index == kDitherInError)
-	{
-		strcpy (text, "DitherInError");
 	}
 	else if (index == kAutoDither)
 	{
