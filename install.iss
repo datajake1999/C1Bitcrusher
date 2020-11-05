@@ -45,6 +45,7 @@ Source: "Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}; Components: VS
 Source: "X64\Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: Is64BitInstallMode
 
 [Icons]
+Name: "{group}\License"; Filename: "{app}\LICENSE.TXT"; Components: "Docs"
 Name: "{group}\Readme"; Filename: "{app}\readme.txt"; Components: "Docs"
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 
