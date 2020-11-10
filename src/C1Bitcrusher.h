@@ -16,6 +16,7 @@ enum
 	kOnlyError,
 	kAutoDither,
 	kInvertDither,
+	kSeed,
 	kClipPreQuantization,
 	kClipValue,
 	kClipPostQuantization,
@@ -55,6 +56,7 @@ private:
 	float OnlyError;
 	float AutoDither;
 	float InvertDither;
+	float Seed;
 	float ClipPreQuantization;
 	float ClipValue;
 	float ClipPostQuantization;

@@ -23,6 +23,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OnlyError = 0;
 	AutoDither = 0;
 	InvertDither = 0;
+	Seed = 1;
 	ClipPreQuantization = 0;
 	ClipValue = 1;
 	ClipPostQuantization = 1;
@@ -35,7 +36,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 
 void C1Bitcrusher::resume ()
 {
-	srand(1);
+	srand((int)Seed);
 	quantized[0] = 0;
 	quantized[1] = 0;
 	error[0] = 0;
@@ -90,6 +91,11 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kInvertDither)
 	{
 		InvertDither = value;
+	}
+	else if (index == kSeed)
+	{
+		Seed = value*1000;
+		if (Seed < 1) Seed = 1;
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -169,6 +175,11 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 	{
 		InvertDither = value;
 	}
+	else if (index == kSeed)
+	{
+		Seed = value*1000;
+		if (Seed < 1) Seed = 1;
+	}
 	else if (index == kClipPreQuantization)
 	{
 		ClipPreQuantization = value;
@@ -244,6 +255,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kInvertDither)
 	{
 		return InvertDither;
+	}
+	else if (index == kSeed)
+	{
+		return Seed/1000;
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -404,6 +419,10 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kSeed)
+	{
+		int2string ((int)Seed, text, kVstMaxParamStrLen);
+	}
 	else if (index == kClipPreQuantization)
 	{
 		if (ClipPreQuantization >= 0.5)	
@@ -453,6 +472,10 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	if (index == kBitDepth)
 	{
 		strcpy (label, "Bits");
+	}
+	else if (index == kSeed)
+	{
+		strcpy (label, "I");
 	}
 	else if (index == kClipValue)
 	{
@@ -521,6 +544,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kInvertDither)
 	{
 		strcpy (text, "InvertDither");
+	}
+	else if (index == kSeed)
+	{
+		strcpy (text, "Seed");
 	}
 	else if (index == kClipPreQuantization)
 	{
