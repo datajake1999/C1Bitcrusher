@@ -25,6 +25,8 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * OnlyError: Only outputs the quantization noise.
 * AutoDither: If this is enabled, silent audio isn't dithered.
 * InvertDither: Inverts the dither noise.
+* Seed: The value used to reset the pseudorandom number generator.
+* SeedWithTime: Resets the pseudorandom number generator with the current time. When this is enabled, the value set by Seed is ignored.
 * ClipPreQuantization: Clips the audio before quantizing.
 * ClipValue: The maximum sample value allowed in the audio before quantizing.
 * ClipPostQuantization: Clips audio that is over 0 dB after quantizing.
