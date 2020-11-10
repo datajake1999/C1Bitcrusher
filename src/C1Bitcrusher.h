@@ -26,8 +26,6 @@ enum
 	kNumParams
 };
 
-class C1Bitcrusher;
-
 class C1Bitcrusher : public AudioEffectX
 {
 public:
