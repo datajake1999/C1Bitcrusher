@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <time.h>
 #ifndef __C1Bitcrusher__
 #include "C1Bitcrusher.h"
 #endif
@@ -24,6 +25,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	AutoDither = 0;
 	InvertDither = 0;
 	Seed = 1;
+	SeedWithTime = 0;
 	ClipPreQuantization = 0;
 	ClipValue = 1;
 	ClipPostQuantization = 1;
@@ -36,7 +38,14 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 
 void C1Bitcrusher::resume ()
 {
-	srand((int)Seed);
+	if (SeedWithTime >= 0.5)
+	{
+		srand(time(0));
+	}
+	else
+	{
+		srand((int)Seed);
+	}
 	quantized[0] = 0;
 	quantized[1] = 0;
 	error[0] = 0;
@@ -96,6 +105,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	{
 		Seed = value*1000;
 		if (Seed < 1) Seed = 1;
+	}
+	else if (index == kSeedWithTime)
+	{
+		SeedWithTime = value;
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -180,6 +193,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 		Seed = value*1000;
 		if (Seed < 1) Seed = 1;
 	}
+	else if (index == kSeedWithTime)
+	{
+		SeedWithTime = value;
+	}
 	else if (index == kClipPreQuantization)
 	{
 		ClipPreQuantization = value;
@@ -259,6 +276,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kSeed)
 	{
 		return Seed/1000;
+	}
+	else if (index == kSeedWithTime)
+	{
+		return SeedWithTime;
 	}
 	else if (index == kClipPreQuantization)
 	{
@@ -423,6 +444,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	{
 		int2string ((int)Seed, text, kVstMaxParamStrLen);
 	}
+	else if (index == kSeedWithTime)
+	{
+		if (SeedWithTime >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 	else if (index == kClipPreQuantization)
 	{
 		if (ClipPreQuantization >= 0.5)	
@@ -548,6 +580,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	else if (index == kSeed)
 	{
 		strcpy (text, "Seed");
+	}
+	else if (index == kSeedWithTime)
+	{
+		strcpy (text, "SeedWithTime");
 	}
 	else if (index == kClipPreQuantization)
 	{

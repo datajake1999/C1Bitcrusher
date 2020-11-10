@@ -17,6 +17,7 @@ enum
 	kAutoDither,
 	kInvertDither,
 	kSeed,
+	kSeedWithTime,
 	kClipPreQuantization,
 	kClipValue,
 	kClipPostQuantization,
@@ -57,6 +58,7 @@ private:
 	float AutoDither;
 	float InvertDither;
 	float Seed;
+	float SeedWithTime;
 	float ClipPreQuantization;
 	float ClipValue;
 	float ClipPostQuantization;
