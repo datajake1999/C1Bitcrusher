@@ -35,6 +35,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 
 void C1Bitcrusher::resume ()
 {
+	srand(1);
 	quantized[0] = 0;
 	quantized[1] = 0;
 	error[0] = 0;
