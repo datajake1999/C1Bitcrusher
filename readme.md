@@ -14,7 +14,9 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 
 # Parameters and their descriptions
 
+* Disable: disables the effect. This is useful if the host application doesn’t have a way of bypassing the plug-in.
 * BitDepth: The new bit depth.
+* DCBias: applies a DC bias to the input.
 * Dither: Enable or disable dithering.
 * DitherType: The type of noise that is used for dithering.
 * DitherInError: Treats dithering as part of the quantization noise.
