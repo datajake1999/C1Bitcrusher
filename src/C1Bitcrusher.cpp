@@ -14,6 +14,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	BitDepth = 16;
+	DCBias = 0;
 	Dither = 1;
 	DitherType = 1;
 	DitherInError = 1;
@@ -62,6 +63,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		if (BitDepth > 32) BitDepth = 32;
 		else if (BitDepth < 1) BitDepth = 1;
 		NumAmplitudes = powf(2, BitDepth);
+	}
+	else if (index == kDCBias)
+	{
+		DCBias = (value*4.0f)-2.0f;
 	}
 	else if (index == kDither)
 	{
@@ -151,6 +156,10 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 		else if (BitDepth < 1) BitDepth = 1;
 		NumAmplitudes = powf(2, BitDepth);
 	}
+	else if (index == kDCBias)
+	{
+		DCBias = (value*4.0f)-2.0f;
+	}
 	else if (index == kDither)
 	{
 		Dither = value;
@@ -236,6 +245,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	{
 		return BitDepth/32;
 	}
+	else if (index == kDCBias)
+	{
+		return (DCBias+2.0f)/4.0f;
+	}
 	else if (index == kDither)
 	{
 		return Dither;
@@ -320,6 +333,10 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	if (index == kBitDepth)
 	{
 		float2string (BitDepth, text, kVstMaxParamStrLen);
+	}
+	else if (index == kDCBias)
+	{
+		float2string (DCBias, text, kVstMaxParamStrLen);
 	}
 	else if (index == kDither)
 	{
@@ -508,6 +525,10 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	{
 		strcpy (label, "Bits");
 	}
+	else if (index == kDCBias)
+	{
+		strcpy (label, "LSB");
+	}
 	else if (index == kSeed)
 	{
 		strcpy (label, "I");
@@ -539,6 +560,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	if (index == kBitDepth)
 	{
 		strcpy (text, "BitDepth");
+	}
+	else if (index == kDCBias)
+	{
+		strcpy (text, "DCBias");
 	}
 	else if (index == kDither)
 	{
@@ -780,6 +805,8 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	{
 		*out1 = *in1 * InGain;
 		*out2 = *in2 * InGain;
+		*out1 = *out1 + DCBias/NumAmplitudes;
+		*out2 = *out2 + DCBias/NumAmplitudes;
 		if (Dither >= 0.5 && DitherInError < 0.5)
 		{
 			*out1 = DitherSample(*out1);

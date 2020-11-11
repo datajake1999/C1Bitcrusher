@@ -6,6 +6,7 @@
 enum
 {
 	kBitDepth = 0,
+	kDCBias,
 	kDither,
 	kDitherType,
 	kDitherInError,
@@ -47,6 +48,7 @@ public:
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 private:
 	float BitDepth;
+	float DCBias;
 	float Dither;
 	float DitherType;
 	float DitherInError;
