@@ -75,6 +75,7 @@ private:
 	float QuantizeSample(float sample);
 	float quantized[2];
 	float error[2];
+	float NumAmplitudes;
 };
 
 #endif

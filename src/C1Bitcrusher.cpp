@@ -33,6 +33,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OutGain = 1;
 	DitherGain = 1;
 	NoiseShapingGain = 1;
+	NumAmplitudes = powf(2, BitDepth);
 	resume ();
 }
 
@@ -60,6 +61,7 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		BitDepth = value*32;
 		if (BitDepth > 32) BitDepth = 32;
 		else if (BitDepth < 1) BitDepth = 1;
+		NumAmplitudes = powf(2, BitDepth);
 	}
 	else if (index == kDither)
 	{
@@ -147,6 +149,7 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 		BitDepth = value*32;
 		if (BitDepth > 32) BitDepth = 32;
 		else if (BitDepth < 1) BitDepth = 1;
+		NumAmplitudes = powf(2, BitDepth);
 	}
 	else if (index == kDither)
 	{
@@ -707,7 +710,7 @@ float C1Bitcrusher::DitherSample(float sample)
 	}
 	else
 	{
-		noise = DitherNoise() / powf(2, BitDepth);
+		noise = DitherNoise() / NumAmplitudes;
 	}
 	noise = noise * DitherGain;
 	if (InvertDither >= 0.5)
