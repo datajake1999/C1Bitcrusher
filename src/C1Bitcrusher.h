@@ -5,7 +5,8 @@
 
 enum
 {
-	kBitDepth = 0,
+	kDisable = 0,
+	kBitDepth,
 	kDCBias,
 	kDither,
 	kDitherType,
@@ -47,6 +48,7 @@ public:
 	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 private:
+	float Disable;
 	float BitDepth;
 	float DCBias;
 	float Dither;

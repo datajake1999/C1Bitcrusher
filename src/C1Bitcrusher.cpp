@@ -13,6 +13,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	// init
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
+	Disable = 0;
 	BitDepth = 16;
 	DCBias = 0;
 	Dither = 1;
@@ -57,7 +58,11 @@ void C1Bitcrusher::resume ()
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
 {
-	if (index == kBitDepth)
+	if (index == kDisable)
+	{
+		Disable = value;
+	}
+	else if (index == kBitDepth)
 	{
 		BitDepth = value*32;
 		if (BitDepth > 32) BitDepth = 32;
@@ -149,7 +154,11 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 
 void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 {
-	if (index == kBitDepth)
+	if (index == kDisable)
+	{
+		Disable = value;
+	}
+	else if (index == kBitDepth)
 	{
 		BitDepth = value*32;
 		if (BitDepth > 32) BitDepth = 32;
@@ -241,7 +250,11 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 
 float C1Bitcrusher::getParameter (VstInt32 index)
 {
-	if (index == kBitDepth)
+	if (index == kDisable)
+	{
+		return Disable;
+	}
+	else if (index == kBitDepth)
 	{
 		return BitDepth/32;
 	}
@@ -330,7 +343,18 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 
 void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 {
-	if (index == kBitDepth)
+	if (index == kDisable)
+	{
+		if (Disable >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
+	else if (index == kBitDepth)
 	{
 		float2string (BitDepth, text, kVstMaxParamStrLen);
 	}
@@ -557,7 +581,11 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 
 void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 {
-	if (index == kBitDepth)
+	if (index == kDisable)
+	{
+		strcpy (text, "Disable");
+	}
+	else if (index == kBitDepth)
 	{
 		strcpy (text, "BitDepth");
 	}
@@ -801,6 +829,19 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	float* in2 = inputs[1];
 	float* out1 = outputs[0];
 	float* out2 = outputs[1];
+	if (Disable >= 0.5)
+	{
+		for (int i=0; i<sampleFrames; i++)
+		{
+			*out1 = *in1;
+			*out2 = *in2;
+			*in1++;
+			*in2++;
+			*out1++;
+			*out2++;
+		}
+		return;
+	}
 	for (int i=0; i<sampleFrames; i++)
 	{
 		*out1 = *in1 * InGain;
