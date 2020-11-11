@@ -39,6 +39,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 
 # Extra notes
 
+* The seed parameters take effect when the plug-in is next reset.
 * This is only a VST2 compatible plug-in.
 * This plug-in only supports 32-bit floating point processing.
 * This plug-in has no User Interface of Its own, so the host application should provide a method of interacting with effect parameters.
