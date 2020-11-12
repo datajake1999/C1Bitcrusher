@@ -27,8 +27,8 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OnlyError = 0;
 	AutoDither = 0;
 	InvertDither = 0;
-	MersenneTwister = 0;
-	MersenneGenerator = 0;
+	MersenneTwister = 1;
+	MersenneGenerator = 1;
 	Seed = 1;
 	SeedWithTime = 0;
 	ClipPreQuantization = 0;
