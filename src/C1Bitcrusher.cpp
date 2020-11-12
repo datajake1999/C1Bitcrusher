@@ -712,7 +712,7 @@ float C1Bitcrusher::AWGN_generator()
 	while( p > 0 )
 	{
 		if (MersenneTwister >= 0.5)
-		temp2 = MT_generator();
+		temp2 = ( MT_generator() );
 		else
 		temp2 = ( rand() / ( (float)RAND_MAX ) ); /*  rand() function generates an
 													integer between 0 and  RAND_MAX,
