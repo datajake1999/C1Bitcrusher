@@ -146,23 +146,23 @@ long genrand_int31(void)
 }
 
 /* generates a random number on [0,1]-real-interval */
-double genrand_real1(void)
+float genrand_real1(void)
 {
-    return genrand_int32()*(1.0/4294967295.0); 
+    return genrand_int32()*(1.0f/4294967295.0f); 
     /* divided by 2^32-1 */ 
 }
 
 /* generates a random number on [0,1)-real-interval */
-double genrand_real2(void)
+float genrand_real2(void)
 {
-    return genrand_int32()*(1.0/4294967296.0); 
+    return genrand_int32()*(1.0f/4294967296.0f); 
     /* divided by 2^32 */
 }
 
 /* generates a random number on (0,1)-real-interval */
-double genrand_real3(void)
+float genrand_real3(void)
 {
-    return (((double)genrand_int32()) + 0.5)*(1.0/4294967296.0); 
+    return (((float)genrand_int32()) + 0.5f)*(1.0f/4294967296.0f); 
     /* divided by 2^32 */
 }
 

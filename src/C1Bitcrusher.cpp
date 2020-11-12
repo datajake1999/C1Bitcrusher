@@ -657,15 +657,15 @@ float C1Bitcrusher::MT_generator()
 {
 	if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
 	{
-		return (float)genrand_real1();
+		return genrand_real1();
 	}
 	else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
 	{
-		return (float)genrand_real2();
+		return genrand_real2();
 	}
 	else
 	{
-		return (float)genrand_real3();
+		return genrand_real3();
 	}
 }
 
