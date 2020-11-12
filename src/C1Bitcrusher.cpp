@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include "mt19937ar.h"
 #ifndef __C1Bitcrusher__
 #include "C1Bitcrusher.h"
 #endif
@@ -26,6 +27,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OnlyError = 0;
 	AutoDither = 0;
 	InvertDither = 0;
+	MersenneTwister = 0;
 	Seed = 1;
 	SeedWithTime = 0;
 	ClipPreQuantization = 0;
@@ -44,10 +46,12 @@ void C1Bitcrusher::resume ()
 	if (SeedWithTime >= 0.5)
 	{
 		srand(time(0));
+		init_genrand(time(0));
 	}
 	else
 	{
 		srand((int)Seed);
+		init_genrand((int)Seed);
 	}
 	quantized[0] = 0;
 	quantized[1] = 0;
@@ -112,6 +116,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kInvertDither)
 	{
 		InvertDither = value;
+	}
+	else if (index == kMersenneTwister)
+	{
+		MersenneTwister = value;
 	}
 	else if (index == kSeed)
 	{
@@ -210,6 +218,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kInvertDither)
 	{
 		return InvertDither;
+	}
+	else if (index == kMersenneTwister)
+	{
+		return MersenneTwister;
 	}
 	else if (index == kSeed)
 	{
@@ -393,6 +405,17 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kMersenneTwister)
+	{
+		if (MersenneTwister >= 0.5)	
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+	}
 	else if (index == kSeed)
 	{
 		int2string ((int)Seed, text, kVstMaxParamStrLen);
@@ -542,6 +565,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	{
 		strcpy (text, "InvertDither");
 	}
+	else if (index == kMersenneTwister)
+	{
+		strcpy (text, "MersenneTwister");
+	}
 	else if (index == kSeed)
 	{
 		strcpy (text, "Seed");
@@ -598,16 +625,37 @@ bool C1Bitcrusher::getVendorString (char* text)
 	return true;
 }
 
+float C1Bitcrusher::MT_generator()
+{
+	return (float)genrand_real1();
+}
+
 float C1Bitcrusher::RPDF()
 {
-	return rand() / (float)(RAND_MAX/2);
+	if (MersenneTwister >= 0.5)
+	{
+		return MT_generator() * 2;
+	}
+	else
+	{
+		return rand() / (float)(RAND_MAX/2);
+	}
 }
 
 float C1Bitcrusher::TPDF()
 {
-	float s1 = rand() / (float)(RAND_MAX/2);
-	float s2 = rand() / (float)(RAND_MAX/2);
-	return s1 + s2;
+	if (MersenneTwister >= 0.5)
+	{
+		float s1 = MT_generator() * 2;
+		float s2 = MT_generator() * 2;
+		return s1 + s2;
+	}
+	else
+	{
+		float s1 = rand() / (float)(RAND_MAX/2);
+		float s2 = rand() / (float)(RAND_MAX/2);
+		return s1 + s2;
+	}
 }
 
 #define PI 3.1415926536
@@ -624,6 +672,9 @@ float C1Bitcrusher::AWGN_generator()
 
 	while( p > 0 )
 	{
+		if (MersenneTwister >= 0.5)
+		temp2 = MT_generator();
+		else
 		temp2 = ( rand() / ( (float)RAND_MAX ) ); /*  rand() function generates an
 													integer between 0 and  RAND_MAX,
 													which is defined in stdlib.h.
@@ -640,6 +691,9 @@ float C1Bitcrusher::AWGN_generator()
 
 	}// end while()
 
+	if (MersenneTwister >= 0.5)
+	temp1 = cosf( ( 2.0f * (float)PI ) * MT_generator() );
+	else
 	temp1 = cosf( ( 2.0f * (float)PI ) * rand() / ( (float)RAND_MAX ) );
 	result = sqrtf( -2.0f * logf( temp2 ) ) * temp1;
 

@@ -110,6 +110,10 @@ SOURCE=..\src\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\mt19937ar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\vstplug.def
 # End Source File
 # Begin Source File

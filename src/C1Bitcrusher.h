@@ -18,6 +18,7 @@ enum
 	kOnlyError,
 	kAutoDither,
 	kInvertDither,
+	kMersenneTwister,
 	kSeed,
 	kSeedWithTime,
 	kClipPreQuantization,
@@ -61,6 +62,7 @@ private:
 	float OnlyError;
 	float AutoDither;
 	float InvertDither;
+	float MersenneTwister;
 	float Seed;
 	float SeedWithTime;
 	float ClipPreQuantization;
@@ -70,6 +72,7 @@ private:
 	float OutGain;
 	float DitherGain;
 	float NoiseShapingGain;
+	float MT_generator();
 	float RPDF();
 	float TPDF();
 	float AWGN_generator();
