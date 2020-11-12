@@ -846,8 +846,8 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	{
 		*out1 = *in1 * InGain;
 		*out2 = *in2 * InGain;
-		*out1 = *out1 + DCBias/NumAmplitudes;
-		*out2 = *out2 + DCBias/NumAmplitudes;
+		*out1 = *out1 + DCBias/(NumAmplitudes/2);
+		*out2 = *out2 + DCBias/(NumAmplitudes/2);
 		if (Dither >= 0.5 && DitherInError < 0.5)
 		{
 			*out1 = DitherSample(*out1);
