@@ -19,6 +19,7 @@ enum
 	kAutoDither,
 	kInvertDither,
 	kMersenneTwister,
+	kMersenneGenerator,
 	kSeed,
 	kSeedWithTime,
 	kClipPreQuantization,
@@ -63,6 +64,7 @@ private:
 	float AutoDither;
 	float InvertDither;
 	float MersenneTwister;
+	float MersenneGenerator;
 	float Seed;
 	float SeedWithTime;
 	float ClipPreQuantization;

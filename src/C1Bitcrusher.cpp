@@ -28,6 +28,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	AutoDither = 0;
 	InvertDither = 0;
 	MersenneTwister = 0;
+	MersenneGenerator = 0;
 	Seed = 1;
 	SeedWithTime = 0;
 	ClipPreQuantization = 0;
@@ -120,6 +121,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kMersenneTwister)
 	{
 		MersenneTwister = value;
+	}
+	else if (index == kMersenneGenerator)
+	{
+		MersenneGenerator = value;
 	}
 	else if (index == kSeed)
 	{
@@ -222,6 +227,10 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	else if (index == kMersenneTwister)
 	{
 		return MersenneTwister;
+	}
+	else if (index == kMersenneGenerator)
+	{
+		return MersenneGenerator;
 	}
 	else if (index == kSeed)
 	{
@@ -416,6 +425,21 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 	}
+	else if (index == kMersenneGenerator)
+	{
+		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)	
+		{
+			strcpy (text, "Generator1");
+		}
+		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)	
+		{
+			strcpy (text, "Generator2");
+		}
+		else
+		{
+			strcpy (text, "Generator3");
+		}
+	}
 	else if (index == kSeed)
 	{
 		int2string ((int)Seed, text, kVstMaxParamStrLen);
@@ -569,6 +593,10 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	{
 		strcpy (text, "MersenneTwister");
 	}
+	else if (index == kMersenneGenerator)
+	{
+		strcpy (text, "MersenneGenerator");
+	}
 	else if (index == kSeed)
 	{
 		strcpy (text, "Seed");
@@ -627,7 +655,18 @@ bool C1Bitcrusher::getVendorString (char* text)
 
 float C1Bitcrusher::MT_generator()
 {
-	return (float)genrand_real1();
+	if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
+	{
+		return (float)genrand_real1();
+	}
+	else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
+	{
+		return (float)genrand_real2();
+	}
+	else
+	{
+		return (float)genrand_real3();
+	}
 }
 
 float C1Bitcrusher::RPDF()
