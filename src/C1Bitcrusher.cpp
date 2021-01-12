@@ -857,6 +857,11 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 		}
 		if (Quantize >= 0.5)
 		{
+			if (ClipPreQuantization >= 0.5)
+			{
+				*out1 = ClipSample(*out1);
+				*out2 = ClipSample(*out2);
+			}
 			if (NoiseShaping >= 0.5)
 			{
 				if (NoiseShapingMode >= 0.5)
@@ -869,11 +874,6 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 					*out1 = *out1 + error[0] * NoiseShapingGain;
 					*out2 = *out2 + error[1] * NoiseShapingGain;
 				}
-			}
-			if (ClipPreQuantization >= 0.5)
-			{
-				*out1 = ClipSample(*out1);
-				*out2 = ClipSample(*out2);
 			}
 			if (Dither >= 0.5 && DitherInError >= 0.5)
 			{
