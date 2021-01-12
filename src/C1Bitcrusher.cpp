@@ -275,7 +275,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 {
 	if (index == kDisable)
 	{
-		if (Disable >= 0.5)	
+		if (Disable >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -294,7 +294,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kDither)
 	{
-		if (Dither >= 0.5)	
+		if (Dither >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -305,11 +305,11 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kDitherType)
 	{
-		if (DitherType >= 0.0 && DitherType < 0.25)	
+		if (DitherType >= 0.0 && DitherType < 0.25)
 		{
 			strcpy (text, "Rectangular");
 		}
-		else if (DitherType >= 0.25 && DitherType < 0.5)	
+		else if (DitherType >= 0.25 && DitherType < 0.5)
 		{
 			strcpy (text, "Triangular");
 		}
@@ -320,7 +320,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kDitherInError)
 	{
-		if (DitherInError >= 0.5)	
+		if (DitherInError >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -331,7 +331,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kNoiseShaping)
 	{
-		if (NoiseShaping >= 0.5)	
+		if (NoiseShaping >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -342,7 +342,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kNoiseShapingMode)
 	{
-		if (NoiseShapingMode >= 0.5)	
+		if (NoiseShapingMode >= 0.5)
 		{
 			strcpy (text, "High");
 		}
@@ -353,7 +353,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kQuantize)
 	{
-		if (Quantize >= 0.5)	
+		if (Quantize >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -364,15 +364,15 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kQuantizationMode)
 	{
-		if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)	
+		if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
 		{
 			strcpy (text, "Floor");
 		}
-		else if (QuantizationMode >= 0.25 && QuantizationMode < 0.5)	
+		else if (QuantizationMode >= 0.25 && QuantizationMode < 0.5)
 		{
 			strcpy (text, "Ceiling");
 		}
-		else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)	
+		else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)
 		{
 			strcpy (text, "Truncate");
 		}
@@ -383,7 +383,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kOnlyError)
 	{
-		if (OnlyError >= 0.5)	
+		if (OnlyError >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -394,7 +394,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kAutoDither)
 	{
-		if (AutoDither >= 0.5)	
+		if (AutoDither >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -405,7 +405,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kInvertDither)
 	{
-		if (InvertDither >= 0.5)	
+		if (InvertDither >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -416,7 +416,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kMersenneTwister)
 	{
-		if (MersenneTwister >= 0.5)	
+		if (MersenneTwister >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -427,11 +427,11 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kMersenneGenerator)
 	{
-		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)	
+		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
 		{
 			strcpy (text, "Generator1");
 		}
-		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)	
+		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
 		{
 			strcpy (text, "Generator2");
 		}
@@ -446,7 +446,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kSeedWithTime)
 	{
-		if (SeedWithTime >= 0.5)	
+		if (SeedWithTime >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -457,7 +457,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kClipPreQuantization)
 	{
-		if (ClipPreQuantization >= 0.5)	
+		if (ClipPreQuantization >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -472,7 +472,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kClipPostQuantization)
 	{
-		if (ClipPostQuantization >= 0.5)	
+		if (ClipPostQuantization >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
