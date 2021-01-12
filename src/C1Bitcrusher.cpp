@@ -342,13 +342,13 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	}
 	else if (index == kNoiseShapingMode)
 	{
-		if (NoiseShapingMode >= 0.0 && NoiseShapingMode < 0.5)	
+		if (NoiseShapingMode >= 0.5)	
 		{
-			strcpy (text, "Low");
+			strcpy (text, "High");
 		}
 		else
 		{
-			strcpy (text, "High");
+			strcpy (text, "Low");
 		}
 	}
 	else if (index == kQuantize)
