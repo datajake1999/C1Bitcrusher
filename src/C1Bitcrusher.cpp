@@ -63,12 +63,12 @@ void C1Bitcrusher::resume ()
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
 {
-	if (index == kDisable)
+	switch(index)
 	{
+	case kDisable:
 		Disable = value;
-	}
-	else if (index == kBitDepth)
-	{
+		break;
+	case kBitDepth:
 		BitDepth = value*32;
 		if (BitDepth > 32)
 		{
@@ -79,98 +79,77 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 			BitDepth = 1;
 		}
 		NumAmplitudes = powf(2, BitDepth);
-	}
-	else if (index == kDCBias)
-	{
+		break;
+	case kDCBias:
 		DCBias = (value*4.0f)-2.0f;
-	}
-	else if (index == kDither)
-	{
+		break;
+	case kDither:
 		Dither = value;
-	}
-	else if (index == kDitherType)
-	{
+		break;
+	case kDitherType:
 		DitherType = value;
-	}
-	else if (index == kDitherInError)
-	{
+		break;
+	case kDitherInError:
 		DitherInError = value;
-	}
-	else if (index == kNoiseShaping)
-	{
+		break;
+	case kNoiseShaping:
 		NoiseShaping = value;
-	}
-	else if (index == kNoiseShapingMode)
-	{
+		break;
+	case kNoiseShapingMode:
 		NoiseShapingMode = value;
-	}
-	else if (index == kQuantize)
-	{
+		break;
+	case kQuantize:
 		Quantize = value;
-	}
-	else if (index == kQuantizationMode)
-	{
+		break;
+	case kQuantizationMode:
 		QuantizationMode = value;
-	}
-	else if (index == kOnlyError)
-	{
+		break;
+	case kOnlyError:
 		OnlyError = value;
-	}
-	else if (index == kAutoDither)
-	{
+		break;
+	case kAutoDither:
 		AutoDither = value;
-	}
-	else if (index == kInvertDither)
-	{
+		break;
+	case kInvertDither:
 		InvertDither = value;
-	}
-	else if (index == kMersenneTwister)
-	{
+		break;
+	case kMersenneTwister:
 		MersenneTwister = value;
-	}
-	else if (index == kMersenneGenerator)
-	{
+		break;
+	case kMersenneGenerator:
 		MersenneGenerator = value;
-	}
-	else if (index == kSeed)
-	{
+		break;
+	case kSeed:
 		Seed = value*1000;
 		if (Seed < 1)
 		{
 			Seed = 1;
 		}
-	}
-	else if (index == kSeedWithTime)
-	{
+		break;
+	case kSeedWithTime:
 		SeedWithTime = value;
-	}
-	else if (index == kClipPreQuantization)
-	{
+		break;
+	case kClipPreQuantization:
 		ClipPreQuantization = value;
-	}
-	else if (index == kClipValue)
-	{
+		break;
+	case kClipValue:
 		ClipValue = value;
-	}
-	else if (index == kClipPostQuantization)
-	{
+		break;
+	case kClipPostQuantization:
 		ClipPostQuantization = value;
-	}
-	else if (index == kInGain)
-	{
+		break;
+	case kInGain:
 		InGain = value;
-	}
-	else if (index == kOutGain)
-	{
+		break;
+	case kOutGain:
 		OutGain = value;
-	}
-	else if (index == kDitherGain)
-	{
+		break;
+	case kDitherGain:
 		DitherGain = value;
-	}
-	else if (index == kNoiseShapingGain)
-	{
+		break;
+	case kNoiseShapingGain:
 		NoiseShapingGain = value;
+		break;
 	}
 }
 
@@ -181,109 +160,89 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 
 float C1Bitcrusher::getParameter (VstInt32 index)
 {
-	if (index == kDisable)
+	switch(index)
 	{
+	case kDisable:
 		return Disable;
-	}
-	else if (index == kBitDepth)
-	{
+		break;
+	case kBitDepth:
 		return BitDepth/32;
-	}
-	else if (index == kDCBias)
-	{
+		break;
+	case kDCBias:
 		return (DCBias+2.0f)/4.0f;
-	}
-	else if (index == kDither)
-	{
+		break;
+	case kDither:
 		return Dither;
-	}
-	else if (index == kDitherType)
-	{
+		break;
+	case kDitherType:
 		return DitherType;
-	}
-	else if (index == kDitherInError)
-	{
+		break;
+	case kDitherInError:
 		return DitherInError;
-	}
-	else if (index == kNoiseShaping)
-	{
+		break;
+	case kNoiseShaping:
 		return NoiseShaping;
-	}
-	else if (index == kNoiseShapingMode)
-	{
+		break;
+	case kNoiseShapingMode:
 		return NoiseShapingMode;
-	}
-	else if (index == kQuantize)
-	{
+		break;
+	case kQuantize:
 		return Quantize;
-	}
-	else if (index == kQuantizationMode)
-	{
+		break;
+	case kQuantizationMode:
 		return QuantizationMode;
-	}
-	else if (index == kOnlyError)
-	{
+		break;
+	case kOnlyError:
 		return OnlyError;
-	}
-	else if (index == kAutoDither)
-	{
+		break;
+	case kAutoDither:
 		return AutoDither;
-	}
-	else if (index == kInvertDither)
-	{
+		break;
+	case kInvertDither:
 		return InvertDither;
-	}
-	else if (index == kMersenneTwister)
-	{
+		break;
+	case kMersenneTwister:
 		return MersenneTwister;
-	}
-	else if (index == kMersenneGenerator)
-	{
+		break;
+	case kMersenneGenerator:
 		return MersenneGenerator;
-	}
-	else if (index == kSeed)
-	{
+		break;
+	case kSeed:
 		return Seed/1000;
-	}
-	else if (index == kSeedWithTime)
-	{
+		break;
+	case kSeedWithTime:
 		return SeedWithTime;
-	}
-	else if (index == kClipPreQuantization)
-	{
+		break;
+	case kClipPreQuantization:
 		return ClipPreQuantization;
-	}
-	else if (index == kClipValue)
-	{
+		break;
+	case kClipValue:
 		return ClipValue;
-	}
-	else if (index == kClipPostQuantization)
-	{
+		break;
+	case kClipPostQuantization:
 		return ClipPostQuantization;
-	}
-	else if (index == kInGain)
-	{
+		break;
+	case kInGain:
 		return InGain;
-	}
-	else if (index == kOutGain)
-	{
+		break;
+	case kOutGain:
 		return OutGain;
-	}
-	else if (index == kDitherGain)
-	{
+		break;
+	case kDitherGain:
 		return DitherGain;
-	}
-	else if (index == kNoiseShapingGain)
-	{
+		break;
+	case kNoiseShapingGain:
 		return NoiseShapingGain;
+		break;
 	}
 	return 0;
 }
 
 void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 {
-	if (index == kDisable)
+	switch(index)
 	{
+	case kDisable:
 		if (Disable >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -292,17 +251,14 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kBitDepth)
-	{
+		break;
+	case kBitDepth:
 		float2string (BitDepth, text, kVstMaxParamStrLen);
-	}
-	else if (index == kDCBias)
-	{
+		break;
+	case kDCBias:
 		float2string (DCBias, text, kVstMaxParamStrLen);
-	}
-	else if (index == kDither)
-	{
+		break;
+	case kDither:
 		if (Dither >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -311,9 +267,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kDitherType)
-	{
+		break;
+	case kDitherType:
 		if (DitherType >= 0.0 && DitherType < 0.25)
 		{
 			strcpy (text, "Rectangular");
@@ -326,9 +281,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "Gaussian");
 		}
-	}
-	else if (index == kDitherInError)
-	{
+		break;
+	case kDitherInError:
 		if (DitherInError >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -337,9 +291,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kNoiseShaping)
-	{
+		break;
+	case kNoiseShaping:
 		if (NoiseShaping >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -348,9 +301,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kNoiseShapingMode)
-	{
+		break;
+	case kNoiseShapingMode:
 		if (NoiseShapingMode >= 0.5)
 		{
 			strcpy (text, "High");
@@ -359,9 +311,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "Low");
 		}
-	}
-	else if (index == kQuantize)
-	{
+		break;
+	case kQuantize:
 		if (Quantize >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -370,9 +321,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kQuantizationMode)
-	{
+		break;
+	case kQuantizationMode:
 		if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
 		{
 			strcpy (text, "Floor");
@@ -389,9 +339,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "Round");
 		}
-	}
-	else if (index == kOnlyError)
-	{
+		break;
+	case kOnlyError:
 		if (OnlyError >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -400,9 +349,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kAutoDither)
-	{
+		break;
+	case kAutoDither:
 		if (AutoDither >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -411,9 +359,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kInvertDither)
-	{
+		break;
+	case kInvertDither:
 		if (InvertDither >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -422,9 +369,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kMersenneTwister)
-	{
+		break;
+	case kMersenneTwister:
 		if (MersenneTwister >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -433,9 +379,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kMersenneGenerator)
-	{
+		break;
+	case kMersenneGenerator:
 		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
 		{
 			strcpy (text, "Generator1");
@@ -448,13 +393,11 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "Generator3");
 		}
-	}
-	else if (index == kSeed)
-	{
+		break;
+	case kSeed:
 		int2string ((int)Seed, text, kVstMaxParamStrLen);
-	}
-	else if (index == kSeedWithTime)
-	{
+		break;
+	case kSeedWithTime:
 		if (SeedWithTime >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -463,9 +406,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kClipPreQuantization)
-	{
+		break;
+	case kClipPreQuantization:
 		if (ClipPreQuantization >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -474,13 +416,11 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kClipValue)
-	{
+		break;
+	case kClipValue:
 		dB2string (ClipValue, text, kVstMaxParamStrLen);
-	}
-	else if (index == kClipPostQuantization)
-	{
+		break;
+	case kClipPostQuantization:
 		if (ClipPostQuantization >= 0.5)
 		{
 			strcpy (text, "ON");
@@ -489,158 +429,129 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-	}
-	else if (index == kInGain)
-	{
+		break;
+	case kInGain:
 		float2string (InGain, text, kVstMaxParamStrLen);
-	}
-	else if (index == kOutGain)
-	{
+		break;
+	case kOutGain:
 		float2string (OutGain, text, kVstMaxParamStrLen);
-	}
-	else if (index == kDitherGain)
-	{
+		break;
+	case kDitherGain:
 		float2string (DitherGain, text, kVstMaxParamStrLen);
-	}
-	else if (index == kNoiseShapingGain)
-	{
+		break;
+	case kNoiseShapingGain:
 		float2string (NoiseShapingGain, text, kVstMaxParamStrLen);
+		break;
 	}
 }
 
 void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 {
-	if (index == kBitDepth)
+	switch(index)
 	{
+	case kBitDepth:
 		strcpy (label, "Bits");
-	}
-	else if (index == kDCBias)
-	{
+		break;
+	case kDCBias:
 		strcpy (label, "LSB");
-	}
-	else if (index == kSeed)
-	{
+		break;
+	case kSeed:
 		strcpy (label, "I");
-	}
-	else if (index == kClipValue)
-	{
+		break;
+	case kClipValue:
 		strcpy (label, "dB");
-	}
-	else if (index == kInGain)
-	{
+		break;
+	case kInGain:
 		strcpy (label, "F");
-	}
-	else if (index == kOutGain)
-	{
+		break;
+	case kOutGain:
 		strcpy (label, "F");
-	}
-	else if (index == kDitherGain)
-	{
+		break;
+	case kDitherGain:
 		strcpy (label, "F");
-	}
-	else if (index == kNoiseShapingGain)
-	{
+		break;
+	case kNoiseShapingGain:
 		strcpy (label, "F");
+		break;
 	}
 }
 
 void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 {
-	if (index == kDisable)
+	switch(index)
 	{
+	case kDisable:
 		strcpy (text, "Disable");
-	}
-	else if (index == kBitDepth)
-	{
+		break;
+	case kBitDepth:
 		strcpy (text, "BitDepth");
-	}
-	else if (index == kDCBias)
-	{
+		break;
+	case kDCBias:
 		strcpy (text, "DCBias");
-	}
-	else if (index == kDither)
-	{
+		break;
+	case kDither:
 		strcpy (text, "Dither");
-	}
-	else if (index == kDitherType)
-	{
+		break;
+	case kDitherType:
 		strcpy (text, "DitherType");
-	}
-	else if (index == kDitherInError)
-	{
+		break;
+	case kDitherInError:
 		strcpy (text, "DitherInError");
-	}
-	else if (index == kNoiseShaping)
-	{
+		break;
+	case kNoiseShaping:
 		strcpy (text, "NoiseShaping");
-	}
-	else if (index == kNoiseShapingMode)
-	{
+		break;
+	case kNoiseShapingMode:
 		strcpy (text, "NoiseShapingMode");
-	}
-	else if (index == kQuantize)
-	{
+		break;
+	case kQuantize:
 		strcpy (text, "Quantize");
-	}
-	else if (index == kQuantizationMode)
-	{
+		break;
+	case kQuantizationMode:
 		strcpy (text, "QuantizationMode");
-	}
-	else if (index == kOnlyError)
-	{
+		break;
+	case kOnlyError:
 		strcpy (text, "OnlyError");
-	}
-	else if (index == kAutoDither)
-	{
+		break;
+	case kAutoDither:
 		strcpy (text, "AutoDither");
-	}
-	else if (index == kInvertDither)
-	{
+		break;
+	case kInvertDither:
 		strcpy (text, "InvertDither");
-	}
-	else if (index == kMersenneTwister)
-	{
+		break;
+	case kMersenneTwister:
 		strcpy (text, "MersenneTwister");
-	}
-	else if (index == kMersenneGenerator)
-	{
+		break;
+	case kMersenneGenerator:
 		strcpy (text, "MersenneGenerator");
-	}
-	else if (index == kSeed)
-	{
+		break;
+	case kSeed:
 		strcpy (text, "Seed");
-	}
-	else if (index == kSeedWithTime)
-	{
+		break;
+	case kSeedWithTime:
 		strcpy (text, "SeedWithTime");
-	}
-	else if (index == kClipPreQuantization)
-	{
+		break;
+	case kClipPreQuantization:
 		strcpy (text, "ClipPreQuantization");
-	}
-	else if (index == kClipValue)
-	{
+		break;
+	case kClipValue:
 		strcpy (text, "ClipValue");
-	}
-	else if (index == kClipPostQuantization)
-	{
+		break;
+	case kClipPostQuantization:
 		strcpy (text, "ClipPostQuantization");
-	}
-	else if (index == kInGain)
-	{
+		break;
+	case kInGain:
 		strcpy (text, "InGain");
-	}
-	else if (index == kOutGain)
-	{
+		break;
+	case kOutGain:
 		strcpy (text, "OutGain");
-	}
-	else if (index == kDitherGain)
-	{
+		break;
+	case kDitherGain:
 		strcpy (text, "DitherGain");
-	}
-	else if (index == kNoiseShapingGain)
-	{
+		break;
+	case kNoiseShapingGain:
 		strcpy (text, "NoiseShapingGain");
+		break;
 	}
 }
 
