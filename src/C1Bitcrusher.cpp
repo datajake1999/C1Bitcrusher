@@ -719,6 +719,11 @@ float C1Bitcrusher::DitherSample(float sample)
 	return sample + noise;
 }
 
+float C1Bitcrusher::DCSample(float sample)
+{
+	return sample + (DCBias / (NumAmplitudes / 2));
+}
+
 float C1Bitcrusher::ClipSample(float sample)
 {
 	if (sample > ClipValue)
@@ -804,8 +809,8 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	{
 		*out1 = *in1 * InGain;
 		*out2 = *in2 * InGain;
-		*out1 = *out1 + (DCBias / (NumAmplitudes / 2));
-		*out2 = *out2 + (DCBias / (NumAmplitudes / 2));
+		*out1 = DCSample(*out1);
+		*out2 = DCSample(*out2);
 		if (Dither >= 0.5 && DitherInError < 0.5)
 		{
 			*out1 = DitherSample(*out1);
