@@ -70,8 +70,14 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kBitDepth)
 	{
 		BitDepth = value*32;
-		if (BitDepth > 32) BitDepth = 32;
-		else if (BitDepth < 1) BitDepth = 1;
+		if (BitDepth > 32)
+		{
+			BitDepth = 32;
+		}
+		else if (BitDepth < 1)
+		{
+			BitDepth = 1;
+		}
 		NumAmplitudes = powf(2, BitDepth);
 	}
 	else if (index == kDCBias)
@@ -129,7 +135,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	else if (index == kSeed)
 	{
 		Seed = value*1000;
-		if (Seed < 1) Seed = 1;
+		if (Seed < 1)
+		{
+			Seed = 1;
+		}
 	}
 	else if (index == kSeedWithTime)
 	{
@@ -712,12 +721,16 @@ float C1Bitcrusher::AWGN_generator()
 	while( p > 0 )
 	{
 		if (MersenneTwister >= 0.5)
-		temp2 = ( MT_generator() );
+		{
+			temp2 = ( MT_generator() );
+		}
 		else
-		temp2 = ( rand() / ( (float)RAND_MAX ) ); /*  rand() function generates an
+		{
+			temp2 = ( rand() / ( (float)RAND_MAX ) ); /*  rand() function generates an
 													integer between 0 and  RAND_MAX,
 													which is defined in stdlib.h.
 												*/
+		}
 
 		if ( temp2 == 0 )
 		{// temp2 is >= (RAND_MAX / 2)
@@ -731,9 +744,13 @@ float C1Bitcrusher::AWGN_generator()
 	}// end while()
 
 	if (MersenneTwister >= 0.5)
-	temp1 = cosf( ( 2.0f * (float)PI ) * MT_generator() );
+	{
+		temp1 = cosf( ( 2.0f * (float)PI ) * MT_generator() );
+	}
 	else
-	temp1 = cosf( ( 2.0f * (float)PI ) * rand() / ( (float)RAND_MAX ) );
+	{
+		temp1 = cosf( ( 2.0f * (float)PI ) * rand() / ( (float)RAND_MAX ) );
+	}
 	result = sqrtf( -2.0f * logf( temp2 ) ) * temp1;
 
 	return result;	// return the generated random sample to the caller
@@ -803,23 +820,35 @@ float C1Bitcrusher::QuantizeSample(float sample)
 	else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)
 	{
 		if (sample >= 0)
-		sample = floorf(sample);
+		{
+			sample = floorf(sample);
+		}
 		else
-		sample = ceilf(sample);
+		{
+			sample = ceilf(sample);
+		}
 	}
 	else
 	{
 		if (sample >= 0)
-		sample = floorf(sample + 0.5f);
+		{
+			sample = floorf(sample + 0.5f);
+		}
 		else
-		sample = ceilf(sample - 0.5f);
+		{
+			sample = ceilf(sample - 0.5f);
+		}
 	}
 	if (ClipPostQuantization >= 0.5)
 	{
 		if (sample > scale - 1)
-		sample = scale - 1;
+		{
+			sample = scale - 1;
+		}
 		else if (sample < scale * -1)
-		sample = scale * -1;
+		{
+			sample = scale * -1;
+		}
 	}
 	sample = sample / scale;
 	return sample;
