@@ -135,6 +135,10 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kClipValue:
 		ClipValue = value;
+		if (ClipValue < 0)
+		{
+			ClipValue = 0;
+		}
 		break;
 	case kClipPostQuantization:
 		ClipPostQuantization = value;
