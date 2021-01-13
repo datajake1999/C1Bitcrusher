@@ -161,82 +161,83 @@ void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
 
 float C1Bitcrusher::getParameter (VstInt32 index)
 {
+	float value = 0;
 	switch(index)
 	{
 	case kDisable:
-		return Disable;
+		value = Disable;
 		break;
 	case kBitDepth:
-		return BitDepth/32;
+		value = BitDepth/32;
 		break;
 	case kDCBias:
-		return (DCBias+2.0f)/4.0f;
+		value = (DCBias+2.0f)/4.0f;
 		break;
 	case kDither:
-		return Dither;
+		value = Dither;
 		break;
 	case kDitherType:
-		return DitherType;
+		value = DitherType;
 		break;
 	case kDitherInError:
-		return DitherInError;
+		value = DitherInError;
 		break;
 	case kNoiseShaping:
-		return NoiseShaping;
+		value = NoiseShaping;
 		break;
 	case kNoiseShapingMode:
-		return NoiseShapingMode;
+		value = NoiseShapingMode;
 		break;
 	case kQuantize:
-		return Quantize;
+		value = Quantize;
 		break;
 	case kQuantizationMode:
-		return QuantizationMode;
+		value = QuantizationMode;
 		break;
 	case kOnlyError:
-		return OnlyError;
+		value = OnlyError;
 		break;
 	case kAutoDither:
-		return AutoDither;
+		value = AutoDither;
 		break;
 	case kInvertDither:
-		return InvertDither;
+		value = InvertDither;
 		break;
 	case kMersenneTwister:
-		return MersenneTwister;
+		value = MersenneTwister;
 		break;
 	case kMersenneGenerator:
-		return MersenneGenerator;
+		value = MersenneGenerator;
 		break;
 	case kSeed:
-		return Seed/1000;
+		value = Seed/1000;
 		break;
 	case kSeedWithTime:
-		return SeedWithTime;
+		value = SeedWithTime;
 		break;
 	case kClipPreQuantization:
-		return ClipPreQuantization;
+		value = ClipPreQuantization;
 		break;
 	case kClipValue:
-		return ClipValue;
+		value = ClipValue;
 		break;
 	case kClipPostQuantization:
-		return ClipPostQuantization;
+		value = ClipPostQuantization;
 		break;
 	case kInGain:
-		return InGain;
+		value = InGain;
 		break;
 	case kOutGain:
-		return OutGain;
+		value = OutGain;
 		break;
 	case kDitherGain:
-		return DitherGain;
+		value = DitherGain;
 		break;
 	case kNoiseShapingGain:
-		return NoiseShapingGain;
+		value = NoiseShapingGain;
 		break;
 	}
-	return 0;
+	return value;
 }
 
 void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
