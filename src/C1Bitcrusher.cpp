@@ -9,7 +9,7 @@
 #endif
 
 C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 0, kNumParams)
+: AudioEffectX (audioMaster, 1, kNumParams)
 {
 	// init
 	setNumInputs (2);	// stereo input
@@ -39,6 +39,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherGain = 1;
 	NoiseShapingGain = 1;
 	NumAmplitudes = powf(2, BitDepth);
+	strcpy (ProgramName, "C1Bitcrusher");
 	resume ();
 }
 
@@ -553,6 +554,16 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		strcpy (text, "NoiseShapingGain");
 		break;
 	}
+}
+
+void C1Bitcrusher::setProgramName (char *name)
+{
+	strcpy (ProgramName, name);
+}
+
+void C1Bitcrusher::getProgramName (char *name)
+{
+	strcpy (name, ProgramName);
 }
 
 bool C1Bitcrusher::getEffectName (char* name)

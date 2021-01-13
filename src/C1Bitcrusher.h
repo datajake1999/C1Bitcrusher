@@ -43,6 +43,8 @@ public:
 	virtual void getParameterDisplay (VstInt32 index, char* text);
 	virtual void getParameterLabel (VstInt32 index, char* label);
 	virtual void getParameterName (VstInt32 index, char* text);
+	virtual void setProgramName (char* name);
+	virtual void getProgramName (char* name);
 	virtual bool getEffectName (char* name);
 	virtual bool getProductString (char* text);
 	virtual bool getVendorString (char* text);
@@ -85,6 +87,7 @@ private:
 	float quantized[2];
 	float error[2];
 	float NumAmplitudes;
+	char ProgramName[32];
 };
 
 #endif
