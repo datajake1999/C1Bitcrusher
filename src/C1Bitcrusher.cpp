@@ -721,6 +721,10 @@ float C1Bitcrusher::DitherSample(float sample)
 
 float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
 {
+	if (sample == 0 && AutoDither >= 0.5)
+	{
+		return 0;
+	}
 	if (NoiseShapingMode >= 0.5)
 	{
 		return sample - (noise * NoiseShapingGain);
