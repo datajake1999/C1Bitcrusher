@@ -702,16 +702,11 @@ float C1Bitcrusher::DitherNoise()
 
 float C1Bitcrusher::DitherSample(float sample)
 {
-	float noise;
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
-		noise = 0;
+		return 0;
 	}
-	else
-	{
-		noise = DitherNoise() / NumAmplitudes;
-	}
-	noise = noise * DitherGain;
+	float noise = (DitherNoise() / NumAmplitudes) * DitherGain;
 	if (InvertDither >= 0.5)
 	{
 		noise = noise * -1;
