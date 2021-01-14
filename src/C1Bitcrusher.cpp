@@ -719,6 +719,18 @@ float C1Bitcrusher::DitherSample(float sample)
 	return sample + noise;
 }
 
+float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
+{
+	if (NoiseShapingMode >= 0.5)
+	{
+		return sample - (noise * NoiseShapingGain);
+	}
+	else
+	{
+		return sample + (noise * NoiseShapingGain);
+	}
+}
+
 float C1Bitcrusher::DCSample(float sample)
 {
 	return sample + (DCBias / (NumAmplitudes / 2));
@@ -825,16 +837,8 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			}
 			if (NoiseShaping >= 0.5)
 			{
-				if (NoiseShapingMode >= 0.5)
-				{
-					*out1 = *out1 - (error[0] * NoiseShapingGain);
-					*out2 = *out2 - (error[1] * NoiseShapingGain);
-				}
-				else
-				{
-					*out1 = *out1 + (error[0] * NoiseShapingGain);
-					*out2 = *out2 + (error[1] * NoiseShapingGain);
-				}
+				*out1 = NoiseShapeSample(*out1, error[0]);
+				*out2 = NoiseShapeSample(*out2, error[1]);
 			}
 			if (Dither >= 0.5 && DitherInError >= 0.5)
 			{

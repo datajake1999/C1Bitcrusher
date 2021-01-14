@@ -82,6 +82,7 @@ private:
 	float AWGN_generator();
 	float DitherNoise();
 	float DitherSample(float sample);
+	float NoiseShapeSample(float sample, float noise);
 	float DCSample(float sample);
 	float ClipSample(float sample);
 	float QuantizeSample(float sample);
