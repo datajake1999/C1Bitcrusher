@@ -25,7 +25,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Quantize = 1;
 	QuantizationMode = 1;
 	OnlyError = 0;
-	AutoDither = 0;
+	AutoBlank = 0;
 	InvertDither = 0;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
@@ -108,8 +108,8 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kOnlyError:
 		OnlyError = value;
 		break;
-	case kAutoDither:
-		AutoDither = value;
+	case kAutoBlank:
+		AutoBlank = value;
 		break;
 	case kInvertDither:
 		InvertDither = value;
@@ -201,8 +201,8 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kOnlyError:
 		value = OnlyError;
 		break;
-	case kAutoDither:
-		value = AutoDither;
+	case kAutoBlank:
+		value = AutoBlank;
 		break;
 	case kInvertDither:
 		value = InvertDither;
@@ -356,8 +356,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
-	case kAutoDither:
-		if (AutoDither >= 0.5)
+	case kAutoBlank:
+		if (AutoBlank >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -519,8 +519,8 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kOnlyError:
 		strcpy (text, "OnlyError");
 		break;
-	case kAutoDither:
-		strcpy (text, "AutoDither");
+	case kAutoBlank:
+		strcpy (text, "AutoBlank");
 		break;
 	case kInvertDither:
 		strcpy (text, "InvertDither");
@@ -703,7 +703,7 @@ float C1Bitcrusher::DitherNoise()
 float C1Bitcrusher::DitherSample(float sample)
 {
 	float noise;
-	if (sample == 0 && AutoDither >= 0.5)
+	if (sample == 0 && AutoBlank >= 0.5)
 	{
 		noise = 0;
 	}
@@ -721,7 +721,7 @@ float C1Bitcrusher::DitherSample(float sample)
 
 float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
 {
-	if (sample == 0 && AutoDither >= 0.5)
+	if (sample == 0 && AutoBlank >= 0.5)
 	{
 		return 0;
 	}

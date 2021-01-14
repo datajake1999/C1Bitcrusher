@@ -16,7 +16,7 @@ enum
 	kQuantize,
 	kQuantizationMode,
 	kOnlyError,
-	kAutoDither,
+	kAutoBlank,
 	kInvertDither,
 	kMersenneTwister,
 	kMersenneGenerator,
@@ -63,7 +63,7 @@ private:
 	float Quantize;
 	float QuantizationMode;
 	float OnlyError;
-	float AutoDither;
+	float AutoBlank;
 	float InvertDither;
 	float MersenneTwister;
 	float MersenneGenerator;

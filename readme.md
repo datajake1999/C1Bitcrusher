@@ -25,7 +25,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
 * OnlyError: Only outputs the quantization noise.
-* AutoDither: If this is enabled, silent audio isn't dithered.
+* AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
 * InvertDither: Inverts the dither noise.
 * MersenneTwister: Switches to the Mersenne Twister pseudorandom number generator.
 * MersenneGenerator: The Mersenne Twister generator function to use.
