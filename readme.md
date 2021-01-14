@@ -19,6 +19,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * DCBias: applies a DC bias to the input.
 * Dither: Enable or disable dithering.
 * DitherType: The type of noise that is used for dithering.
+* InvertDither: Inverts the dither noise.
 * DitherInError: Treats dithering as part of the quantization noise.
 * NoiseShaping: Enable or disable noise shaping.
 * NoiseShapingMode: Controls whether the noise shaping focuses on low or high frequencies.
@@ -26,7 +27,6 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * QuantizationMode: The type of math that is used for quantization.
 * OnlyError: Only outputs the quantization noise.
 * AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
-* InvertDither: Inverts the dither noise.
 * MersenneTwister: Switches to the Mersenne Twister pseudorandom number generator.
 * MersenneGenerator: The Mersenne Twister generator function to use.
 * Seed: The value used to reset the pseudorandom number generator.

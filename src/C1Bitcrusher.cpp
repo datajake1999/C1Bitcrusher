@@ -19,6 +19,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DCBias = 0;
 	Dither = 1;
 	DitherType = 1;
+	InvertDither = 0;
 	DitherInError = 1;
 	NoiseShaping = 1;
 	NoiseShapingMode = 1;
@@ -26,7 +27,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	QuantizationMode = 1;
 	OnlyError = 0;
 	AutoBlank = 0;
-	InvertDither = 0;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
 	Seed = 1;
@@ -90,6 +90,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kDitherType:
 		DitherType = value;
 		break;
+	case kInvertDither:
+		InvertDither = value;
+		break;
 	case kDitherInError:
 		DitherInError = value;
 		break;
@@ -110,9 +113,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kAutoBlank:
 		AutoBlank = value;
-		break;
-	case kInvertDither:
-		InvertDither = value;
 		break;
 	case kMersenneTwister:
 		MersenneTwister = value;
@@ -183,6 +183,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kDitherType:
 		value = DitherType;
 		break;
+	case kInvertDither:
+		value = InvertDither;
+		break;
 	case kDitherInError:
 		value = DitherInError;
 		break;
@@ -203,9 +206,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kAutoBlank:
 		value = AutoBlank;
-		break;
-	case kInvertDither:
-		value = InvertDither;
 		break;
 	case kMersenneTwister:
 		value = MersenneTwister;
@@ -288,6 +288,16 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "Gaussian");
 		}
 		break;
+	case kInvertDither:
+		if (InvertDither >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
 	case kDitherInError:
 		if (DitherInError >= 0.5)
 		{
@@ -358,16 +368,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		break;
 	case kAutoBlank:
 		if (AutoBlank >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
-	case kInvertDither:
-		if (InvertDither >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -501,6 +501,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kDitherType:
 		strcpy (text, "DitherType");
 		break;
+	case kInvertDither:
+		strcpy (text, "InvertDither");
+		break;
 	case kDitherInError:
 		strcpy (text, "DitherInError");
 		break;
@@ -521,9 +524,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kAutoBlank:
 		strcpy (text, "AutoBlank");
-		break;
-	case kInvertDither:
-		strcpy (text, "InvertDither");
 		break;
 	case kMersenneTwister:
 		strcpy (text, "MersenneTwister");

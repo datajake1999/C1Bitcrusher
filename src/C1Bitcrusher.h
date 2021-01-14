@@ -10,6 +10,7 @@ enum
 	kDCBias,
 	kDither,
 	kDitherType,
+	kInvertDither,
 	kDitherInError,
 	kNoiseShaping,
 	kNoiseShapingMode,
@@ -17,7 +18,6 @@ enum
 	kQuantizationMode,
 	kOnlyError,
 	kAutoBlank,
-	kInvertDither,
 	kMersenneTwister,
 	kMersenneGenerator,
 	kSeed,
@@ -57,6 +57,7 @@ private:
 	float DCBias;
 	float Dither;
 	float DitherType;
+	float InvertDither;
 	float DitherInError;
 	float NoiseShaping;
 	float NoiseShapingMode;
@@ -64,7 +65,6 @@ private:
 	float QuantizationMode;
 	float OnlyError;
 	float AutoBlank;
-	float InvertDither;
 	float MersenneTwister;
 	float MersenneGenerator;
 	float Seed;
