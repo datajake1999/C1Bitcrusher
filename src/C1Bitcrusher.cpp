@@ -720,6 +720,14 @@ float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
 	{
 		return 0;
 	}
+	if (noise > 1)
+	{
+		noise = 1;
+	}
+	else if (noise < -1)
+	{
+		noise = -1;
+	}
 	if (NoiseShapingMode >= 0.5)
 	{
 		return sample - (noise * NoiseShapingGain);
