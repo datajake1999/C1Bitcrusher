@@ -706,12 +706,12 @@ float C1Bitcrusher::DitherSample(float sample)
 	{
 		return 0;
 	}
-	float noise = (DitherNoise() / NumAmplitudes) * DitherGain;
+	float noise = DitherNoise() / NumAmplitudes;
 	if (InvertDither >= 0.5)
 	{
 		noise = noise * -1;
 	}
-	return sample + noise;
+	return sample + (noise * DitherGain);
 }
 
 float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
