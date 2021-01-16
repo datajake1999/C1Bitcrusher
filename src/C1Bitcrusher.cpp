@@ -711,6 +711,14 @@ float C1Bitcrusher::DitherSample(float sample)
 	{
 		noise = noise * -1;
 	}
+	if (noise > 1)
+	{
+		noise = 1;
+	}
+	else if (noise < -1)
+	{
+		noise = -1;
+	}
 	return sample + (noise * DitherGain);
 }
 
