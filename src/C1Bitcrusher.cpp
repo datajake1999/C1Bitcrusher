@@ -22,7 +22,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	InvertDither = 0;
 	DitherInError = 1;
 	NoiseShaping = 1;
-	NoiseShapingMode = 1;
+	NoiseShapingFocus = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
 	OnlyError = 0;
@@ -99,8 +99,8 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kNoiseShaping:
 		NoiseShaping = value;
 		break;
-	case kNoiseShapingMode:
-		NoiseShapingMode = value;
+	case kNoiseShapingFocus:
+		NoiseShapingFocus = value;
 		break;
 	case kQuantize:
 		Quantize = value;
@@ -192,8 +192,8 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kNoiseShaping:
 		value = NoiseShaping;
 		break;
-	case kNoiseShapingMode:
-		value = NoiseShapingMode;
+	case kNoiseShapingFocus:
+		value = NoiseShapingFocus;
 		break;
 	case kQuantize:
 		value = Quantize;
@@ -318,8 +318,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
-	case kNoiseShapingMode:
-		if (NoiseShapingMode >= 0.5)
+	case kNoiseShapingFocus:
+		if (NoiseShapingFocus >= 0.5)
 		{
 			strcpy (text, "High");
 		}
@@ -510,8 +510,8 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kNoiseShaping:
 		strcpy (text, "NoiseShaping");
 		break;
-	case kNoiseShapingMode:
-		strcpy (text, "NoiseShapingMode");
+	case kNoiseShapingFocus:
+		strcpy (text, "NoiseShapingFocus");
 		break;
 	case kQuantize:
 		strcpy (text, "Quantize");
@@ -736,7 +736,7 @@ float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
 	{
 		noise = -1;
 	}
-	if (NoiseShapingMode >= 0.5)
+	if (NoiseShapingFocus >= 0.5)
 	{
 		return sample - (noise * NoiseShapingGain);
 	}

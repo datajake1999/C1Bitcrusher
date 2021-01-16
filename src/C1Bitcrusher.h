@@ -13,7 +13,7 @@ enum
 	kInvertDither,
 	kDitherInError,
 	kNoiseShaping,
-	kNoiseShapingMode,
+	kNoiseShapingFocus,
 	kQuantize,
 	kQuantizationMode,
 	kOnlyError,
@@ -60,7 +60,7 @@ private:
 	float InvertDither;
 	float DitherInError;
 	float NoiseShaping;
-	float NoiseShapingMode;
+	float NoiseShapingFocus;
 	float Quantize;
 	float QuantizationMode;
 	float OnlyError;

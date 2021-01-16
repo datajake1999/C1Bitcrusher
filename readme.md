@@ -22,7 +22,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * InvertDither: Inverts the dither noise.
 * DitherInError: Treats dithering as part of the quantization noise.
 * NoiseShaping: Enable or disable noise shaping.
-* NoiseShapingMode: Controls whether the noise shaping focuses on low or high frequencies.
+* NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
 * OnlyError: Only outputs the quantization noise.
