@@ -748,7 +748,16 @@ float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
 
 float C1Bitcrusher::DCSample(float sample)
 {
-	return sample + (DCBias / (NumAmplitudes / 2));
+	float DC = DCBias / (NumAmplitudes / 2);
+	if (DC > 1)
+	{
+		DC = 1;
+	}
+	else if (DC < -1)
+	{
+		DC = -1;
+	}
+	return sample + DC;
 }
 
 float C1Bitcrusher::ClipSample(float sample)
