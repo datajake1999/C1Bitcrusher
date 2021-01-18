@@ -15,6 +15,8 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 # Parameters and their descriptions
 
 * Disable: disables the effect. This is useful if the host application doesn’t have a way of bypassing the plug-in.
+* InGain: Input gain of the plug-in.
+* OutGain: Output gain of the plug-in.
 * BitDepth: The new bit depth.
 * DCBias: applies a DC bias to the input.
 * Dither: Enable or disable dithering.
@@ -36,8 +38,6 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
 * DitherInError: Treats dithering as part of the quantization error.
 * OnlyError: Only outputs the quantization error.
-* InGain: Input gain of the plug-in.
-* OutGain: Output gain of the plug-in.
 
 # Extra notes
 

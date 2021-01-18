@@ -15,6 +15,8 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	Disable = 0;
+	InGain = 1;
+	OutGain = 1;
 	BitDepth = 16;
 	DCBias = 0;
 	Dither = 1;
@@ -36,8 +38,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Clip0dB = 1;
 	DitherInError = 1;
 	OnlyError = 0;
-	InGain = 1;
-	OutGain = 1;
 	NumAmplitudes = powf(2, BitDepth);
 	strcpy (ProgramName, "C1Bitcrusher");
 	canProcessReplacing ();
@@ -50,6 +50,12 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	{
 	case kDisable:
 		Disable = value;
+		break;
+	case kInGain:
+		InGain = value;
+		break;
+	case kOutGain:
+		OutGain = value;
 		break;
 	case kBitDepth:
 		BitDepth = value*32;
@@ -131,12 +137,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kOnlyError:
 		OnlyError = value;
 		break;
-	case kInGain:
-		InGain = value;
-		break;
-	case kOutGain:
-		OutGain = value;
-		break;
 	}
 }
 
@@ -152,6 +152,12 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	{
 	case kDisable:
 		value = Disable;
+		break;
+	case kInGain:
+		value = InGain;
+		break;
+	case kOutGain:
+		value = OutGain;
 		break;
 	case kBitDepth:
 		value = BitDepth/32;
@@ -216,12 +222,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kOnlyError:
 		value = OnlyError;
 		break;
-	case kInGain:
-		value = InGain;
-		break;
-	case kOutGain:
-		value = OutGain;
-		break;
 	}
 	return value;
 }
@@ -239,6 +239,12 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
+		break;
+	case kInGain:
+		float2string (InGain, text, kVstMaxParamStrLen);
+		break;
+	case kOutGain:
+		float2string (OutGain, text, kVstMaxParamStrLen);
 		break;
 	case kBitDepth:
 		float2string (BitDepth, text, kVstMaxParamStrLen);
@@ -424,12 +430,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
-	case kInGain:
-		float2string (InGain, text, kVstMaxParamStrLen);
-		break;
-	case kOutGain:
-		float2string (OutGain, text, kVstMaxParamStrLen);
-		break;
 	}
 }
 
@@ -437,6 +437,12 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 {
 	switch(index)
 	{
+	case kInGain:
+		strcpy (label, "F");
+		break;
+	case kOutGain:
+		strcpy (label, "F");
+		break;
 	case kBitDepth:
 		strcpy (label, "Bits");
 		break;
@@ -455,12 +461,6 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	case kClipThreshold:
 		strcpy (label, "dB");
 		break;
-	case kInGain:
-		strcpy (label, "F");
-		break;
-	case kOutGain:
-		strcpy (label, "F");
-		break;
 	}
 }
 
@@ -470,6 +470,12 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	{
 	case kDisable:
 		strcpy (text, "Disable");
+		break;
+	case kInGain:
+		strcpy (text, "InGain");
+		break;
+	case kOutGain:
+		strcpy (text, "OutGain");
 		break;
 	case kBitDepth:
 		strcpy (text, "BitDepth");
@@ -533,12 +539,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kOnlyError:
 		strcpy (text, "OnlyError");
-		break;
-	case kInGain:
-		strcpy (text, "InGain");
-		break;
-	case kOutGain:
-		strcpy (text, "OutGain");
 		break;
 	}
 }

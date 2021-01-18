@@ -6,6 +6,8 @@
 enum
 {
 	kDisable = 0,
+	kInGain,
+	kOutGain,
 	kBitDepth,
 	kDCBias,
 	kDither,
@@ -27,8 +29,6 @@ enum
 	kClip0dB,
 	kDitherInError,
 	kOnlyError,
-	kInGain,
-	kOutGain,
 	kNumParams
 };
 
@@ -53,6 +53,8 @@ public:
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 private:
 	float Disable;
+	float InGain;
+	float OutGain;
 	float BitDepth;
 	float DCBias;
 	float Dither;
@@ -74,8 +76,6 @@ private:
 	float Clip0dB;
 	float DitherInError;
 	float OnlyError;
-	float InGain;
-	float OutGain;
 	float MT_generator();
 	float RPDF();
 	float TPDF();
