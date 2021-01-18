@@ -21,23 +21,23 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * DitherType: The type of noise that is used for dithering.
 * InvertDither: Inverts the dither noise.
 * DitherInError: Treats dithering as part of the quantization error.
-* NoiseShaping: Enable or disable noise shaping.
-* NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
-* Quantize: Enable or disable the actual bit reduction.
-* QuantizationMode: The type of math that is used for quantization.
-* Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
-* OnlyError: Only outputs the quantization error.
-* AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
+* DitherGain: controls the over all affect of dithering.
 * MersenneTwister: Switches to the Mersenne Twister pseudorandom number generator.
 * MersenneGenerator: The Mersenne Twister generator function to use.
 * Seed: The value used to reset the pseudorandom number generator.
 * SeedWithTime: Resets the pseudorandom number generator with the current time. When this is enabled, the value set by Seed is ignored.
+* NoiseShaping: Enable or disable noise shaping.
+* NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
+* NoiseShapingGain: controls the over all affect of noise shaping.
+* AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
+* Quantize: Enable or disable the actual bit reduction.
+* QuantizationMode: The type of math that is used for quantization.
+* Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
+* OnlyError: Only outputs the quantization error.
 * Clip: Clips the audio before quantizing.
 * ClipThreshold: Sets the threshold for Clip.
 * InGain: Input gain of the plug-in.
 * OutGain: Output gain of the plug-in.
-* DitherGain: controls the over all affect of dithering.
-* NoiseShapingGain: controls the over all affect of noise shaping.
 
 # Extra notes
 

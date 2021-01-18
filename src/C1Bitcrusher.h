@@ -12,23 +12,23 @@ enum
 	kDitherType,
 	kInvertDither,
 	kDitherInError,
-	kNoiseShaping,
-	kNoiseShapingFocus,
-	kQuantize,
-	kQuantizationMode,
-	kClip0dB,
-	kOnlyError,
-	kAutoBlank,
+	kDitherGain,
 	kMersenneTwister,
 	kMersenneGenerator,
 	kSeed,
 	kSeedWithTime,
+	kNoiseShaping,
+	kNoiseShapingFocus,
+	kNoiseShapingGain,
+	kAutoBlank,
+	kQuantize,
+	kQuantizationMode,
+	kClip0dB,
+	kOnlyError,
 	kClip,
 	kClipThreshold,
 	kInGain,
 	kOutGain,
-	kDitherGain,
-	kNoiseShapingGain,
 	kNumParams
 };
 
@@ -59,23 +59,23 @@ private:
 	float DitherType;
 	float InvertDither;
 	float DitherInError;
-	float NoiseShaping;
-	float NoiseShapingFocus;
-	float Quantize;
-	float QuantizationMode;
-	float Clip0dB;
-	float OnlyError;
-	float AutoBlank;
+	float DitherGain;
 	float MersenneTwister;
 	float MersenneGenerator;
 	float Seed;
 	float SeedWithTime;
+	float NoiseShaping;
+	float NoiseShapingFocus;
+	float NoiseShapingGain;
+	float AutoBlank;
+	float Quantize;
+	float QuantizationMode;
+	float Clip0dB;
+	float OnlyError;
 	float Clip;
 	float ClipThreshold;
 	float InGain;
 	float OutGain;
-	float DitherGain;
-	float NoiseShapingGain;
 	float MT_generator();
 	float RPDF();
 	float TPDF();

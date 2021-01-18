@@ -21,23 +21,23 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherType = 1;
 	InvertDither = 0;
 	DitherInError = 1;
-	NoiseShaping = 1;
-	NoiseShapingFocus = 1;
-	Quantize = 1;
-	QuantizationMode = 1;
-	Clip0dB = 1;
-	OnlyError = 0;
-	AutoBlank = 0;
+	DitherGain = 1;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
 	Seed = 1;
 	SeedWithTime = 0;
+	NoiseShaping = 1;
+	NoiseShapingFocus = 1;
+	NoiseShapingGain = 1;
+	AutoBlank = 0;
+	Quantize = 1;
+	QuantizationMode = 1;
+	Clip0dB = 1;
+	OnlyError = 0;
 	Clip = 0;
 	ClipThreshold = 1;
 	InGain = 1;
 	OutGain = 1;
-	DitherGain = 1;
-	NoiseShapingGain = 1;
 	NumAmplitudes = powf(2, BitDepth);
 	strcpy (ProgramName, "C1Bitcrusher");
 	canProcessReplacing ();
@@ -97,26 +97,8 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kDitherInError:
 		DitherInError = value;
 		break;
-	case kNoiseShaping:
-		NoiseShaping = value;
-		break;
-	case kNoiseShapingFocus:
-		NoiseShapingFocus = value;
-		break;
-	case kQuantize:
-		Quantize = value;
-		break;
-	case kQuantizationMode:
-		QuantizationMode = value;
-		break;
-	case kClip0dB:
-		Clip0dB = value;
-		break;
-	case kOnlyError:
-		OnlyError = value;
-		break;
-	case kAutoBlank:
-		AutoBlank = value;
+	case kDitherGain:
+		DitherGain = value;
 		break;
 	case kMersenneTwister:
 		MersenneTwister = value;
@@ -134,6 +116,30 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kSeedWithTime:
 		SeedWithTime = value;
 		break;
+	case kNoiseShaping:
+		NoiseShaping = value;
+		break;
+	case kNoiseShapingFocus:
+		NoiseShapingFocus = value;
+		break;
+	case kNoiseShapingGain:
+		NoiseShapingGain = value;
+		break;
+	case kAutoBlank:
+		AutoBlank = value;
+		break;
+	case kQuantize:
+		Quantize = value;
+		break;
+	case kQuantizationMode:
+		QuantizationMode = value;
+		break;
+	case kClip0dB:
+		Clip0dB = value;
+		break;
+	case kOnlyError:
+		OnlyError = value;
+		break;
 	case kClip:
 		Clip = value;
 		break;
@@ -149,12 +155,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kOutGain:
 		OutGain = value;
-		break;
-	case kDitherGain:
-		DitherGain = value;
-		break;
-	case kNoiseShapingGain:
-		NoiseShapingGain = value;
 		break;
 	}
 }
@@ -190,26 +190,8 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kDitherInError:
 		value = DitherInError;
 		break;
-	case kNoiseShaping:
-		value = NoiseShaping;
-		break;
-	case kNoiseShapingFocus:
-		value = NoiseShapingFocus;
-		break;
-	case kQuantize:
-		value = Quantize;
-		break;
-	case kQuantizationMode:
-		value = QuantizationMode;
-		break;
-	case kClip0dB:
-		value = Clip0dB;
-		break;
-	case kOnlyError:
-		value = OnlyError;
-		break;
-	case kAutoBlank:
-		value = AutoBlank;
+	case kDitherGain:
+		value = DitherGain;
 		break;
 	case kMersenneTwister:
 		value = MersenneTwister;
@@ -223,6 +205,30 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kSeedWithTime:
 		value = SeedWithTime;
 		break;
+	case kNoiseShaping:
+		value = NoiseShaping;
+		break;
+	case kNoiseShapingFocus:
+		value = NoiseShapingFocus;
+		break;
+	case kNoiseShapingGain:
+		value = NoiseShapingGain;
+		break;
+	case kAutoBlank:
+		value = AutoBlank;
+		break;
+	case kQuantize:
+		value = Quantize;
+		break;
+	case kQuantizationMode:
+		value = QuantizationMode;
+		break;
+	case kClip0dB:
+		value = Clip0dB;
+		break;
+	case kOnlyError:
+		value = OnlyError;
+		break;
 	case kClip:
 		value = Clip;
 		break;
@@ -234,12 +240,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kOutGain:
 		value = OutGain;
-		break;
-	case kDitherGain:
-		value = DitherGain;
-		break;
-	case kNoiseShapingGain:
-		value = NoiseShapingGain;
 		break;
 	}
 	return value;
@@ -309,6 +309,46 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
+	case kDitherGain:
+		float2string (DitherGain, text, kVstMaxParamStrLen);
+		break;
+	case kMersenneTwister:
+		if (MersenneTwister >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
+	case kMersenneGenerator:
+		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
+		{
+			strcpy (text, "Generator1");
+		}
+		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
+		{
+			strcpy (text, "Generator2");
+		}
+		else
+		{
+			strcpy (text, "Generator3");
+		}
+		break;
+	case kSeed:
+		int2string ((int)Seed, text, kVstMaxParamStrLen);
+		break;
+	case kSeedWithTime:
+		if (SeedWithTime >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
 	case kNoiseShaping:
 		if (NoiseShaping >= 0.5)
 		{
@@ -327,6 +367,19 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "Low");
+		}
+		break;
+	case kNoiseShapingGain:
+		float2string (NoiseShapingGain, text, kVstMaxParamStrLen);
+		break;
+	case kAutoBlank:
+		if (AutoBlank >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
 		}
 		break;
 	case kQuantize:
@@ -377,53 +430,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
-	case kAutoBlank:
-		if (AutoBlank >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
-	case kMersenneTwister:
-		if (MersenneTwister >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
-	case kMersenneGenerator:
-		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
-		{
-			strcpy (text, "Generator1");
-		}
-		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
-		{
-			strcpy (text, "Generator2");
-		}
-		else
-		{
-			strcpy (text, "Generator3");
-		}
-		break;
-	case kSeed:
-		int2string ((int)Seed, text, kVstMaxParamStrLen);
-		break;
-	case kSeedWithTime:
-		if (SeedWithTime >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
 	case kClip:
 		if (Clip >= 0.5)
 		{
@@ -443,12 +449,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	case kOutGain:
 		float2string (OutGain, text, kVstMaxParamStrLen);
 		break;
-	case kDitherGain:
-		float2string (DitherGain, text, kVstMaxParamStrLen);
-		break;
-	case kNoiseShapingGain:
-		float2string (NoiseShapingGain, text, kVstMaxParamStrLen);
-		break;
 	}
 }
 
@@ -462,8 +462,14 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	case kDCBias:
 		strcpy (label, "LSB");
 		break;
+	case kDitherGain:
+		strcpy (label, "F");
+		break;
 	case kSeed:
 		strcpy (label, "I");
+		break;
+	case kNoiseShapingGain:
+		strcpy (label, "F");
 		break;
 	case kClipThreshold:
 		strcpy (label, "dB");
@@ -472,12 +478,6 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 		strcpy (label, "F");
 		break;
 	case kOutGain:
-		strcpy (label, "F");
-		break;
-	case kDitherGain:
-		strcpy (label, "F");
-		break;
-	case kNoiseShapingGain:
 		strcpy (label, "F");
 		break;
 	}
@@ -508,26 +508,8 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kDitherInError:
 		strcpy (text, "DitherInError");
 		break;
-	case kNoiseShaping:
-		strcpy (text, "NoiseShaping");
-		break;
-	case kNoiseShapingFocus:
-		strcpy (text, "NoiseShapingFocus");
-		break;
-	case kQuantize:
-		strcpy (text, "Quantize");
-		break;
-	case kQuantizationMode:
-		strcpy (text, "QuantizationMode");
-		break;
-	case kClip0dB:
-		strcpy (text, "Clip0dB");
-		break;
-	case kOnlyError:
-		strcpy (text, "OnlyError");
-		break;
-	case kAutoBlank:
-		strcpy (text, "AutoBlank");
+	case kDitherGain:
+		strcpy (text, "DitherGain");
 		break;
 	case kMersenneTwister:
 		strcpy (text, "MersenneTwister");
@@ -541,6 +523,30 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kSeedWithTime:
 		strcpy (text, "SeedWithTime");
 		break;
+	case kNoiseShaping:
+		strcpy (text, "NoiseShaping");
+		break;
+	case kNoiseShapingFocus:
+		strcpy (text, "NoiseShapingFocus");
+		break;
+	case kNoiseShapingGain:
+		strcpy (text, "NoiseShapingGain");
+		break;
+	case kAutoBlank:
+		strcpy (text, "AutoBlank");
+		break;
+	case kQuantize:
+		strcpy (text, "Quantize");
+		break;
+	case kQuantizationMode:
+		strcpy (text, "QuantizationMode");
+		break;
+	case kClip0dB:
+		strcpy (text, "Clip0dB");
+		break;
+	case kOnlyError:
+		strcpy (text, "OnlyError");
+		break;
 	case kClip:
 		strcpy (text, "Clip");
 		break;
@@ -552,12 +558,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kOutGain:
 		strcpy (text, "OutGain");
-		break;
-	case kDitherGain:
-		strcpy (text, "DitherGain");
-		break;
-	case kNoiseShapingGain:
-		strcpy (text, "NoiseShapingGain");
 		break;
 	}
 }
