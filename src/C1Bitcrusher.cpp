@@ -44,25 +44,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	resume ();
 }
 
-void C1Bitcrusher::resume ()
-{
-	if (SeedWithTime >= 0.5)
-	{
-		srand(time(0));
-		init_genrand(time(0));
-	}
-	else
-	{
-		srand((int)Seed);
-		init_genrand((int)Seed);
-	}
-	quantized[0] = 0;
-	quantized[1] = 0;
-	error[0] = 0;
-	error[1] = 0;
-	AudioEffectX::resume();
-}
-
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
 {
 	switch(index)
@@ -588,6 +569,25 @@ bool C1Bitcrusher::getVendorString (char* text)
 {
 	strcpy (text, "Datajake");
 	return true;
+}
+
+void C1Bitcrusher::resume ()
+{
+	if (SeedWithTime >= 0.5)
+	{
+		srand(time(0));
+		init_genrand(time(0));
+	}
+	else
+	{
+		srand((int)Seed);
+		init_genrand((int)Seed);
+	}
+	quantized[0] = 0;
+	quantized[1] = 0;
+	error[0] = 0;
+	error[1] = 0;
+	AudioEffectX::resume();
 }
 
 float C1Bitcrusher::MT_generator()

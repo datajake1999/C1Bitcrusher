@@ -36,7 +36,6 @@ class C1Bitcrusher : public AudioEffectX
 {
 public:
 	C1Bitcrusher (audioMasterCallback audioMaster);
-	virtual void resume ();
 	virtual void setParameter (VstInt32 index, float value);
 	virtual void setParameterAutomated (VstInt32 index, float value);
 	virtual float getParameter (VstInt32 index);
@@ -50,6 +49,7 @@ public:
 	virtual bool getVendorString (char* text);
 	virtual VstInt32 getVendorVersion () { return 1000; }
 	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
+	virtual void resume ();
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 private:
 	float Disable;
