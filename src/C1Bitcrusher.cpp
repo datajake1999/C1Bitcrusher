@@ -31,9 +31,9 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	MersenneGenerator = 1;
 	Seed = 1;
 	SeedWithTime = 0;
-	ClipPreQuantization = 0;
-	ClipValue = 1;
-	ClipPostQuantization = 1;
+	Clip = 0;
+	ClipThreshold = 1;
+	Clip0dB = 1;
 	InGain = 1;
 	OutGain = 1;
 	DitherGain = 1;
@@ -131,18 +131,18 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kSeedWithTime:
 		SeedWithTime = value;
 		break;
-	case kClipPreQuantization:
-		ClipPreQuantization = value;
+	case kClip:
+		Clip = value;
 		break;
-	case kClipValue:
-		ClipValue = value;
-		if (ClipValue < 0)
+	case kClipThreshold:
+		ClipThreshold = value;
+		if (ClipThreshold < 0)
 		{
-			ClipValue = 0;
+			ClipThreshold = 0;
 		}
 		break;
-	case kClipPostQuantization:
-		ClipPostQuantization = value;
+	case kClip0dB:
+		Clip0dB = value;
 		break;
 	case kInGain:
 		InGain = value;
@@ -220,14 +220,14 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kSeedWithTime:
 		value = SeedWithTime;
 		break;
-	case kClipPreQuantization:
-		value = ClipPreQuantization;
+	case kClip:
+		value = Clip;
 		break;
-	case kClipValue:
-		value = ClipValue;
+	case kClipThreshold:
+		value = ClipThreshold;
 		break;
-	case kClipPostQuantization:
-		value = ClipPostQuantization;
+	case kClip0dB:
+		value = Clip0dB;
 		break;
 	case kInGain:
 		value = InGain;
@@ -414,8 +414,8 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
-	case kClipPreQuantization:
-		if (ClipPreQuantization >= 0.5)
+	case kClip:
+		if (Clip >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -424,11 +424,11 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
-	case kClipValue:
-		dB2string (ClipValue, text, kVstMaxParamStrLen);
+	case kClipThreshold:
+		dB2string (ClipThreshold, text, kVstMaxParamStrLen);
 		break;
-	case kClipPostQuantization:
-		if (ClipPostQuantization >= 0.5)
+	case kClip0dB:
+		if (Clip0dB >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -465,7 +465,7 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	case kSeed:
 		strcpy (label, "I");
 		break;
-	case kClipValue:
+	case kClipThreshold:
 		strcpy (label, "dB");
 		break;
 	case kInGain:
@@ -538,14 +538,14 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kSeedWithTime:
 		strcpy (text, "SeedWithTime");
 		break;
-	case kClipPreQuantization:
-		strcpy (text, "ClipPreQuantization");
+	case kClip:
+		strcpy (text, "Clip");
 		break;
-	case kClipValue:
-		strcpy (text, "ClipValue");
+	case kClipThreshold:
+		strcpy (text, "ClipThreshold");
 		break;
-	case kClipPostQuantization:
-		strcpy (text, "ClipPostQuantization");
+	case kClip0dB:
+		strcpy (text, "Clip0dB");
 		break;
 	case kInGain:
 		strcpy (text, "InGain");
@@ -763,13 +763,13 @@ float C1Bitcrusher::DCSample(float sample)
 
 float C1Bitcrusher::ClipSample(float sample)
 {
-	if (sample > ClipValue)
+	if (sample > ClipThreshold)
 	{
-		sample = ClipValue;
+		sample = ClipThreshold;
 	}
-	else if (sample < ClipValue * -1)
+	else if (sample < ClipThreshold * -1)
 	{
-		sample = ClipValue * -1;
+		sample = ClipThreshold * -1;
 	}
 	return sample;
 }
@@ -808,7 +808,7 @@ float C1Bitcrusher::QuantizeSample(float sample)
 			sample = ceilf(sample - 0.5f);
 		}
 	}
-	if (ClipPostQuantization >= 0.5)
+	if (Clip0dB >= 0.5)
 	{
 		if (sample > scale - 1)
 		{
@@ -853,7 +853,7 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 			*out1 = DitherSample(*out1);
 			*out2 = DitherSample(*out2);
 		}
-		if (ClipPreQuantization >= 0.5)
+		if (Clip >= 0.5)
 		{
 			*out1 = ClipSample(*out1);
 			*out2 = ClipSample(*out2);

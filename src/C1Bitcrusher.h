@@ -22,9 +22,9 @@ enum
 	kMersenneGenerator,
 	kSeed,
 	kSeedWithTime,
-	kClipPreQuantization,
-	kClipValue,
-	kClipPostQuantization,
+	kClip,
+	kClipThreshold,
+	kClip0dB,
 	kInGain,
 	kOutGain,
 	kDitherGain,
@@ -69,9 +69,9 @@ private:
 	float MersenneGenerator;
 	float Seed;
 	float SeedWithTime;
-	float ClipPreQuantization;
-	float ClipValue;
-	float ClipPostQuantization;
+	float Clip;
+	float ClipThreshold;
+	float Clip0dB;
 	float InGain;
 	float OutGain;
 	float DitherGain;
