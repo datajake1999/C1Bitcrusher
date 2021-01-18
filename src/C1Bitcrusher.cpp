@@ -25,6 +25,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	NoiseShapingFocus = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
+	Clip0dB = 1;
 	OnlyError = 0;
 	AutoBlank = 0;
 	MersenneTwister = 1;
@@ -33,7 +34,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	SeedWithTime = 0;
 	Clip = 0;
 	ClipThreshold = 1;
-	Clip0dB = 1;
 	InGain = 1;
 	OutGain = 1;
 	DitherGain = 1;
@@ -109,6 +109,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kQuantizationMode:
 		QuantizationMode = value;
 		break;
+	case kClip0dB:
+		Clip0dB = value;
+		break;
 	case kOnlyError:
 		OnlyError = value;
 		break;
@@ -140,9 +143,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		{
 			ClipThreshold = 0;
 		}
-		break;
-	case kClip0dB:
-		Clip0dB = value;
 		break;
 	case kInGain:
 		InGain = value;
@@ -202,6 +202,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kQuantizationMode:
 		value = QuantizationMode;
 		break;
+	case kClip0dB:
+		value = Clip0dB;
+		break;
 	case kOnlyError:
 		value = OnlyError;
 		break;
@@ -225,9 +228,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kClipThreshold:
 		value = ClipThreshold;
-		break;
-	case kClip0dB:
-		value = Clip0dB;
 		break;
 	case kInGain:
 		value = InGain;
@@ -357,6 +357,16 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "Round");
 		}
 		break;
+	case kClip0dB:
+		if (Clip0dB >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
 	case kOnlyError:
 		if (OnlyError >= 0.5)
 		{
@@ -426,16 +436,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		break;
 	case kClipThreshold:
 		dB2string (ClipThreshold, text, kVstMaxParamStrLen);
-		break;
-	case kClip0dB:
-		if (Clip0dB >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
 		break;
 	case kInGain:
 		float2string (InGain, text, kVstMaxParamStrLen);
@@ -520,6 +520,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kQuantizationMode:
 		strcpy (text, "QuantizationMode");
 		break;
+	case kClip0dB:
+		strcpy (text, "Clip0dB");
+		break;
 	case kOnlyError:
 		strcpy (text, "OnlyError");
 		break;
@@ -543,9 +546,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kClipThreshold:
 		strcpy (text, "ClipThreshold");
-		break;
-	case kClip0dB:
-		strcpy (text, "Clip0dB");
 		break;
 	case kInGain:
 		strcpy (text, "InGain");

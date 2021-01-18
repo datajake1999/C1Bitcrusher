@@ -25,6 +25,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
+* Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
 * OnlyError: Only outputs the quantization error.
 * AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
 * MersenneTwister: Switches to the Mersenne Twister pseudorandom number generator.
@@ -33,7 +34,6 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * SeedWithTime: Resets the pseudorandom number generator with the current time. When this is enabled, the value set by Seed is ignored.
 * Clip: Clips the audio before quantizing.
 * ClipThreshold: Sets the threshold for Clip.
-* Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
 * InGain: Input gain of the plug-in.
 * OutGain: Output gain of the plug-in.
 * DitherGain: controls the over all affect of dithering.

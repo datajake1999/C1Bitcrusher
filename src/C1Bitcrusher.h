@@ -16,6 +16,7 @@ enum
 	kNoiseShapingFocus,
 	kQuantize,
 	kQuantizationMode,
+	kClip0dB,
 	kOnlyError,
 	kAutoBlank,
 	kMersenneTwister,
@@ -24,7 +25,6 @@ enum
 	kSeedWithTime,
 	kClip,
 	kClipThreshold,
-	kClip0dB,
 	kInGain,
 	kOutGain,
 	kDitherGain,
@@ -63,6 +63,7 @@ private:
 	float NoiseShapingFocus;
 	float Quantize;
 	float QuantizationMode;
+	float Clip0dB;
 	float OnlyError;
 	float AutoBlank;
 	float MersenneTwister;
@@ -71,7 +72,6 @@ private:
 	float SeedWithTime;
 	float Clip;
 	float ClipThreshold;
-	float Clip0dB;
 	float InGain;
 	float OutGain;
 	float DitherGain;
