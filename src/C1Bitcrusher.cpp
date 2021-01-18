@@ -20,7 +20,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Dither = 1;
 	DitherType = 1;
 	InvertDither = 0;
-	DitherInError = 1;
 	DitherGain = 1;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
@@ -35,6 +34,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Quantize = 1;
 	QuantizationMode = 1;
 	Clip0dB = 1;
+	DitherInError = 1;
 	OnlyError = 0;
 	InGain = 1;
 	OutGain = 1;
@@ -74,9 +74,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kInvertDither:
 		InvertDither = value;
-		break;
-	case kDitherInError:
-		DitherInError = value;
 		break;
 	case kDitherGain:
 		DitherGain = value;
@@ -128,6 +125,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kClip0dB:
 		Clip0dB = value;
 		break;
+	case kDitherInError:
+		DitherInError = value;
+		break;
 	case kOnlyError:
 		OnlyError = value;
 		break;
@@ -167,9 +167,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kInvertDither:
 		value = InvertDither;
-		break;
-	case kDitherInError:
-		value = DitherInError;
 		break;
 	case kDitherGain:
 		value = DitherGain;
@@ -212,6 +209,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kClip0dB:
 		value = Clip0dB;
+		break;
+	case kDitherInError:
+		value = DitherInError;
 		break;
 	case kOnlyError:
 		value = OnlyError;
@@ -272,16 +272,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		break;
 	case kInvertDither:
 		if (InvertDither >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
-	case kDitherInError:
-		if (DitherInError >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -414,6 +404,16 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
+	case kDitherInError:
+		if (DitherInError >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
 	case kOnlyError:
 		if (OnlyError >= 0.5)
 		{
@@ -486,9 +486,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kInvertDither:
 		strcpy (text, "InvertDither");
 		break;
-	case kDitherInError:
-		strcpy (text, "DitherInError");
-		break;
 	case kDitherGain:
 		strcpy (text, "DitherGain");
 		break;
@@ -530,6 +527,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kClip0dB:
 		strcpy (text, "Clip0dB");
+		break;
+	case kDitherInError:
+		strcpy (text, "DitherInError");
 		break;
 	case kOnlyError:
 		strcpy (text, "OnlyError");

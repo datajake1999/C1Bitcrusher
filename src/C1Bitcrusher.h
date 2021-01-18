@@ -11,7 +11,6 @@ enum
 	kDither,
 	kDitherType,
 	kInvertDither,
-	kDitherInError,
 	kDitherGain,
 	kMersenneTwister,
 	kMersenneGenerator,
@@ -26,6 +25,7 @@ enum
 	kQuantize,
 	kQuantizationMode,
 	kClip0dB,
+	kDitherInError,
 	kOnlyError,
 	kInGain,
 	kOutGain,
@@ -58,7 +58,6 @@ private:
 	float Dither;
 	float DitherType;
 	float InvertDither;
-	float DitherInError;
 	float DitherGain;
 	float MersenneTwister;
 	float MersenneGenerator;
@@ -73,6 +72,7 @@ private:
 	float Quantize;
 	float QuantizationMode;
 	float Clip0dB;
+	float DitherInError;
 	float OnlyError;
 	float InGain;
 	float OutGain;
