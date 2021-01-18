@@ -40,6 +40,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	NoiseShapingGain = 1;
 	NumAmplitudes = powf(2, BitDepth);
 	strcpy (ProgramName, "C1Bitcrusher");
+	canProcessReplacing ();
 	resume ();
 }
 
