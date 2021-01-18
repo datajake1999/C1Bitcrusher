@@ -30,12 +30,12 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
 * NoiseShapingGain: controls the over all affect of noise shaping.
 * AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
+* Clip: Clips the audio before quantizing.
+* ClipThreshold: Sets the threshold for Clip.
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
 * Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
 * OnlyError: Only outputs the quantization error.
-* Clip: Clips the audio before quantizing.
-* ClipThreshold: Sets the threshold for Clip.
 * InGain: Input gain of the plug-in.
 * OutGain: Output gain of the plug-in.
 

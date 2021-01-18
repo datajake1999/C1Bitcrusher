@@ -21,12 +21,12 @@ enum
 	kNoiseShapingFocus,
 	kNoiseShapingGain,
 	kAutoBlank,
+	kClip,
+	kClipThreshold,
 	kQuantize,
 	kQuantizationMode,
 	kClip0dB,
 	kOnlyError,
-	kClip,
-	kClipThreshold,
 	kInGain,
 	kOutGain,
 	kNumParams
@@ -68,12 +68,12 @@ private:
 	float NoiseShapingFocus;
 	float NoiseShapingGain;
 	float AutoBlank;
+	float Clip;
+	float ClipThreshold;
 	float Quantize;
 	float QuantizationMode;
 	float Clip0dB;
 	float OnlyError;
-	float Clip;
-	float ClipThreshold;
 	float InGain;
 	float OutGain;
 	float MT_generator();

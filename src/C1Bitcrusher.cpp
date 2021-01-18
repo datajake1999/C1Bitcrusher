@@ -30,12 +30,12 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	NoiseShapingFocus = 1;
 	NoiseShapingGain = 1;
 	AutoBlank = 0;
+	Clip = 0;
+	ClipThreshold = 1;
 	Quantize = 1;
 	QuantizationMode = 1;
 	Clip0dB = 1;
 	OnlyError = 0;
-	Clip = 0;
-	ClipThreshold = 1;
 	InGain = 1;
 	OutGain = 1;
 	NumAmplitudes = powf(2, BitDepth);
@@ -128,6 +128,16 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kAutoBlank:
 		AutoBlank = value;
 		break;
+	case kClip:
+		Clip = value;
+		break;
+	case kClipThreshold:
+		ClipThreshold = value;
+		if (ClipThreshold < 0)
+		{
+			ClipThreshold = 0;
+		}
+		break;
 	case kQuantize:
 		Quantize = value;
 		break;
@@ -139,16 +149,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kOnlyError:
 		OnlyError = value;
-		break;
-	case kClip:
-		Clip = value;
-		break;
-	case kClipThreshold:
-		ClipThreshold = value;
-		if (ClipThreshold < 0)
-		{
-			ClipThreshold = 0;
-		}
 		break;
 	case kInGain:
 		InGain = value;
@@ -217,6 +217,12 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kAutoBlank:
 		value = AutoBlank;
 		break;
+	case kClip:
+		value = Clip;
+		break;
+	case kClipThreshold:
+		value = ClipThreshold;
+		break;
 	case kQuantize:
 		value = Quantize;
 		break;
@@ -228,12 +234,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kOnlyError:
 		value = OnlyError;
-		break;
-	case kClip:
-		value = Clip;
-		break;
-	case kClipThreshold:
-		value = ClipThreshold;
 		break;
 	case kInGain:
 		value = InGain;
@@ -382,6 +382,19 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
+	case kClip:
+		if (Clip >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
+	case kClipThreshold:
+		dB2string (ClipThreshold, text, kVstMaxParamStrLen);
+		break;
 	case kQuantize:
 		if (Quantize >= 0.5)
 		{
@@ -429,19 +442,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
-		break;
-	case kClip:
-		if (Clip >= 0.5)
-		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
-	case kClipThreshold:
-		dB2string (ClipThreshold, text, kVstMaxParamStrLen);
 		break;
 	case kInGain:
 		float2string (InGain, text, kVstMaxParamStrLen);
@@ -535,6 +535,12 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kAutoBlank:
 		strcpy (text, "AutoBlank");
 		break;
+	case kClip:
+		strcpy (text, "Clip");
+		break;
+	case kClipThreshold:
+		strcpy (text, "ClipThreshold");
+		break;
 	case kQuantize:
 		strcpy (text, "Quantize");
 		break;
@@ -546,12 +552,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kOnlyError:
 		strcpy (text, "OnlyError");
-		break;
-	case kClip:
-		strcpy (text, "Clip");
-		break;
-	case kClipThreshold:
-		strcpy (text, "ClipThreshold");
 		break;
 	case kInGain:
 		strcpy (text, "InGain");
