@@ -1,9 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
-#include "mt19937ar.h"
 #ifndef __C1Bitcrusher__
 #include "C1Bitcrusher.h"
 #endif

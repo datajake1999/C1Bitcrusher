@@ -1,6 +1,12 @@
 #ifndef __C1Bitcrusher__
 #define __C1Bitcrusher__
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <time.h>
+#include "mt19937ar.h"
 #include "public.sdk/source/vst2.x/audioeffectx.h"
 
 enum
