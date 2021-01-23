@@ -106,6 +106,10 @@ SOURCE=..\src\C1Bitcrusher.rc
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\C1BitcrusherProc.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\main.cpp
 # End Source File
 # Begin Source File
