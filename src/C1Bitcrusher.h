@@ -1,7 +1,6 @@
 #ifndef __C1Bitcrusher__
 #define __C1Bitcrusher__
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
