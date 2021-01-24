@@ -45,7 +45,7 @@ float C1Bitcrusher::RPDF()
 	}
 	else
 	{
-		return rand() / ((float)RAND_MAX / 2);
+		return (rand() / (float)RAND_MAX) * 2;
 	}
 }
 
@@ -59,8 +59,8 @@ float C1Bitcrusher::TPDF()
 	}
 	else
 	{
-		float s1 = rand() / ((float)RAND_MAX / 2);
-		float s2 = rand() / ((float)RAND_MAX / 2);
+		float s1 = (rand() / (float)RAND_MAX) * 2;
+		float s2 = (rand() / (float)RAND_MAX) * 2;
 		return s1 + s2;
 	}
 }
