@@ -53,6 +53,7 @@ float C1Bitcrusher::TPDF()
 {
 	float s1;
 	float s2;
+	float out;
 	if (MersenneTwister >= 0.5)
 	{
 		s1 = MT_generator();
@@ -63,7 +64,8 @@ float C1Bitcrusher::TPDF()
 		s1 = rand() / (float)RAND_MAX;
 		s2 = rand() / (float)RAND_MAX;
 	}
-	return (s1 + s2) * 2;
+	out = s1 + s2;
+	return out * 2;
 }
 
 #define PI 3.1415926536
