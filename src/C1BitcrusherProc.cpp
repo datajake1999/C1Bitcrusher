@@ -261,9 +261,10 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	float* in2 = inputs[1];
 	float* out1 = outputs[0];
 	float* out2 = outputs[1];
+	int i;
 	if (Disable >= 0.5)
 	{
-		for (int i=0; i<sampleFrames; i++)
+		for (i=0; i<sampleFrames; i++)
 		{
 			*out1 = *in1;
 			*out2 = *in2;
@@ -274,7 +275,7 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 		}
 		return;
 	}
-	for (int i=0; i<sampleFrames; i++)
+	for (i=0; i<sampleFrames; i++)
 	{
 		*out1 = *in1 * InGain;
 		*out2 = *in2 * InGain;
