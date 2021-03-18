@@ -134,11 +134,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	}
 }
 
-void C1Bitcrusher::setParameterAutomated (VstInt32 index, float value)
-{
-	setParameter (index, value);
-}
-
 float C1Bitcrusher::getParameter (VstInt32 index)
 {
 	float value = 0;
