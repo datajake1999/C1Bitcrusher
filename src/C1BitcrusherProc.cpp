@@ -18,7 +18,6 @@ void C1Bitcrusher::resume ()
 	quantized[1] = 0;
 	error[0] = 0;
 	error[1] = 0;
-	AudioEffectX::resume();
 }
 
 float C1Bitcrusher::MT_generator()
