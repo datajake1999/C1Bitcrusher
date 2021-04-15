@@ -4,5 +4,5 @@
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {
-    return new C1Bitcrusher (audioMaster);
+	return new C1Bitcrusher (audioMaster);
 }
