@@ -542,6 +542,16 @@ void C1Bitcrusher::getProgramName (char *name)
 	strcpy (name, ProgramName);
 }
 
+bool C1Bitcrusher::getProgramNameIndexed (VstInt32 category, VstInt32 index, char* text)
+{
+	if (index == 0)
+	{
+		strcpy (text, ProgramName);
+		return true;
+	}
+	return false;
+}
+
 bool C1Bitcrusher::getEffectName (char* name)
 {
 	strcpy (name, "C1Bitcrusher");
