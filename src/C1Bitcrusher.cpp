@@ -8,6 +8,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	// init
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
+	setUniqueID ('C1BC');	// identify
 	Disable = 0;
 	InGain = 1;
 	OutGain = 1;
