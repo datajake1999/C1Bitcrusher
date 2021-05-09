@@ -66,6 +66,14 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kDCBias:
 		DCBias = (value*4.0f)-2.0f;
+		if (DCBias > 2)
+		{
+			DCBias = 2;
+		}
+		else if (DCBias < -2)
+		{
+			DCBias = -2;
+		}
 		break;
 	case kDither:
 		Dither = value;
