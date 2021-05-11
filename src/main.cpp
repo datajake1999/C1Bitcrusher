@@ -1,6 +1,4 @@
-#ifndef __C1Bitcrusher__
 #include "C1Bitcrusher.h"
-#endif
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {

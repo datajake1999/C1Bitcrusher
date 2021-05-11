@@ -1,6 +1,4 @@
-#ifndef __C1Bitcrusher__
 #include "C1Bitcrusher.h"
-#endif
 
 void C1Bitcrusher::resume ()
 {

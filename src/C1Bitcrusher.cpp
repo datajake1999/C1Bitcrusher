@@ -1,6 +1,4 @@
-#ifndef __C1Bitcrusher__
 #include "C1Bitcrusher.h"
-#endif
 
 C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, 1, kNumParams)
