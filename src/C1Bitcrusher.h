@@ -52,8 +52,8 @@ public:
 	virtual bool getEffectName (char* name);
 	virtual bool getProductString (char* text);
 	virtual bool getVendorString (char* text);
-	virtual VstInt32 getVendorVersion () { return 1000; }
-	virtual VstPlugCategory getPlugCategory () { return kPlugCategEffect; }
+	virtual VstInt32 getVendorVersion ();
+	virtual VstPlugCategory getPlugCategory ();
 	virtual void resume ();
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 private:

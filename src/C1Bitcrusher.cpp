@@ -578,3 +578,13 @@ bool C1Bitcrusher::getVendorString (char* text)
 	strcpy (text, "Datajake");
 	return true;
 }
+
+VstInt32 C1Bitcrusher::getVendorVersion ()
+{
+	return 1000;
+}
+
+VstPlugCategory C1Bitcrusher::getPlugCategory ()
+{
+	return kPlugCategEffect;
+}
