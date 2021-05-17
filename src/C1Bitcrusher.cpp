@@ -18,7 +18,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherGain = 1;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
-	Seed = 1;
+	Seed = 0;
 	SeedWithTime = 0;
 	NoiseShaping = 1;
 	NoiseShapingFocus = 1;
@@ -93,9 +93,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kSeed:
 		Seed = value*1000;
-		if (Seed < 1)
+		if (Seed < 0)
 		{
-			Seed = 1;
+			Seed = 0;
 		}
 		break;
 	case kSeedWithTime:
