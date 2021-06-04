@@ -56,6 +56,7 @@ public:
 	virtual VstPlugCategory getPlugCategory ();
 	virtual void resume ();
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
+	virtual void processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames);
 private:
 	float Disable;
 	float InGain;

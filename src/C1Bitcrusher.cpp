@@ -34,6 +34,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	NumAmplitudes = powf(2, BitDepth);
 	strcpy (ProgramName, "C1Bitcrusher");
 	canProcessReplacing ();
+	canDoubleReplacing ();
 	resume ();
 }
 

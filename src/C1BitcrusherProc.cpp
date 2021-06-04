@@ -328,3 +328,78 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 		*out2++;
 	}
 }
+
+void C1Bitcrusher::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+{
+	double* in1 = inputs[0];
+	double* in2 = inputs[1];
+	double* out1 = outputs[0];
+	double* out2 = outputs[1];
+	int i;
+	if (Disable >= 0.5)
+	{
+		for (i=0; i<sampleFrames; i++)
+		{
+			*out1 = *in1;
+			*out2 = *in2;
+			*in1++;
+			*in2++;
+			*out1++;
+			*out2++;
+		}
+		return;
+	}
+	for (i=0; i<sampleFrames; i++)
+	{
+		*out1 = *in1 * InGain;
+		*out2 = *in2 * InGain;
+		*out1 = DCSample((float)*out1);
+		*out2 = DCSample((float)*out2);
+		if (Dither >= 0.5 && DitherInError < 0.5)
+		{
+			*out1 = DitherSample((float)*out1);
+			*out2 = DitherSample((float)*out2);
+		}
+		if (Clip >= 0.5)
+		{
+			*out1 = ClipSample((float)*out1);
+			*out2 = ClipSample((float)*out2);
+		}
+		if (Quantize >= 0.5)
+		{
+			if (NoiseShaping >= 0.5)
+			{
+				*out1 = NoiseShapeSample((float)*out1, error[0]);
+				*out2 = NoiseShapeSample((float)*out2, error[1]);
+			}
+			if (Dither >= 0.5 && DitherInError >= 0.5)
+			{
+				quantized[0] = QuantizeSample(DitherSample((float)*out1));
+				quantized[1] = QuantizeSample(DitherSample((float)*out2));
+			}
+			else
+			{
+				quantized[0] = QuantizeSample((float)*out1);
+				quantized[1] = QuantizeSample((float)*out2);
+			}
+			error[0] = quantized[0] - (float)*out1;
+			error[1] = quantized[1] - (float)*out2;
+			if (OnlyError >= 0.5)
+			{
+				*out1 = error[0];
+				*out2 = error[1];
+			}
+			else
+			{
+				*out1 = quantized[0];
+				*out2 = quantized[1];
+			}
+		}
+		*out1 = *out1 * OutGain;
+		*out2 = *out2 * OutGain;
+		*in1++;
+		*in2++;
+		*out1++;
+		*out2++;
+	}
+}
