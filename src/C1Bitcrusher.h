@@ -82,6 +82,7 @@ private:
 	float Clip0dB;
 	float DitherInError;
 	float OnlyError;
+	void Reset();
 	float MT_generator();
 	float RPDF();
 	float TPDF();
@@ -92,6 +93,7 @@ private:
 	float DCSample(float sample);
 	float ClipSample(float sample);
 	float QuantizeSample(float sample);
+	float ProcessSample(float sample, int channel);
 	float quantized[2];
 	float error[2];
 	float NumAmplitudes;

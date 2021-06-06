@@ -1,6 +1,6 @@
 #include "C1Bitcrusher.h"
 
-void C1Bitcrusher::resume ()
+void C1Bitcrusher::Reset()
 {
 	if (SeedWithTime >= 0.5)
 	{
@@ -254,152 +254,54 @@ float C1Bitcrusher::QuantizeSample(float sample)
 	return sample;
 }
 
-void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
+float C1Bitcrusher::ProcessSample(float sample, int channel)
 {
-	float* in1 = inputs[0];
-	float* in2 = inputs[1];
-	float* out1 = outputs[0];
-	float* out2 = outputs[1];
-	int i;
+	if (channel > 1)
+	{
+		channel = 1;
+	}
+	else if (channel < 0)
+	{
+		channel = 0;
+	}
 	if (Disable >= 0.5)
 	{
-		for (i=0; i<sampleFrames; i++)
-		{
-			*out1 = *in1;
-			*out2 = *in2;
-			*in1++;
-			*in2++;
-			*out1++;
-			*out2++;
-		}
-		return;
+		return sample;
 	}
-	for (i=0; i<sampleFrames; i++)
+	sample = sample * InGain;
+	sample = DCSample(sample);
+	if (Dither >= 0.5 && DitherInError < 0.5)
 	{
-		*out1 = *in1 * InGain;
-		*out2 = *in2 * InGain;
-		*out1 = DCSample(*out1);
-		*out2 = DCSample(*out2);
-		if (Dither >= 0.5 && DitherInError < 0.5)
-		{
-			*out1 = DitherSample(*out1);
-			*out2 = DitherSample(*out2);
-		}
-		if (Clip >= 0.5)
-		{
-			*out1 = ClipSample(*out1);
-			*out2 = ClipSample(*out2);
-		}
-		if (Quantize >= 0.5)
-		{
-			if (NoiseShaping >= 0.5)
-			{
-				*out1 = NoiseShapeSample(*out1, error[0]);
-				*out2 = NoiseShapeSample(*out2, error[1]);
-			}
-			if (Dither >= 0.5 && DitherInError >= 0.5)
-			{
-				quantized[0] = QuantizeSample(DitherSample(*out1));
-				quantized[1] = QuantizeSample(DitherSample(*out2));
-			}
-			else
-			{
-				quantized[0] = QuantizeSample(*out1);
-				quantized[1] = QuantizeSample(*out2);
-			}
-			error[0] = quantized[0] - *out1;
-			error[1] = quantized[1] - *out2;
-			if (OnlyError >= 0.5)
-			{
-				*out1 = error[0];
-				*out2 = error[1];
-			}
-			else
-			{
-				*out1 = quantized[0];
-				*out2 = quantized[1];
-			}
-		}
-		*out1 = *out1 * OutGain;
-		*out2 = *out2 * OutGain;
-		*in1++;
-		*in2++;
-		*out1++;
-		*out2++;
+		sample = DitherSample(sample);
 	}
-}
-
-void C1Bitcrusher::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
-{
-	double* in1 = inputs[0];
-	double* in2 = inputs[1];
-	double* out1 = outputs[0];
-	double* out2 = outputs[1];
-	int i;
-	if (Disable >= 0.5)
+	if (Clip >= 0.5)
 	{
-		for (i=0; i<sampleFrames; i++)
-		{
-			*out1 = *in1;
-			*out2 = *in2;
-			*in1++;
-			*in2++;
-			*out1++;
-			*out2++;
-		}
-		return;
+		sample = ClipSample(sample);
 	}
-	for (i=0; i<sampleFrames; i++)
+	if (Quantize >= 0.5)
 	{
-		*out1 = *in1 * InGain;
-		*out2 = *in2 * InGain;
-		*out1 = DCSample((float)*out1);
-		*out2 = DCSample((float)*out2);
-		if (Dither >= 0.5 && DitherInError < 0.5)
+		if (NoiseShaping >= 0.5)
 		{
-			*out1 = DitherSample((float)*out1);
-			*out2 = DitherSample((float)*out2);
+			sample = NoiseShapeSample(sample, error[channel]);
 		}
-		if (Clip >= 0.5)
+		if (Dither >= 0.5 && DitherInError >= 0.5)
 		{
-			*out1 = ClipSample((float)*out1);
-			*out2 = ClipSample((float)*out2);
+			quantized[channel] = QuantizeSample(DitherSample(sample));
 		}
-		if (Quantize >= 0.5)
+		else
 		{
-			if (NoiseShaping >= 0.5)
-			{
-				*out1 = NoiseShapeSample((float)*out1, error[0]);
-				*out2 = NoiseShapeSample((float)*out2, error[1]);
-			}
-			if (Dither >= 0.5 && DitherInError >= 0.5)
-			{
-				quantized[0] = QuantizeSample(DitherSample((float)*out1));
-				quantized[1] = QuantizeSample(DitherSample((float)*out2));
-			}
-			else
-			{
-				quantized[0] = QuantizeSample((float)*out1);
-				quantized[1] = QuantizeSample((float)*out2);
-			}
-			error[0] = quantized[0] - (float)*out1;
-			error[1] = quantized[1] - (float)*out2;
-			if (OnlyError >= 0.5)
-			{
-				*out1 = error[0];
-				*out2 = error[1];
-			}
-			else
-			{
-				*out1 = quantized[0];
-				*out2 = quantized[1];
-			}
+			quantized[channel] = QuantizeSample(sample);
 		}
-		*out1 = *out1 * OutGain;
-		*out2 = *out2 * OutGain;
-		*in1++;
-		*in2++;
-		*out1++;
-		*out2++;
+		error[channel] = quantized[channel] - sample;
+		if (OnlyError >= 0.5)
+		{
+			sample = error[channel];
+		}
+		else
+		{
+			sample = quantized[channel];
+		}
 	}
+	sample = sample * OutGain;
+	return sample;
 }

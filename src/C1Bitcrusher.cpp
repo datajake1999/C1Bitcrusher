@@ -35,7 +35,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	strcpy (ProgramName, "C1Bitcrusher");
 	canProcessReplacing ();
 	canDoubleReplacing ();
-	resume ();
+	Reset();
 }
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
@@ -586,4 +586,45 @@ VstInt32 C1Bitcrusher::getVendorVersion ()
 VstPlugCategory C1Bitcrusher::getPlugCategory ()
 {
 	return kPlugCategEffect;
+}
+
+void C1Bitcrusher::resume ()
+{
+	Reset();
+}
+
+void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
+{
+	float* in1 = inputs[0];
+	float* in2 = inputs[1];
+	float* out1 = outputs[0];
+	float* out2 = outputs[1];
+	int i;
+	for (i=0; i<sampleFrames; i++)
+	{
+		*out1 = ProcessSample(*in1, 0);
+		*out2 = ProcessSample(*in2, 1);
+		*in1++;
+		*in2++;
+		*out1++;
+		*out2++;
+	}
+}
+
+void C1Bitcrusher::processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames)
+{
+	double* in1 = inputs[0];
+	double* in2 = inputs[1];
+	double* out1 = outputs[0];
+	double* out2 = outputs[1];
+	int i;
+	for (i=0; i<sampleFrames; i++)
+	{
+		*out1 = ProcessSample((float)*in1, 0);
+		*out2 = ProcessSample((float)*in2, 1);
+		*in1++;
+		*in2++;
+		*out1++;
+		*out2++;
+	}
 }
