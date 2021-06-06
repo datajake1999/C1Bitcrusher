@@ -10,6 +10,10 @@
 
 enum
 {
+	// Global
+	kNumPrograms = 1,
+
+	// Parameters Tags
 	kDisable = 0,
 	kInGain,
 	kOutGain,
@@ -34,6 +38,7 @@ enum
 	kClip0dB,
 	kDitherInError,
 	kOnlyError,
+
 	kNumParams
 };
 

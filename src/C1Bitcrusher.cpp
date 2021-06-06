@@ -1,7 +1,7 @@
 #include "C1Bitcrusher.h"
 
 C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
-: AudioEffectX (audioMaster, 1, kNumParams)
+: AudioEffectX (audioMaster, kNumPrograms, kNumParams)
 {
 	// init
 	setNumInputs (2);	// stereo input
