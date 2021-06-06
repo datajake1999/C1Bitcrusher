@@ -31,7 +31,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Clip0dB = 1;
 	DitherInError = 1;
 	OnlyError = 0;
-	NumAmplitudes = powf(2, BitDepth);
+	NumAmplitudes = pow((double)2, (double)BitDepth);
 	strcpy (ProgramName, "C1Bitcrusher");
 	canProcessReplacing ();
 	canDoubleReplacing ();
@@ -61,7 +61,7 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		{
 			BitDepth = 1;
 		}
-		NumAmplitudes = powf(2, BitDepth);
+		NumAmplitudes = pow((double)2, (double)BitDepth);
 		break;
 	case kDCBias:
 		DCBias = (value*4.0f)-2.0f;
@@ -602,8 +602,8 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	int i;
 	for (i=0; i<sampleFrames; i++)
 	{
-		*out1 = ProcessSample(*in1, 0);
-		*out2 = ProcessSample(*in2, 1);
+		*out1 = (float)ProcessSample(*in1, 0);
+		*out2 = (float)ProcessSample(*in2, 1);
 		*in1++;
 		*in2++;
 		*out1++;
@@ -620,8 +620,8 @@ void C1Bitcrusher::processDoubleReplacing (double** inputs, double** outputs, Vs
 	int i;
 	for (i=0; i<sampleFrames; i++)
 	{
-		*out1 = ProcessSample((float)*in1, 0);
-		*out2 = ProcessSample((float)*in2, 1);
+		*out1 = ProcessSample(*in1, 0);
+		*out2 = ProcessSample(*in2, 1);
 		*in1++;
 		*in2++;
 		*out1++;

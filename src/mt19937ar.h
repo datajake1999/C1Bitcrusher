@@ -63,13 +63,13 @@ long genrand_int31(void);
 
 /* These real versions are due to Isaku Wada, 2002/01/09 added */
 /* generates a random number on [0,1]-real-interval */
-float genrand_real1(void);
+double genrand_real1(void);
 
 /* generates a random number on [0,1)-real-interval */
-float genrand_real2(void);
+double genrand_real2(void);
 
 /* generates a random number on (0,1)-real-interval */
-float genrand_real3(void);
+double genrand_real3(void);
 
 /* generates a random number on [0,1) with 53-bit resolution*/
 double genrand_res53(void);

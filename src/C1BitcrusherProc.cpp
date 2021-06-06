@@ -18,7 +18,7 @@ void C1Bitcrusher::Reset()
 	error[1] = 0;
 }
 
-float C1Bitcrusher::MT_generator()
+double C1Bitcrusher::MT_generator()
 {
 	if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
 	{
@@ -34,7 +34,7 @@ float C1Bitcrusher::MT_generator()
 	}
 }
 
-float C1Bitcrusher::RPDF()
+double C1Bitcrusher::RPDF()
 {
 	if (MersenneTwister >= 0.5)
 	{
@@ -42,15 +42,15 @@ float C1Bitcrusher::RPDF()
 	}
 	else
 	{
-		return (rand() / (float)RAND_MAX) * 2;
+		return (rand() / (double)RAND_MAX) * 2;
 	}
 }
 
-float C1Bitcrusher::TPDF()
+double C1Bitcrusher::TPDF()
 {
-	float s1;
-	float s2;
-	float out;
+	double s1;
+	double s2;
+	double out;
 	if (MersenneTwister >= 0.5)
 	{
 		s1 = MT_generator();
@@ -58,8 +58,8 @@ float C1Bitcrusher::TPDF()
 	}
 	else
 	{
-		s1 = rand() / (float)RAND_MAX;
-		s2 = rand() / (float)RAND_MAX;
+		s1 = rand() / (double)RAND_MAX;
+		s2 = rand() / (double)RAND_MAX;
 	}
 	out = s1 + s2;
 	return out * 2;
@@ -67,12 +67,12 @@ float C1Bitcrusher::TPDF()
 
 #define PI 3.1415926536
 
-float C1Bitcrusher::AWGN_generator()
+double C1Bitcrusher::AWGN_generator()
 {/* Generates additive white Gaussian Noise samples with zero mean and a standard deviation of 1. */
 
-	float temp1;
-	float temp2;
-	float result;
+	double temp1;
+	double temp2;
+	double result;
 	int p;
 
 	p = 1;
@@ -85,7 +85,7 @@ float C1Bitcrusher::AWGN_generator()
 		}
 		else
 		{
-			temp2 = ( rand() / ( (float)RAND_MAX ) ); /*  rand() function generates an
+			temp2 = ( rand() / ( (double)RAND_MAX ) ); /*  rand() function generates an
 													integer between 0 and  RAND_MAX,
 													which is defined in stdlib.h.
 												*/
@@ -104,19 +104,19 @@ float C1Bitcrusher::AWGN_generator()
 
 	if (MersenneTwister >= 0.5)
 	{
-		temp1 = cosf( ( 2.0f * (float)PI ) * MT_generator() );
+		temp1 = cos( ( 2.0 * (double)PI ) * MT_generator() );
 	}
 	else
 	{
-		temp1 = cosf( ( 2.0f * (float)PI ) * rand() / ( (float)RAND_MAX ) );
+		temp1 = cos( ( 2.0 * (double)PI ) * rand() / ( (double)RAND_MAX ) );
 	}
-	result = sqrtf( -2.0f * logf( temp2 ) ) * temp1;
+	result = sqrt( -2.0 * log( temp2 ) ) * temp1;
 
 	return result;	// return the generated random sample to the caller
 
 }// end AWGN_generator()
 
-float C1Bitcrusher::DitherNoise()
+double C1Bitcrusher::DitherNoise()
 {
 	if (DitherType >= 0.0 && DitherType < 0.25)
 	{
@@ -132,13 +132,13 @@ float C1Bitcrusher::DitherNoise()
 	}
 }
 
-float C1Bitcrusher::DitherSample(float sample)
+double C1Bitcrusher::DitherSample(double sample)
 {
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
 		return 0;
 	}
-	float noise = DitherNoise() / NumAmplitudes;
+	double noise = DitherNoise() / NumAmplitudes;
 	if (InvertDither >= 0.5)
 	{
 		noise = noise * -1;
@@ -154,7 +154,7 @@ float C1Bitcrusher::DitherSample(float sample)
 	return sample + (noise * DitherGain);
 }
 
-float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
+double C1Bitcrusher::NoiseShapeSample(double sample, double noise)
 {
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
@@ -178,9 +178,9 @@ float C1Bitcrusher::NoiseShapeSample(float sample, float noise)
 	}
 }
 
-float C1Bitcrusher::DCSample(float sample)
+double C1Bitcrusher::DCSample(double sample)
 {
-	float DC = DCBias / (NumAmplitudes / 2);
+	double DC = DCBias / (NumAmplitudes / 2);
 	if (DC > 1)
 	{
 		DC = 1;
@@ -192,7 +192,7 @@ float C1Bitcrusher::DCSample(float sample)
 	return sample + DC;
 }
 
-float C1Bitcrusher::ClipSample(float sample)
+double C1Bitcrusher::ClipSample(double sample)
 {
 	if (sample > ClipThreshold)
 	{
@@ -205,38 +205,38 @@ float C1Bitcrusher::ClipSample(float sample)
 	return sample;
 }
 
-float C1Bitcrusher::QuantizeSample(float sample)
+double C1Bitcrusher::QuantizeSample(double sample)
 {
-	float scale = NumAmplitudes / 2;
+	double scale = NumAmplitudes / 2;
 	sample = sample * scale;
 	if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
 	{
-		sample = floorf(sample);
+		sample = floor(sample);
 	}
 	else if (QuantizationMode >= 0.25 && QuantizationMode < 0.5)
 	{
-		sample = ceilf(sample);
+		sample = ceil(sample);
 	}
 	else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)
 	{
 		if (sample >= 0)
 		{
-			sample = floorf(sample);
+			sample = floor(sample);
 		}
 		else
 		{
-			sample = ceilf(sample);
+			sample = ceil(sample);
 		}
 	}
 	else
 	{
 		if (sample >= 0)
 		{
-			sample = floorf(sample + 0.5f);
+			sample = floor(sample + 0.5);
 		}
 		else
 		{
-			sample = ceilf(sample - 0.5f);
+			sample = ceil(sample - 0.5);
 		}
 	}
 	if (Clip0dB >= 0.5)
@@ -254,7 +254,7 @@ float C1Bitcrusher::QuantizeSample(float sample)
 	return sample;
 }
 
-float C1Bitcrusher::ProcessSample(float sample, int channel)
+double C1Bitcrusher::ProcessSample(double sample, int channel)
 {
 	if (channel > 1)
 	{
