@@ -102,6 +102,7 @@ private:
 	double quantized[2];
 	double error[2];
 	double NumAmplitudes;
+	double scale;
 	char ProgramName[32];
 };
 

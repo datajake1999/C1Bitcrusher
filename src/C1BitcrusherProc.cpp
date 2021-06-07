@@ -180,7 +180,7 @@ double C1Bitcrusher::NoiseShapeSample(double sample, double noise)
 
 double C1Bitcrusher::DCSample(double sample)
 {
-	double DC = DCBias / (NumAmplitudes / 2);
+	double DC = DCBias / scale;
 	if (DC > 1)
 	{
 		DC = 1;
@@ -207,7 +207,6 @@ double C1Bitcrusher::ClipSample(double sample)
 
 double C1Bitcrusher::QuantizeSample(double sample)
 {
-	double scale = NumAmplitudes / 2;
 	sample = sample * scale;
 	if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
 	{

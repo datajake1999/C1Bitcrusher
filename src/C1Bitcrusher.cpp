@@ -32,6 +32,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherInError = 1;
 	OnlyError = 0;
 	NumAmplitudes = pow((double)2, (double)BitDepth);
+	scale = NumAmplitudes / 2;
 	strcpy (ProgramName, "C1Bitcrusher");
 	canProcessReplacing ();
 	canDoubleReplacing ();
@@ -62,6 +63,7 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 			BitDepth = 1;
 		}
 		NumAmplitudes = pow((double)2, (double)BitDepth);
+		scale = NumAmplitudes / 2;
 		break;
 	case kDCBias:
 		DCBias = (value*4.0f)-2.0f;
