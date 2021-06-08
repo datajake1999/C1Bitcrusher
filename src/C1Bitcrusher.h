@@ -87,6 +87,11 @@ private:
 	float Clip0dB;
 	float DitherInError;
 	float OnlyError;
+	char ProgramName[32];
+	double NumAmplitudes;
+	double scale;
+	double quantized[2];
+	double error[2];
 	void Reset();
 	double MT_generator();
 	double RPDF();
@@ -99,11 +104,6 @@ private:
 	double ClipSample(double sample);
 	double QuantizeSample(double sample);
 	double ProcessSample(double sample, int channel);
-	double quantized[2];
-	double error[2];
-	double NumAmplitudes;
-	double scale;
-	char ProgramName[32];
 };
 
 #endif
