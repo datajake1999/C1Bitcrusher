@@ -33,7 +33,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	OnlyError = 0;
 	NumAmplitudes = pow((double)2, (double)BitDepth);
 	scale = NumAmplitudes / 2;
-	strcpy (ProgramName, "C1Bitcrusher");
+	strcpy (ProgramName, "Default");
 	canProcessReplacing ();
 	canDoubleReplacing ();
 	Reset();
