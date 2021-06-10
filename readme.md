@@ -14,19 +14,19 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 
 # Parameters and their descriptions
 
-* Disable: disables the effect. This is useful if the host application doesn’t have a way of bypassing the plug-in.
-* InGain: Input gain of the plug-in.
-* OutGain: Output gain of the plug-in.
-* BitDepth: The new bit depth.
+* Disable: Bypasses the effect. This is useful if the host application doesn’t have a way of bypassing the plug-in.
+* InGain: Input gain of the effect.
+* OutGain: Output gain of the effect.
+* BitDepth: The target bit depth.
 * DCBias: applies a DC bias to the input.
 * Dither: Enable or disable dithering.
-* DitherType: The type of noise that is used for dithering.
-* InvertDither: Inverts the dither noise.
+* DitherType: The probability density function that is used to generate dither noise.
+* InvertDither: Flips the polarity of the dither noise.
 * DitherGain: controls the over all affect of dithering.
-* MersenneTwister: Switches to the Mersenne Twister pseudorandom number generator.
+* MersenneTwister: Switches to using the Mersenne Twister pseudorandom number generator instead of the PRNG provided by the standard library.
 * MersenneGenerator: The Mersenne Twister generator function to use.
-* Seed: The value used to reset the pseudorandom number generator.
-* SeedWithTime: Resets the pseudorandom number generator with the current time. When this is enabled, the value set by Seed is ignored.
+* Seed: The value used to reset the pseudorandom number generators.
+* SeedWithTime: Resets the pseudorandom number generators with the current time. When this is enabled, the value set by Seed is ignored.
 * NoiseShaping: Enable or disable noise shaping.
 * NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
 * NoiseShapingGain: controls the over all affect of noise shaping.
@@ -35,9 +35,9 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * ClipThreshold: Sets the threshold for Clip.
 * Quantize: Enable or disable the actual bit reduction.
 * QuantizationMode: The type of math that is used for quantization.
-* Clip0dB: Clips audio that is over 0 dB so it can fit in a fixed point format.
-* DitherInError: Treats dithering as part of the quantization error.
-* OnlyError: Only outputs the quantization error.
+* Clip0dB: Clips audio that is over 0 dB as part of the quantization process, so the quantized audio can fit in a fixed point format.
+* DitherInError: Treats dithering as part of the quantization process.
+* OnlyError: Sends the quantization error to the output instead of the quantized signal.
 
 # Extra notes
 
