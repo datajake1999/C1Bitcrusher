@@ -1,5 +1,5 @@
-#ifndef __C1Bitcrusher__
-#define __C1Bitcrusher__
+#ifndef C1Bitcrusher_H
+#define C1Bitcrusher_H
 
 #include <stdlib.h>
 #include <math.h>
