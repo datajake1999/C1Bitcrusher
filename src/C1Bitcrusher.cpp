@@ -605,7 +605,7 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	for (i=0; i<sampleFrames; i++)
 	{
 		out1[i] = (float)ProcessSample(in1[i], 0);
-		out2[i] = (float)ProcessSample(in2[i], 0);
+		out2[i] = (float)ProcessSample(in2[i], 1);
 	}
 }
 
@@ -619,6 +619,6 @@ void C1Bitcrusher::processDoubleReplacing (double** inputs, double** outputs, Vs
 	for (i=0; i<sampleFrames; i++)
 	{
 		out1[i] = ProcessSample(in1[i], 0);
-		out2[i] = ProcessSample(in2[i], 0);
+		out2[i] = ProcessSample(in2[i], 1);
 	}
 }
