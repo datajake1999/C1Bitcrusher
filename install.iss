@@ -41,8 +41,8 @@ Name: "VST64"; Description: "64-bit VST Plug-in"; Types: "full"; Check: Is64BitI
 [Files]
 Source: "LICENSE.TXT"; DestDir: "{app}"; Components: "Docs"
 Source: "readme.md"; DestDir: "{app}"; Components: "Docs"; DestName: "readme.txt"
-Source: "Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}; Components: VST32
-Source: "X64\Release\C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: Is64BitInstallMode
+Source: "C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}; Components: VST32
+Source: "C1Bitcrusher_X64.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: Is64BitInstallMode
 
 [Icons]
 Name: "{group}\License"; Filename: "{app}\LICENSE.TXT"; Components: "Docs"
