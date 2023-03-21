@@ -88,7 +88,6 @@ private:
 	float DitherInError;
 	float OnlyError;
 	char ProgramName[32];
-	double NumAmplitudes;
 	double scale;
 	double quantized[2];
 	double error[2];

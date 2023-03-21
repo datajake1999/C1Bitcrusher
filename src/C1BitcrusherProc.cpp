@@ -38,11 +38,11 @@ double C1Bitcrusher::RPDF()
 {
 	if (MersenneTwister >= 0.5)
 	{
-		return MT_generator() * 2;
+		return MT_generator();
 	}
 	else
 	{
-		return (rand() / (double)RAND_MAX) * 2;
+		return rand() / (double)RAND_MAX;
 	}
 }
 
@@ -62,7 +62,7 @@ double C1Bitcrusher::TPDF()
 		s2 = rand() / (double)RAND_MAX;
 	}
 	out = s1 + s2;
-	return out * 2;
+	return out;
 }
 
 #define PI 3.1415926536
@@ -138,7 +138,7 @@ double C1Bitcrusher::DitherSample(double sample)
 	{
 		return 0;
 	}
-	double noise = DitherNoise() / NumAmplitudes;
+	double noise = DitherNoise() / scale;
 	if (InvertDither >= 0.5)
 	{
 		noise = noise * -1;
