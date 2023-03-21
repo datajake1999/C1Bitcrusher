@@ -36,14 +36,17 @@ double C1Bitcrusher::MT_generator()
 
 double C1Bitcrusher::RPDF()
 {
+	double s;
 	if (MersenneTwister >= 0.5)
 	{
-		return MT_generator();
+		s = MT_generator();
 	}
 	else
 	{
-		return rand() / (double)RAND_MAX;
+		s = rand() / (double)RAND_MAX;
 	}
+	s = (s - 0.5) * 2;
+	return s;
 }
 
 double C1Bitcrusher::TPDF()
@@ -61,6 +64,8 @@ double C1Bitcrusher::TPDF()
 		s1 = rand() / (double)RAND_MAX;
 		s2 = rand() / (double)RAND_MAX;
 	}
+	s1 = (s1 - 0.5) * 2;
+	s2 = (s2 - 0.5) * 2;
 	out = s1 + s2;
 	return out;
 }
