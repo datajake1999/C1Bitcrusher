@@ -1,0 +1,7 @@
+..\src\C1Bitcrusher.cpp
+..\src\C1BitcrusherProc.cpp
+..\src\main.cpp
+..\src\mt19937ar.cpp
+..\VST2_SDK\public.sdk\source\vst2.x\audioeffect.cpp
+..\VST2_SDK\public.sdk\source\vst2.x\audioeffectx.cpp
+..\VST2_SDK\public.sdk\source\vst2.x\vstplugmain.cpp
