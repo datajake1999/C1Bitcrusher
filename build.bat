@@ -9,5 +9,9 @@ call "C:\program files\Microsoft Platform SDK\SetEnv.Cmd" /X64 /RETAIL
 cl -c /I ".\include" /I ".\VST2_SDK" src\*.cpp VST2_SDK\public.sdk\source\vst2.x\*.cpp
 link *.obj bufferoverflowU.lib kernel32.lib user32.lib /dll /def:".\src\vstplug.def" /OUT:C1Bitcrusher_X64.dll
 del *.obj
+call "C:\program files\Microsoft Platform SDK\SetEnv.Cmd" /SRV64 /RETAIL
+cl -c /I ".\include" /I ".\VST2_SDK" src\*.cpp VST2_SDK\public.sdk\source\vst2.x\*.cpp
+link *.obj bufferoverflowU.lib kernel32.lib user32.lib /dll /def:".\src\vstplug.def" /OUT:C1Bitcrusher_IA64.dll
+del *.obj
 iscc "install.iss"
-7z a -tzip output\C1Bitcrusher.zip C1Bitcrusher.dll C1Bitcrusher_X64.dll license.txt readme.md
+7z a -tzip output\C1Bitcrusher.zip C1Bitcrusher.dll C1Bitcrusher_IA64.dll C1Bitcrusher_X64.dll license.txt readme.md

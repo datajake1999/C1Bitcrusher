@@ -5,7 +5,7 @@ DefaultDirName={pf}\C1Bitcrusher
 DefaultGroupName=C1Bitcrusher
 AllowNoIcons=yes
 OutputBaseFilename=C1Bitcrusher
-ArchitecturesInstallIn64BitMode=X64
+ArchitecturesInstallIn64BitMode=X64 IA64
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
@@ -42,7 +42,8 @@ Name: "VST64"; Description: "64-bit VST Plug-in"; Types: "full"; Check: Is64BitI
 Source: "LICENSE.TXT"; DestDir: "{app}"; Components: "Docs"
 Source: "readme.md"; DestDir: "{app}"; Components: "Docs"; DestName: "readme.txt"
 Source: "C1Bitcrusher.dll"; DestDir: {code:GetVSTDir_32}; Components: VST32
-Source: "C1Bitcrusher_X64.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: Is64BitInstallMode
+Source: "C1Bitcrusher_IA64.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: IsIA64
+Source: "C1Bitcrusher_X64.dll"; DestDir: {code:GetVSTDir_64}; Components: VST64; Check: IsX64
 
 [Icons]
 Name: "{group}\License"; Filename: "{app}\LICENSE.TXT"; Components: "Docs"
@@ -53,6 +54,16 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 SelectDirLabel3=The documentation will be installed in the following folder.
 
 [Code]
+function IsX64: Boolean;
+begin
+  Result := Is64BitInstallMode and (ProcessorArchitecture = paX64);
+end;
+
+function IsIA64: Boolean;
+begin
+  Result := Is64BitInstallMode and (ProcessorArchitecture = paIA64);
+end;
+
 var
   VSTDirPage_32: TInputDirWizardPage;
   VSTDirPage_64: TInputDirWizardPage;
