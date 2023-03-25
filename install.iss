@@ -5,6 +5,8 @@ DefaultDirName={pf}\C1Bitcrusher
 DefaultGroupName=C1Bitcrusher
 AllowNoIcons=yes
 OutputBaseFilename=C1Bitcrusher
+Compression=lzma
+SolidCompression=yes
 ArchitecturesInstallIn64BitMode=X64 IA64
 
 [Languages]
