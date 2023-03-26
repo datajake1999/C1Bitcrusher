@@ -29,6 +29,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * SeedWithTime: Resets the pseudorandom number generators with the current time. When this is enabled, the value set by Seed is ignored.
 * NoiseShaping: Enable or disable noise shaping.
 * NoiseShapingFocus: Controls whether the noise shaping focuses on low or high frequencies.
+* NoiseShapingOrder: The noise shaping filter style.
 * NoiseShapingGain: controls the over all affect of noise shaping.
 * AutoBlank: If this is enabled, silent audio isn't dithered or noise shaped.
 * Clip: Clips the audio before quantizing.

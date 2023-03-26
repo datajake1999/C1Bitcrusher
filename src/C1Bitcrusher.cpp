@@ -22,6 +22,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	SeedWithTime = 0;
 	NoiseShaping = 1;
 	NoiseShapingFocus = 1;
+	NoiseShapingOrder = 1;
 	NoiseShapingGain = 1;
 	AutoBlank = 0;
 	Clip = 0;
@@ -108,6 +109,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kNoiseShapingFocus:
 		NoiseShapingFocus = value;
 		break;
+	case kNoiseShapingOrder:
+		NoiseShapingOrder = value;
+		break;
 	case kNoiseShapingGain:
 		NoiseShapingGain = value;
 		break;
@@ -191,6 +195,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kNoiseShapingFocus:
 		value = NoiseShapingFocus;
+		break;
+	case kNoiseShapingOrder:
+		value = NoiseShapingOrder;
 		break;
 	case kNoiseShapingGain:
 		value = NoiseShapingGain;
@@ -341,6 +348,16 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "Low");
+		}
+		break;
+	case kNoiseShapingOrder:
+		if (NoiseShapingOrder >= 0.5)
+		{
+			strcpy (text, "Second");
+		}
+		else
+		{
+			strcpy (text, "First");
 		}
 		break;
 	case kNoiseShapingGain:
@@ -509,6 +526,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kNoiseShapingFocus:
 		strcpy (text, "NoiseShapingFocus");
+		break;
+	case kNoiseShapingOrder:
+		strcpy (text, "NoiseShapingOrder");
 		break;
 	case kNoiseShapingGain:
 		strcpy (text, "NoiseShapingGain");

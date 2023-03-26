@@ -29,6 +29,7 @@ enum
 	kSeedWithTime,
 	kNoiseShaping,
 	kNoiseShapingFocus,
+	kNoiseShapingOrder,
 	kNoiseShapingGain,
 	kAutoBlank,
 	kClip,
@@ -78,6 +79,7 @@ private:
 	float SeedWithTime;
 	float NoiseShaping;
 	float NoiseShapingFocus;
+	float NoiseShapingOrder;
 	float NoiseShapingGain;
 	float AutoBlank;
 	float Clip;
@@ -90,7 +92,7 @@ private:
 	char ProgramName[32];
 	double scale;
 	double quantized[2];
-	double error[2];
+	double error[2][2];
 	void Reset();
 	double MT_generator();
 	double RPDF();
@@ -98,7 +100,8 @@ private:
 	double AWGN_generator();
 	double DitherNoise();
 	double DitherSample(double sample);
-	double NoiseShapeSample(double sample, double noise);
+	double NoiseShapeSampleFirstOrder(double sample, double noise);
+	double NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2);
 	double DCSample(double sample);
 	double ClipSample(double sample);
 	double QuantizeSample(double sample);

@@ -12,10 +12,8 @@ void C1Bitcrusher::Reset()
 		srand((int)Seed);
 		init_genrand((int)Seed);
 	}
-	quantized[0] = 0;
-	quantized[1] = 0;
-	error[0] = 0;
-	error[1] = 0;
+	memset(quantized, 0, sizeof(quantized));
+	memset(error, 0, sizeof(error));
 }
 
 double C1Bitcrusher::MT_generator()
@@ -159,7 +157,7 @@ double C1Bitcrusher::DitherSample(double sample)
 	return sample + (noise * DitherGain);
 }
 
-double C1Bitcrusher::NoiseShapeSample(double sample, double noise)
+double C1Bitcrusher::NoiseShapeSampleFirstOrder(double sample, double noise)
 {
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
@@ -180,6 +178,42 @@ double C1Bitcrusher::NoiseShapeSample(double sample, double noise)
 	else
 	{
 		return sample + (noise * NoiseShapingGain);
+	}
+}
+
+double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2)
+{
+	double noiseSum;
+	if (sample == 0 && AutoBlank >= 0.5)
+	{
+		return 0;
+	}
+	if (noise1 > 1)
+	{
+		noise1 = 1;
+	}
+	else if (noise1 < -1)
+	{
+		noise1 = -1;
+	}
+	if (noise2 > 1)
+	{
+		noise2 = 1;
+	}
+	else if (noise2 < -1)
+	{
+		noise2 = -1;
+	}
+	noiseSum = noise1 * 2;
+	if (NoiseShapingFocus >= 0.5)
+	{
+		noiseSum = noiseSum - noise2;
+		return sample - (noiseSum * NoiseShapingGain);
+	}
+	else
+	{
+		noiseSum = noiseSum + noise2;
+		return sample + (noiseSum * NoiseShapingGain);
 	}
 }
 
@@ -286,7 +320,14 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 	{
 		if (NoiseShaping >= 0.5)
 		{
-			sample = NoiseShapeSample(sample, error[channel]);
+			if (NoiseShapingOrder >= 0.5)
+			{
+				sample = NoiseShapeSampleSecondOrder(sample, error[0][channel], error[1][channel]);
+			}
+			else
+			{
+				sample = NoiseShapeSampleFirstOrder(sample, error[0][channel]);
+			}
 		}
 		if (Dither >= 0.5 && DitherInError >= 0.5)
 		{
@@ -296,10 +337,11 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 		{
 			quantized[channel] = QuantizeSample(sample);
 		}
-		error[channel] = quantized[channel] - sample;
+		error[1][channel] = error[0][channel];
+		error[0][channel] = quantized[channel] - sample;
 		if (OnlyError >= 0.5)
 		{
-			sample = error[channel];
+			sample = error[0][channel];
 		}
 		else
 		{
