@@ -22,6 +22,7 @@ This is a bitcrusher VST plug-in with an emphasis on realism. It processes audio
 * Dither: Enable or disable dithering.
 * DitherType: The probability density function that is used to generate dither noise.
 * InvertDither: Flips the polarity of the dither noise.
+* HighpassDither: Applies a highpass filter to the dither noise.
 * DitherGain: controls the over all affect of dithering.
 * MersenneTwister: Switches to using the Mersenne Twister pseudorandom number generator instead of the PRNG provided by the standard library.
 * MersenneGenerator: The Mersenne Twister generator function to use.

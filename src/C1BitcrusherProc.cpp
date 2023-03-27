@@ -135,7 +135,7 @@ double C1Bitcrusher::DitherNoise()
 	}
 }
 
-double C1Bitcrusher::DitherSample(double sample)
+double C1Bitcrusher::DitherSample(double sample, double *lastNoise)
 {
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
@@ -153,6 +153,16 @@ double C1Bitcrusher::DitherSample(double sample)
 	else if (noise < -1)
 	{
 		noise = -1;
+	}
+	if (HighpassDither >= 0.5)
+	{
+		double noise2 = 0;
+		if (lastNoise)
+		{
+			noise2 = *lastNoise;
+			*lastNoise = noise;
+		}
+		noise = noise - noise2;
 	}
 	return sample + (noise * DitherGain);
 }
@@ -310,7 +320,7 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 	sample = DCSample(sample);
 	if (Dither >= 0.5 && DitherInError < 0.5)
 	{
-		sample = DitherSample(sample);
+		sample = DitherSample(sample, &LastDither[channel]);
 	}
 	if (Clip >= 0.5)
 	{
@@ -331,7 +341,7 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 		}
 		if (Dither >= 0.5 && DitherInError >= 0.5)
 		{
-			quantized[channel] = QuantizeSample(DitherSample(sample));
+			quantized[channel] = QuantizeSample(DitherSample(sample, &LastDither[channel]));
 		}
 		else
 		{

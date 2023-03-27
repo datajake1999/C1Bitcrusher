@@ -15,6 +15,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	Dither = 1;
 	DitherType = 1;
 	InvertDither = 0;
+	HighpassDither = 0;
 	DitherGain = 1;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
@@ -83,6 +84,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kInvertDither:
 		InvertDither = value;
+		break;
+	case kHighpassDither:
+		HighpassDither = value;
 		break;
 	case kDitherGain:
 		DitherGain = value;
@@ -174,6 +178,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kInvertDither:
 		value = InvertDither;
+		break;
+	case kHighpassDither:
+		value = HighpassDither;
 		break;
 	case kDitherGain:
 		value = DitherGain;
@@ -282,6 +289,16 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		break;
 	case kInvertDither:
 		if (InvertDither >= 0.5)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
+	case kHighpassDither:
+		if (HighpassDither >= 0.5)
 		{
 			strcpy (text, "ON");
 		}
@@ -505,6 +522,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kInvertDither:
 		strcpy (text, "InvertDither");
+		break;
+	case kHighpassDither:
+		strcpy (text, "HighpassDither");
 		break;
 	case kDitherGain:
 		strcpy (text, "DitherGain");

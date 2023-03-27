@@ -22,6 +22,7 @@ enum
 	kDither,
 	kDitherType,
 	kInvertDither,
+	kHighpassDither,
 	kDitherGain,
 	kMersenneTwister,
 	kMersenneGenerator,
@@ -72,6 +73,7 @@ private:
 	float Dither;
 	float DitherType;
 	float InvertDither;
+	float HighpassDither;
 	float DitherGain;
 	float MersenneTwister;
 	float MersenneGenerator;
@@ -91,6 +93,7 @@ private:
 	float OnlyError;
 	char ProgramName[32];
 	double scale;
+	double LastDither[2];
 	double quantized[2];
 	double error[2][2];
 	void Reset();
@@ -99,7 +102,7 @@ private:
 	double TPDF();
 	double AWGN_generator();
 	double DitherNoise();
-	double DitherSample(double sample);
+	double DitherSample(double sample, double *lastNoise);
 	double NoiseShapeSampleFirstOrder(double sample, double noise);
 	double NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2);
 	double DCSample(double sample);
