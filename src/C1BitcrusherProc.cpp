@@ -12,8 +12,7 @@ void C1Bitcrusher::Reset()
 		srand((int)Seed);
 		init_genrand((int)Seed);
 	}
-	memset(quantized, 0, sizeof(quantized));
-	memset(error, 0, sizeof(error));
+	memset(chan, 0, sizeof(chan));
 }
 
 double C1Bitcrusher::MT_generator()
@@ -137,11 +136,12 @@ double C1Bitcrusher::DitherNoise()
 
 double C1Bitcrusher::DitherSample(double sample, double *lastNoise)
 {
+	double noise;
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
 		return 0;
 	}
-	double noise = DitherNoise() / scale;
+	noise = DitherNoise() / scale;
 	if (InvertDither >= 0.5)
 	{
 		noise = noise * -1;
@@ -227,6 +227,41 @@ double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, d
 	}
 }
 
+double C1Bitcrusher::NoiseShapeSamplePsycho(double sample, ChannelState *cs)
+{
+	int i;
+	int curPhase = cs->PsychoPhase;
+	if (sample == 0 && AutoBlank >= 0.5)
+	{
+		return 0;
+	}
+	for (i = 0; i < n; i++)
+	{
+		if (cs->PsychoError[curPhase] > 1)
+		{
+			cs->PsychoError[curPhase] = 1;
+		}
+		else if (cs->PsychoError[curPhase] < -1)
+		{
+			cs->PsychoError[curPhase] = -1;
+		}
+		if (NoiseShapingFocus >= 0.5)
+		{
+			sample = sample - (cs->PsychoError[curPhase] * (coeffs[i] * NoiseShapingGain));
+		}
+		else
+		{
+			sample = sample + (cs->PsychoError[curPhase] * (coeffs[i] * NoiseShapingGain));
+		}
+		curPhase++;
+		if (curPhase == n)
+		{
+			curPhase = 0;
+		}
+	}
+	return sample;
+}
+
 double C1Bitcrusher::DCSample(double sample)
 {
 	double DC = DCBias / scale;
@@ -304,6 +339,7 @@ double C1Bitcrusher::QuantizeSample(double sample)
 
 double C1Bitcrusher::ProcessSample(double sample, int channel)
 {
+	ChannelState *cs;
 	if (channel > 1)
 	{
 		channel = 1;
@@ -312,6 +348,7 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 	{
 		channel = 0;
 	}
+	cs = &chan[channel];
 	if (Disable >= 0.5)
 	{
 		return sample;
@@ -320,7 +357,7 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 	sample = DCSample(sample);
 	if (Dither >= 0.5 && DitherInError < 0.5)
 	{
-		sample = DitherSample(sample, &LastDither[channel]);
+		sample = DitherSample(sample, &cs->LastDither);
 	}
 	if (Clip >= 0.5)
 	{
@@ -328,34 +365,48 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 	}
 	if (Quantize >= 0.5)
 	{
+		double quantized;
 		if (NoiseShaping >= 0.5)
 		{
-			if (NoiseShapingOrder >= 0.5)
+			if (NoiseShapingFilter >= 0.0 && NoiseShapingFilter < 0.25)
 			{
-				sample = NoiseShapeSampleSecondOrder(sample, error[0][channel], error[1][channel]);
+				sample = NoiseShapeSampleFirstOrder(sample, cs->error[0]);
+			}
+			else if (NoiseShapingFilter >= 0.25 && NoiseShapingFilter < 0.5)
+			{
+				sample = NoiseShapeSampleSecondOrder(sample, cs->error[0], cs->error[1]);
 			}
 			else
 			{
-				sample = NoiseShapeSampleFirstOrder(sample, error[0][channel]);
+				sample = NoiseShapeSamplePsycho(sample, cs);
 			}
 		}
 		if (Dither >= 0.5 && DitherInError >= 0.5)
 		{
-			quantized[channel] = QuantizeSample(DitherSample(sample, &LastDither[channel]));
+			quantized = QuantizeSample(DitherSample(sample, &cs->LastDither));
 		}
 		else
 		{
-			quantized[channel] = QuantizeSample(sample);
+			quantized = QuantizeSample(sample);
 		}
-		error[1][channel] = error[0][channel];
-		error[0][channel] = quantized[channel] - sample;
+		cs->error[1] = cs->error[0];
+		cs->error[0] = quantized - sample;
+		if (cs->PsychoPhase == 0)
+		{
+			cs->PsychoPhase = n - 1;
+		}
+		else
+		{
+			cs->PsychoPhase--;
+		}
+		cs->PsychoError[cs->PsychoPhase] = cs->error[0];
 		if (OnlyError >= 0.5)
 		{
-			sample = error[0][channel];
+			sample = cs->error[0];
 		}
 		else
 		{
-			sample = quantized[channel];
+			sample = quantized;
 		}
 	}
 	sample = sample * OutGain;

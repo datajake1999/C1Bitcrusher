@@ -29,8 +29,9 @@ enum
 	kSeed,
 	kSeedWithTime,
 	kNoiseShaping,
+	kNoiseShapingFilter,
+	kPsychoacousticCurve,
 	kNoiseShapingFocus,
-	kNoiseShapingOrder,
 	kNoiseShapingGain,
 	kAutoBlank,
 	kClip,
@@ -42,6 +43,14 @@ enum
 	kOnlyError,
 
 	kNumParams
+};
+
+struct ChannelState
+{
+	double LastDither;
+	double error[2];
+	double PsychoError[9];
+	int PsychoPhase;
 };
 
 class C1Bitcrusher : public AudioEffectX
@@ -80,8 +89,9 @@ private:
 	float Seed;
 	float SeedWithTime;
 	float NoiseShaping;
+	float NoiseShapingFilter;
+	float PsychoacousticCurve;
 	float NoiseShapingFocus;
-	float NoiseShapingOrder;
 	float NoiseShapingGain;
 	float AutoBlank;
 	float Clip;
@@ -93,9 +103,9 @@ private:
 	float OnlyError;
 	char ProgramName[32];
 	double scale;
-	double LastDither[2];
-	double quantized[2];
-	double error[2][2];
+	ChannelState chan[2];
+	double coeffs[9];
+	int n;
 	void Reset();
 	double MT_generator();
 	double RPDF();
@@ -105,6 +115,7 @@ private:
 	double DitherSample(double sample, double *lastNoise);
 	double NoiseShapeSampleFirstOrder(double sample, double noise);
 	double NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2);
+	double NoiseShapeSamplePsycho(double sample, ChannelState *cs);
 	double DCSample(double sample);
 	double ClipSample(double sample);
 	double QuantizeSample(double sample);

@@ -1,4 +1,5 @@
 #include "C1Bitcrusher.h"
+#include "psycho.h"
 
 C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
@@ -21,9 +22,10 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	MersenneGenerator = 1;
 	Seed = 0;
 	SeedWithTime = 0;
-	NoiseShaping = 1;
+	NoiseShaping = 0;
+	NoiseShapingFilter = 1;
+	PsychoacousticCurve = 1;
 	NoiseShapingFocus = 1;
-	NoiseShapingOrder = 1;
 	NoiseShapingGain = 1;
 	AutoBlank = 0;
 	Clip = 0;
@@ -38,6 +40,8 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	canProcessReplacing ();
 	canDoubleReplacing ();
 	Reset();
+	n = 9;
+	memcpy(coeffs, psycho9, sizeof(psycho9));
 }
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
@@ -110,11 +114,31 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kNoiseShaping:
 		NoiseShaping = value;
 		break;
+	case kNoiseShapingFilter:
+		NoiseShapingFilter = value;
+		break;
+	case kPsychoacousticCurve:
+		PsychoacousticCurve = value;
+		n = 0;
+		memset(coeffs, 0, sizeof(coeffs));
+		if (PsychoacousticCurve >= 0.0 && PsychoacousticCurve < 0.25)
+		{
+			n = 3;
+			memcpy(coeffs, psycho3, sizeof(psycho3));
+		}
+		else if (PsychoacousticCurve >= 0.25 && PsychoacousticCurve < 0.5)
+		{
+			n = 5;
+			memcpy(coeffs, psycho5, sizeof(psycho5));
+		}
+		else
+		{
+			n = 9;
+			memcpy(coeffs, psycho9, sizeof(psycho9));
+		}
+		break;
 	case kNoiseShapingFocus:
 		NoiseShapingFocus = value;
-		break;
-	case kNoiseShapingOrder:
-		NoiseShapingOrder = value;
 		break;
 	case kNoiseShapingGain:
 		NoiseShapingGain = value;
@@ -200,11 +224,14 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kNoiseShaping:
 		value = NoiseShaping;
 		break;
+	case kNoiseShapingFilter:
+		value = NoiseShapingFilter;
+		break;
+	case kPsychoacousticCurve:
+		value = PsychoacousticCurve;
+		break;
 	case kNoiseShapingFocus:
 		value = NoiseShapingFocus;
-		break;
-	case kNoiseShapingOrder:
-		value = NoiseShapingOrder;
 		break;
 	case kNoiseShapingGain:
 		value = NoiseShapingGain;
@@ -357,6 +384,34 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
+	case kNoiseShapingFilter:
+		if (NoiseShapingFilter >= 0.0 && NoiseShapingFilter < 0.25)
+		{
+			strcpy (text, "First Order");
+		}
+		else if (NoiseShapingFilter >= 0.25 && NoiseShapingFilter < 0.5)
+		{
+			strcpy (text, "Second Order");
+		}
+		else
+		{
+			strcpy (text, "Psychoacoustic");
+		}
+		break;
+	case kPsychoacousticCurve:
+		if (PsychoacousticCurve >= 0.0 && PsychoacousticCurve < 0.25)
+		{
+			strcpy (text, "Wannamaker 3-tap");
+		}
+		else if (PsychoacousticCurve >= 0.25 && PsychoacousticCurve < 0.5)
+		{
+			strcpy (text, "Lipshitz");
+		}
+		else
+		{
+			strcpy (text, "Wannamaker 9-tap");
+		}
+		break;
 	case kNoiseShapingFocus:
 		if (NoiseShapingFocus >= 0.5)
 		{
@@ -365,16 +420,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		else
 		{
 			strcpy (text, "Low");
-		}
-		break;
-	case kNoiseShapingOrder:
-		if (NoiseShapingOrder >= 0.5)
-		{
-			strcpy (text, "Second");
-		}
-		else
-		{
-			strcpy (text, "First");
 		}
 		break;
 	case kNoiseShapingGain:
@@ -544,11 +589,14 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kNoiseShaping:
 		strcpy (text, "NoiseShaping");
 		break;
+	case kNoiseShapingFilter:
+		strcpy (text, "NoiseShapingFilter");
+		break;
+	case kPsychoacousticCurve:
+		strcpy (text, "PsychoacousticCurve");
+		break;
 	case kNoiseShapingFocus:
 		strcpy (text, "NoiseShapingFocus");
-		break;
-	case kNoiseShapingOrder:
-		strcpy (text, "NoiseShapingOrder");
 		break;
 	case kNoiseShapingGain:
 		strcpy (text, "NoiseShapingGain");
