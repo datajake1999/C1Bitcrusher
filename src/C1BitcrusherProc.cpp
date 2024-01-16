@@ -230,33 +230,27 @@ double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, d
 double C1Bitcrusher::NoiseShapeSamplePsycho(double sample, ChannelState *cs)
 {
 	int i;
-	int curPhase = cs->PsychoPhase;
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
 		return 0;
 	}
 	for (i = 0; i < n; i++)
 	{
-		if (cs->PsychoError[curPhase] > 1)
+		if (cs->PsychoError[i] > 1)
 		{
-			cs->PsychoError[curPhase] = 1;
+			cs->PsychoError[i] = 1;
 		}
-		else if (cs->PsychoError[curPhase] < -1)
+		else if (cs->PsychoError[i] < -1)
 		{
-			cs->PsychoError[curPhase] = -1;
+			cs->PsychoError[i] = -1;
 		}
 		if (NoiseShapingFocus >= 0.5)
 		{
-			sample = sample - (cs->PsychoError[curPhase] * (coeffs[i] * NoiseShapingGain));
+			sample = sample - (cs->PsychoError[i] * (coeffs[i] * NoiseShapingGain));
 		}
 		else
 		{
-			sample = sample + (cs->PsychoError[curPhase] * (coeffs[i] * NoiseShapingGain));
-		}
-		curPhase++;
-		if (curPhase == n)
-		{
-			curPhase = 0;
+			sample = sample + (cs->PsychoError[i] * (coeffs[i] * NoiseShapingGain));
 		}
 	}
 	return sample;
@@ -340,6 +334,7 @@ double C1Bitcrusher::QuantizeSample(double sample)
 double C1Bitcrusher::ProcessSample(double sample, int channel)
 {
 	ChannelState *cs;
+	int i;
 	if (channel > 1)
 	{
 		channel = 1;
@@ -391,15 +386,11 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 		}
 		cs->error[1] = cs->error[0];
 		cs->error[0] = quantized - sample;
-		if (cs->PsychoPhase == 0)
+		for (i = n-1; i >= 0; i--)
 		{
-			cs->PsychoPhase = n - 1;
+			cs->PsychoError[i] = cs->PsychoError[i-1];
 		}
-		else
-		{
-			cs->PsychoPhase--;
-		}
-		cs->PsychoError[cs->PsychoPhase] = cs->error[0];
+		cs->PsychoError[0] = cs->error[0];
 		if (OnlyError >= 0.5)
 		{
 			sample = cs->error[0];

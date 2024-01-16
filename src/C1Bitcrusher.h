@@ -50,7 +50,6 @@ struct ChannelState
 	double LastDither;
 	double error[2];
 	double PsychoError[9];
-	int PsychoPhase;
 };
 
 class C1Bitcrusher : public AudioEffectX
