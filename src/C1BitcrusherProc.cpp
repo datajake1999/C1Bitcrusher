@@ -181,19 +181,11 @@ double C1Bitcrusher::NoiseShapeSampleFirstOrder(double sample, double noise)
 	{
 		noise = -1;
 	}
-	if (NoiseShapingFocus >= 0.5)
-	{
-		return sample - (noise * NoiseShapingGain);
-	}
-	else
-	{
-		return sample + (noise * NoiseShapingGain);
-	}
+	return sample - (noise * NoiseShapingGain);
 }
 
 double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2)
 {
-	double noiseSum;
 	if (sample == 0 && AutoBlank >= 0.5)
 	{
 		return 0;
@@ -214,17 +206,7 @@ double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, d
 	{
 		noise2 = -1;
 	}
-	noiseSum = noise1 * 2;
-	if (NoiseShapingFocus >= 0.5)
-	{
-		noiseSum = noiseSum - noise2;
-		return sample - (noiseSum * NoiseShapingGain);
-	}
-	else
-	{
-		noiseSum = noiseSum + noise2;
-		return sample + (noiseSum * NoiseShapingGain);
-	}
+	return sample - (((noise1 * 2) - noise2) * NoiseShapingGain);
 }
 
 double C1Bitcrusher::NoiseShapeSamplePsycho(double sample, ChannelState *cs)
@@ -244,14 +226,7 @@ double C1Bitcrusher::NoiseShapeSamplePsycho(double sample, ChannelState *cs)
 		{
 			cs->PsychoError[i] = -1;
 		}
-		if (NoiseShapingFocus >= 0.5)
-		{
-			sample = sample - (cs->PsychoError[i] * (coeffs[i] * NoiseShapingGain));
-		}
-		else
-		{
-			sample = sample + (cs->PsychoError[i] * (coeffs[i] * NoiseShapingGain));
-		}
+		sample = sample - (cs->PsychoError[i] * (coeffs[i] * NoiseShapingGain));
 	}
 	return sample;
 }

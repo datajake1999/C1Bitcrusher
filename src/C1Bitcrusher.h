@@ -31,7 +31,6 @@ enum
 	kNoiseShaping,
 	kNoiseShapingFilter,
 	kPsychoacousticCurve,
-	kNoiseShapingFocus,
 	kNoiseShapingGain,
 	kAutoBlank,
 	kClip,
@@ -90,7 +89,6 @@ private:
 	float NoiseShaping;
 	float NoiseShapingFilter;
 	float PsychoacousticCurve;
-	float NoiseShapingFocus;
 	float NoiseShapingGain;
 	float AutoBlank;
 	float Clip;

@@ -25,7 +25,6 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	NoiseShaping = 0;
 	NoiseShapingFilter = 1;
 	PsychoacousticCurve = 1;
-	NoiseShapingFocus = 1;
 	NoiseShapingGain = 1;
 	AutoBlank = 0;
 	Clip = 0;
@@ -137,9 +136,6 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 			memcpy(coeffs, psycho9, sizeof(psycho9));
 		}
 		break;
-	case kNoiseShapingFocus:
-		NoiseShapingFocus = value;
-		break;
 	case kNoiseShapingGain:
 		NoiseShapingGain = value;
 		break;
@@ -229,9 +225,6 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kPsychoacousticCurve:
 		value = PsychoacousticCurve;
-		break;
-	case kNoiseShapingFocus:
-		value = NoiseShapingFocus;
 		break;
 	case kNoiseShapingGain:
 		value = NoiseShapingGain;
@@ -412,16 +405,6 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "Wannamaker 9-tap");
 		}
 		break;
-	case kNoiseShapingFocus:
-		if (NoiseShapingFocus >= 0.5)
-		{
-			strcpy (text, "High");
-		}
-		else
-		{
-			strcpy (text, "Low");
-		}
-		break;
 	case kNoiseShapingGain:
 		float2string (NoiseShapingGain, text, kVstMaxParamStrLen);
 		break;
@@ -594,9 +577,6 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kPsychoacousticCurve:
 		strcpy (text, "PsychoacousticCurve");
-		break;
-	case kNoiseShapingFocus:
-		strcpy (text, "NoiseShapingFocus");
 		break;
 	case kNoiseShapingGain:
 		strcpy (text, "NoiseShapingGain");
