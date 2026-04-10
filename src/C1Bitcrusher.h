@@ -47,8 +47,7 @@ enum
 struct ChannelState
 {
 	double LastDither;
-	double error[2];
-	double PsychoError[9];
+	double error[9];
 };
 
 class C1Bitcrusher : public AudioEffectX
@@ -104,14 +103,14 @@ private:
 	double coeffs[9];
 	int n;
 	void Reset();
-	double MT_generator();
+	double PRNG();
 	double RPDF();
 	double TPDF();
 	double AWGN_generator();
 	double DitherNoise();
 	double DitherSample(double sample, double *lastNoise);
-	double NoiseShapeSampleFirstOrder(double sample, double noise);
-	double NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2);
+	double NoiseShapeSampleFirstOrder(double sample, ChannelState *cs);
+	double NoiseShapeSampleSecondOrder(double sample, ChannelState *cs);
 	double NoiseShapeSamplePsycho(double sample, ChannelState *cs);
 	double DCSample(double sample);
 	double ClipSample(double sample);

@@ -15,33 +15,33 @@ void C1Bitcrusher::Reset()
 	memset(chan, 0, sizeof(chan));
 }
 
-double C1Bitcrusher::MT_generator()
+double C1Bitcrusher::PRNG()
 {
-	if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
+	if (MersenneTwister >= 0.5)
 	{
-		return genrand_real1();
-	}
-	else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
-	{
-		return genrand_real2();
+		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
+		{
+			return genrand_real1();
+		}
+		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
+		{
+			return genrand_real2();
+		}
+		else
+		{
+			return genrand_real3();
+		}
 	}
 	else
 	{
-		return genrand_real3();
+		return rand() / (double)RAND_MAX;
 	}
 }
 
 double C1Bitcrusher::RPDF()
 {
 	double s;
-	if (MersenneTwister >= 0.5)
-	{
-		s = MT_generator();
-	}
-	else
-	{
-		s = rand() / (double)RAND_MAX;
-	}
+	s = PRNG();
 	s = (s - 0.5) * 2;
 	return s;
 }
@@ -51,16 +51,8 @@ double C1Bitcrusher::TPDF()
 	double s1;
 	double s2;
 	double out;
-	if (MersenneTwister >= 0.5)
-	{
-		s1 = MT_generator();
-		s2 = MT_generator();
-	}
-	else
-	{
-		s1 = rand() / (double)RAND_MAX;
-		s2 = rand() / (double)RAND_MAX;
-	}
+	s1 = PRNG();
+	s2 = PRNG();
 	s1 = (s1 - 0.5) * 2;
 	s2 = (s2 - 0.5) * 2;
 	out = s1 + s2;
@@ -70,53 +62,28 @@ double C1Bitcrusher::TPDF()
 #define PI 3.1415926536
 
 double C1Bitcrusher::AWGN_generator()
-{/* Generates additive white Gaussian Noise samples with zero mean and a standard deviation of 1. */
-
+{
 	double temp1;
 	double temp2;
 	double result;
 	int p;
-
 	p = 1;
-
-	while( p > 0 )
+	while (p > 0)
 	{
-		if (MersenneTwister >= 0.5)
+		temp2 = PRNG();
+		if (temp2 == 0)
 		{
-			temp2 = ( MT_generator() );
-		}
-		else
-		{
-			temp2 = ( rand() / ( (double)RAND_MAX ) ); /*  rand() function generates an
-													integer between 0 and  RAND_MAX,
-													which is defined in stdlib.h.
-												*/
-		}
-
-		if ( temp2 == 0 )
-		{// temp2 is >= (RAND_MAX / 2)
 			p = 1;
-		}// end if
+		}
 		else
-		{// temp2 is < (RAND_MAX / 2)
+		{
 			p = -1;
-		}// end else
-
-	}// end while()
-
-	if (MersenneTwister >= 0.5)
-	{
-		temp1 = cos( ( 2.0 * (double)PI ) * MT_generator() );
+		}
 	}
-	else
-	{
-		temp1 = cos( ( 2.0 * (double)PI ) * rand() / ( (double)RAND_MAX ) );
-	}
-	result = sqrt( -2.0 * log( temp2 ) ) * temp1;
-
-	return result;	// return the generated random sample to the caller
-
-}// end AWGN_generator()
+	temp1 = cos((2.0 * (double)PI) * PRNG());
+	result = sqrt(-2.0 * log(temp2)) * temp1;
+	return result;
+}
 
 double C1Bitcrusher::DitherNoise()
 {
@@ -167,12 +134,14 @@ double C1Bitcrusher::DitherSample(double sample, double *lastNoise)
 	return sample + (noise * DitherGain);
 }
 
-double C1Bitcrusher::NoiseShapeSampleFirstOrder(double sample, double noise)
+double C1Bitcrusher::NoiseShapeSampleFirstOrder(double sample, ChannelState *cs)
 {
-	if (sample == 0 && AutoBlank >= 0.5)
+	double noise;
+	if (!cs || (sample == 0 && AutoBlank >= 0.5))
 	{
 		return 0;
 	}
+	noise = cs->error[0];
 	if (noise > 1)
 	{
 		noise = 1;
@@ -184,12 +153,15 @@ double C1Bitcrusher::NoiseShapeSampleFirstOrder(double sample, double noise)
 	return sample - (noise * NoiseShapingGain);
 }
 
-double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, double noise2)
+double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, ChannelState *cs)
 {
-	if (sample == 0 && AutoBlank >= 0.5)
+	double noise1;
+	double noise2;
+	if (!cs || (sample == 0 && AutoBlank >= 0.5))
 	{
 		return 0;
 	}
+	noise1 = cs->error[0];
 	if (noise1 > 1)
 	{
 		noise1 = 1;
@@ -198,6 +170,7 @@ double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, d
 	{
 		noise1 = -1;
 	}
+	noise2 = cs->error[1];
 	if (noise2 > 1)
 	{
 		noise2 = 1;
@@ -212,21 +185,22 @@ double C1Bitcrusher::NoiseShapeSampleSecondOrder(double sample, double noise1, d
 double C1Bitcrusher::NoiseShapeSamplePsycho(double sample, ChannelState *cs)
 {
 	int i;
-	if (sample == 0 && AutoBlank >= 0.5)
+	if (!cs || (sample == 0 && AutoBlank >= 0.5))
 	{
 		return 0;
 	}
 	for (i = 0; i < n; i++)
 	{
-		if (cs->PsychoError[i] > 1)
+		double noise = cs->error[i];
+		if (noise > 1)
 		{
-			cs->PsychoError[i] = 1;
+			noise = 1;
 		}
-		else if (cs->PsychoError[i] < -1)
+		else if (noise < -1)
 		{
-			cs->PsychoError[i] = -1;
+			noise = -1;
 		}
-		sample = sample - (cs->PsychoError[i] * (coeffs[i] * NoiseShapingGain));
+		sample = sample - (noise * (coeffs[i] * NoiseShapingGain));
 	}
 	return sample;
 }
@@ -293,9 +267,9 @@ double C1Bitcrusher::QuantizeSample(double sample)
 	}
 	if (Clip0dB >= 0.5)
 	{
-		if (sample > scale - 1)
+		if (sample > scale-1)
 		{
-			sample = scale - 1;
+			sample = scale-1;
 		}
 		else if (sample < scale * -1)
 		{
@@ -336,15 +310,16 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 	if (Quantize >= 0.5)
 	{
 		double quantized;
+		double error;
 		if (NoiseShaping >= 0.5)
 		{
 			if (NoiseShapingFilter >= 0.0 && NoiseShapingFilter < 0.25)
 			{
-				sample = NoiseShapeSampleFirstOrder(sample, cs->error[0]);
+				sample = NoiseShapeSampleFirstOrder(sample, cs);
 			}
 			else if (NoiseShapingFilter >= 0.25 && NoiseShapingFilter < 0.5)
 			{
-				sample = NoiseShapeSampleSecondOrder(sample, cs->error[0], cs->error[1]);
+				sample = NoiseShapeSampleSecondOrder(sample, cs);
 			}
 			else
 			{
@@ -359,16 +334,15 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 		{
 			quantized = QuantizeSample(sample);
 		}
-		cs->error[1] = cs->error[0];
-		cs->error[0] = quantized - sample;
+		error = quantized - sample;
 		for (i = n-1; i >= 1; i--)
 		{
-			cs->PsychoError[i] = cs->PsychoError[i-1];
+			cs->error[i] = cs->error[i-1];
 		}
-		cs->PsychoError[0] = cs->error[0];
+		cs->error[0] = error;
 		if (OnlyError >= 0.5)
 		{
-			sample = cs->error[0];
+			sample = error;
 		}
 		else
 		{
