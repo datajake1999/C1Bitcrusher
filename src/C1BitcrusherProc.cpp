@@ -361,7 +361,7 @@ double C1Bitcrusher::ProcessSample(double sample, int channel)
 		}
 		cs->error[1] = cs->error[0];
 		cs->error[0] = quantized - sample;
-		for (i = n-1; i >= 0; i--)
+		for (i = n-1; i >= 1; i--)
 		{
 			cs->PsychoError[i] = cs->PsychoError[i-1];
 		}
