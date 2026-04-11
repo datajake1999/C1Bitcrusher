@@ -129,7 +129,7 @@ double C1Bitcrusher::DitherSample(double sample, double *lastNoise)
 			noise2 = *lastNoise;
 			*lastNoise = noise;
 		}
-		noise = noise - noise2;
+		noise = noise - (noise2 * HighpassGain);
 	}
 	return sample + (noise * DitherGain);
 }

@@ -23,6 +23,7 @@ enum
 	kDitherType,
 	kInvertDither,
 	kHighpassDither,
+	kHighpassGain,
 	kDitherGain,
 	kMersenneTwister,
 	kMersenneGenerator,
@@ -80,6 +81,7 @@ private:
 	float DitherType;
 	float InvertDither;
 	float HighpassDither;
+	float HighpassGain;
 	float DitherGain;
 	float MersenneTwister;
 	float MersenneGenerator;

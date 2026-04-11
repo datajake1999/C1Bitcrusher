@@ -17,6 +17,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	DitherType = 1;
 	InvertDither = 0;
 	HighpassDither = 0;
+	HighpassGain = 1;
 	DitherGain = 1;
 	MersenneTwister = 1;
 	MersenneGenerator = 1;
@@ -90,6 +91,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 		break;
 	case kHighpassDither:
 		HighpassDither = value;
+		break;
+	case kHighpassGain:
+		HighpassGain = value;
 		break;
 	case kDitherGain:
 		DitherGain = value;
@@ -201,6 +205,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kHighpassDither:
 		value = HighpassDither;
+		break;
+	case kHighpassGain:
+		value = HighpassGain;
 		break;
 	case kDitherGain:
 		value = DitherGain;
@@ -326,6 +333,9 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		{
 			strcpy (text, "OFF");
 		}
+		break;
+	case kHighpassGain:
+		float2string (HighpassGain, text, kVstMaxParamStrLen);
 		break;
 	case kDitherGain:
 		float2string (DitherGain, text, kVstMaxParamStrLen);
@@ -508,6 +518,9 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 	case kDCBias:
 		strcpy (label, "LSB");
 		break;
+	case kHighpassGain:
+		strcpy (label, "F");
+		break;
 	case kDitherGain:
 		strcpy (label, "F");
 		break;
@@ -553,6 +566,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kHighpassDither:
 		strcpy (text, "HighpassDither");
+		break;
+	case kHighpassGain:
+		strcpy (text, "HighpassGain");
 		break;
 	case kDitherGain:
 		strcpy (text, "DitherGain");
