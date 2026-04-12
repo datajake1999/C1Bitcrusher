@@ -4,8 +4,8 @@ void C1Bitcrusher::Reset()
 {
 	if (SeedWithTime >= 0.5)
 	{
-		srand(time(0));
-		init_genrand(time(0));
+		srand(time(NULL));
+		init_genrand(time(NULL));
 	}
 	else
 	{
