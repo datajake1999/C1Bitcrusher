@@ -1,4 +1,4 @@
-#include "C1Bitcrusher.h"
+#include "vstplug.h"
 
 AudioEffect* createEffectInstance (audioMasterCallback audioMaster)
 {

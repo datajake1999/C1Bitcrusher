@@ -1,12 +1,8 @@
-#ifndef C1Bitcrusher_H
-#define C1Bitcrusher_H
+#ifndef VSTPLUG_H
+#define VSTPLUG_H
 
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
-#include "mt19937ar.h"
 #include "public.sdk/source/vst2.x/audioeffectx.h"
+#include "C1.h"
 
 enum
 {
@@ -45,12 +41,6 @@ enum
 	kNumParams
 };
 
-struct ChannelState
-{
-	double LastDither;
-	double error[9];
-};
-
 class C1Bitcrusher : public AudioEffectX
 {
 public:
@@ -72,52 +62,10 @@ public:
 	virtual void processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames);
 	virtual void processDoubleReplacing (double** inputs, double** outputs, VstInt32 sampleFrames);
 private:
-	float Disable;
-	float InGain;
-	float OutGain;
-	float BitDepth;
-	float DCBias;
-	float Dither;
-	float DitherType;
-	float InvertDither;
-	float HighpassDither;
-	float HighpassGain;
-	float DitherGain;
-	float MersenneTwister;
-	float MersenneGenerator;
-	float Seed;
-	float SeedWithTime;
-	float NoiseShaping;
-	float NoiseShapingFilter;
-	float PsychoacousticCurve;
-	float NoiseShapingGain;
-	float AutoBlank;
-	float Clip;
-	float ClipThreshold;
-	float Quantize;
-	float QuantizationMode;
-	float Clip0dB;
-	float DitherInError;
-	float OnlyError;
 	char ProgramName[32];
-	double scale;
-	ChannelState chan[2];
-	double coeffs[9];
-	int n;
-	void Reset();
-	double PRNG();
-	double RPDF();
-	double TPDF();
-	double AWGN_generator();
-	double DitherNoise();
-	double DitherSample(double sample, double *lastNoise);
-	double NoiseShapeSampleFirstOrder(double sample, ChannelState *cs);
-	double NoiseShapeSampleSecondOrder(double sample, ChannelState *cs);
-	double NoiseShapeSamplePsycho(double sample, ChannelState *cs);
-	double DCSample(double sample);
-	double ClipSample(double sample);
-	double QuantizeSample(double sample);
-	double ProcessSample(double sample, int channel);
+	C1Settings settings;
+	C1State state;
+	C1ChannelState channel[2];
 };
 
 #endif

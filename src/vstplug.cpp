@@ -1,5 +1,4 @@
-#include "C1Bitcrusher.h"
-#include "psycho.h"
+#include "vstplug.h"
 
 C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 : AudioEffectX (audioMaster, kNumPrograms, kNumParams)
@@ -8,40 +7,13 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	setNumInputs (2);	// stereo input
 	setNumOutputs (2);	// stereo output
 	setUniqueID ('C1BC');	// identify
-	Disable = 0;
-	InGain = 1;
-	OutGain = 1;
-	BitDepth = 16;
-	DCBias = 0;
-	Dither = 1;
-	DitherType = 1;
-	InvertDither = 0;
-	HighpassDither = 0;
-	HighpassGain = 1;
-	DitherGain = 1;
-	MersenneTwister = 1;
-	MersenneGenerator = 1;
-	Seed = 0;
-	SeedWithTime = 0;
-	NoiseShaping = 0;
-	NoiseShapingFilter = 1;
-	PsychoacousticCurve = 1;
-	NoiseShapingGain = 1;
-	AutoBlank = 0;
-	Clip = 0;
-	ClipThreshold = 1;
-	Quantize = 1;
-	QuantizationMode = 1;
-	Clip0dB = 1;
-	DitherInError = 1;
-	OnlyError = 0;
-	scale = pow((double)2, (double)BitDepth) / 2;
-	strcpy (ProgramName, "Default");
 	canProcessReplacing ();
 	canDoubleReplacing ();
-	Reset();
-	n = 9;
-	memcpy(coeffs, psycho9, sizeof(psycho9));
+	strcpy (ProgramName, "Default");
+	C1Init(&state);
+	C1GetSettings(&state, &settings);
+	C1ResetChannel(&channel[0]);
+	C1ResetChannel(&channel[1]);
 }
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
@@ -49,216 +21,176 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	switch(index)
 	{
 	case kDisable:
-		Disable = value;
+		settings.Disable = (int)value;
 		break;
 	case kInGain:
-		InGain = value;
+		settings.InGain = value;
 		break;
 	case kOutGain:
-		OutGain = value;
+		settings.OutGain = value;
 		break;
 	case kBitDepth:
-		BitDepth = value*32;
-		if (BitDepth > 32)
-		{
-			BitDepth = 32;
-		}
-		else if (BitDepth < 1)
-		{
-			BitDepth = 1;
-		}
-		scale = pow((double)2, (double)BitDepth) / 2;
+		settings.BitDepth = value*32.0f;
 		break;
 	case kDCBias:
-		DCBias = (value*4.0f)-2.0f;
-		if (DCBias > 2)
-		{
-			DCBias = 2;
-		}
-		else if (DCBias < -2)
-		{
-			DCBias = -2;
-		}
+		settings.DCBias = (value*4.0f)-2.0f;
 		break;
 	case kDither:
-		Dither = value;
+		settings.Dither = (int)value;
 		break;
 	case kDitherType:
-		DitherType = value;
+		settings.DitherType = (int)(value*(kNumDitherTypes-1));
 		break;
 	case kInvertDither:
-		InvertDither = value;
+		settings.InvertDither = (int)value;
 		break;
 	case kHighpassDither:
-		HighpassDither = value;
+		settings.HighpassDither = (int)value;
 		break;
 	case kHighpassGain:
-		HighpassGain = value;
+		settings.HighpassGain = value;
 		break;
 	case kDitherGain:
-		DitherGain = value;
+		settings.DitherGain = value;
 		break;
 	case kMersenneTwister:
-		MersenneTwister = value;
+		settings.MersenneTwister = (int)value;
 		break;
 	case kMersenneGenerator:
-		MersenneGenerator = value;
+		settings.MersenneGenerator = (int)(value*(kNumMersenneGenerators-1));
 		break;
 	case kSeed:
-		Seed = value*1000;
-		if (Seed < 0)
-		{
-			Seed = 0;
-		}
+		settings.Seed = (int)(value*1000);
 		break;
 	case kSeedWithTime:
-		SeedWithTime = value;
+		settings.SeedWithTime = (int)value;
 		break;
 	case kNoiseShaping:
-		NoiseShaping = value;
+		settings.NoiseShaping = (int)value;
 		break;
 	case kNoiseShapingFilter:
-		NoiseShapingFilter = value;
+		settings.NoiseShapingFilter = (int)(value*(kNumNoiseShapingFilters-1));
 		break;
 	case kPsychoacousticCurve:
-		PsychoacousticCurve = value;
-		n = 0;
-		memset(coeffs, 0, sizeof(coeffs));
-		if (PsychoacousticCurve >= 0.0 && PsychoacousticCurve < 0.25)
-		{
-			n = 3;
-			memcpy(coeffs, psycho3, sizeof(psycho3));
-		}
-		else if (PsychoacousticCurve >= 0.25 && PsychoacousticCurve < 0.5)
-		{
-			n = 5;
-			memcpy(coeffs, psycho5, sizeof(psycho5));
-		}
-		else
-		{
-			n = 9;
-			memcpy(coeffs, psycho9, sizeof(psycho9));
-		}
+		settings.PsychoacousticCurve = (int)(value*(kNumPsychoacousticCurves-1));
 		break;
 	case kNoiseShapingGain:
-		NoiseShapingGain = value;
+		settings.NoiseShapingGain = value;
 		break;
 	case kAutoBlank:
-		AutoBlank = value;
+		settings.AutoBlank = (int)value;
 		break;
 	case kClip:
-		Clip = value;
+		settings.Clip = (int)value;
 		break;
 	case kClipThreshold:
-		ClipThreshold = value;
-		if (ClipThreshold < 0)
-		{
-			ClipThreshold = 0;
-		}
+		settings.ClipThreshold = value;
 		break;
 	case kQuantize:
-		Quantize = value;
+		settings.Quantize = (int)value;
 		break;
 	case kQuantizationMode:
-		QuantizationMode = value;
+		settings.QuantizationMode = (int)(value*(kNumQuantizationModes-1));
 		break;
 	case kClip0dB:
-		Clip0dB = value;
+		settings.Clip0dB = (int)value;
 		break;
 	case kDitherInError:
-		DitherInError = value;
+		settings.DitherInError = (int)value;
 		break;
 	case kOnlyError:
-		OnlyError = value;
+		settings.OnlyError = (int)value;
 		break;
 	}
+	C1LoadSettings(&state, &settings);
 }
 
 float C1Bitcrusher::getParameter (VstInt32 index)
 {
 	float value = 0;
+	C1GetSettings(&state, &settings);
 	switch(index)
 	{
 	case kDisable:
-		value = Disable;
+		value = settings.Disable;
 		break;
 	case kInGain:
-		value = InGain;
+		value = (float)settings.InGain;
 		break;
 	case kOutGain:
-		value = OutGain;
+		value = (float)settings.OutGain;
 		break;
 	case kBitDepth:
-		value = BitDepth/32;
+		value = settings.BitDepth/32.0f;
 		break;
 	case kDCBias:
-		value = (DCBias+2.0f)/4.0f;
+		value = (settings.DCBias+2.0f)/4.0f;
 		break;
 	case kDither:
-		value = Dither;
+		value = settings.Dither;
 		break;
 	case kDitherType:
-		value = DitherType;
+		value = settings.DitherType/(float)(kNumDitherTypes-1);
 		break;
 	case kInvertDither:
-		value = InvertDither;
+		value = settings.InvertDither;
 		break;
 	case kHighpassDither:
-		value = HighpassDither;
+		value = settings.HighpassDither;
 		break;
 	case kHighpassGain:
-		value = HighpassGain;
+		value = (float)settings.HighpassGain;
 		break;
 	case kDitherGain:
-		value = DitherGain;
+		value = (float)settings.DitherGain;
 		break;
 	case kMersenneTwister:
-		value = MersenneTwister;
+		value = settings.MersenneTwister;
 		break;
 	case kMersenneGenerator:
-		value = MersenneGenerator;
+		value = settings.MersenneGenerator/(float)(kNumMersenneGenerators-1);
 		break;
 	case kSeed:
-		value = Seed/1000;
+		value = settings.Seed/1000.0f;
 		break;
 	case kSeedWithTime:
-		value = SeedWithTime;
+		value = settings.SeedWithTime;
 		break;
 	case kNoiseShaping:
-		value = NoiseShaping;
+		value = settings.NoiseShaping;
 		break;
 	case kNoiseShapingFilter:
-		value = NoiseShapingFilter;
+		value = settings.NoiseShapingFilter/(float)(kNumNoiseShapingFilters-1);
 		break;
 	case kPsychoacousticCurve:
-		value = PsychoacousticCurve;
+		value = settings.PsychoacousticCurve/(float)(kNumPsychoacousticCurves-1);
 		break;
 	case kNoiseShapingGain:
-		value = NoiseShapingGain;
+		value = (float)settings.NoiseShapingGain;
 		break;
 	case kAutoBlank:
-		value = AutoBlank;
+		value = settings.AutoBlank;
 		break;
 	case kClip:
-		value = Clip;
+		value = settings.Clip;
 		break;
 	case kClipThreshold:
-		value = ClipThreshold;
+		value = (float)settings.ClipThreshold;
 		break;
 	case kQuantize:
-		value = Quantize;
+		value = settings.Quantize;
 		break;
 	case kQuantizationMode:
-		value = QuantizationMode;
+		value = settings.QuantizationMode/(float)(kNumQuantizationModes-1);
 		break;
 	case kClip0dB:
-		value = Clip0dB;
+		value = settings.Clip0dB;
 		break;
 	case kDitherInError:
-		value = DitherInError;
+		value = settings.DitherInError;
 		break;
 	case kOnlyError:
-		value = OnlyError;
+		value = settings.OnlyError;
 		break;
 	}
 	return value;
@@ -269,7 +201,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	switch(index)
 	{
 	case kDisable:
-		if (Disable >= 0.5)
+		if (settings.Disable)
 		{
 			strcpy (text, "ON");
 		}
@@ -279,19 +211,19 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kInGain:
-		float2string (InGain, text, kVstMaxParamStrLen);
+		float2string ((float)settings.InGain, text, kVstMaxParamStrLen);
 		break;
 	case kOutGain:
-		float2string (OutGain, text, kVstMaxParamStrLen);
+		float2string ((float)settings.OutGain, text, kVstMaxParamStrLen);
 		break;
 	case kBitDepth:
-		float2string (BitDepth, text, kVstMaxParamStrLen);
+		float2string ((float)settings.BitDepth, text, kVstMaxParamStrLen);
 		break;
 	case kDCBias:
-		float2string (DCBias, text, kVstMaxParamStrLen);
+		float2string ((float)settings.DCBias, text, kVstMaxParamStrLen);
 		break;
 	case kDither:
-		if (Dither >= 0.5)
+		if (settings.Dither)
 		{
 			strcpy (text, "ON");
 		}
@@ -301,21 +233,21 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kDitherType:
-		if (DitherType >= 0.0 && DitherType < 0.25)
+		switch(settings.DitherType)
 		{
+		case kRectangular:
 			strcpy (text, "Rectangular");
-		}
-		else if (DitherType >= 0.25 && DitherType < 0.5)
-		{
+			break;
+		case kTriangular:
 			strcpy (text, "Triangular");
-		}
-		else
-		{
+			break;
+		case kGaussian:
 			strcpy (text, "Gaussian");
+			break;
 		}
 		break;
 	case kInvertDither:
-		if (InvertDither >= 0.5)
+		if (settings.InvertDither)
 		{
 			strcpy (text, "ON");
 		}
@@ -325,7 +257,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kHighpassDither:
-		if (HighpassDither >= 0.5)
+		if (settings.HighpassDither)
 		{
 			strcpy (text, "ON");
 		}
@@ -335,13 +267,13 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kHighpassGain:
-		float2string (HighpassGain, text, kVstMaxParamStrLen);
+		float2string ((float)settings.HighpassGain, text, kVstMaxParamStrLen);
 		break;
 	case kDitherGain:
-		float2string (DitherGain, text, kVstMaxParamStrLen);
+		float2string ((float)settings.DitherGain, text, kVstMaxParamStrLen);
 		break;
 	case kMersenneTwister:
-		if (MersenneTwister >= 0.5)
+		if (settings.MersenneTwister)
 		{
 			strcpy (text, "ON");
 		}
@@ -351,24 +283,24 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kMersenneGenerator:
-		if (MersenneGenerator >= 0.0 && MersenneGenerator < 0.25)
+		switch(settings.MersenneGenerator)
 		{
+		case kGenerator1:
 			strcpy (text, "Generator1");
-		}
-		else if (MersenneGenerator >= 0.25 && MersenneGenerator < 0.5)
-		{
+			break;
+		case kGenerator2:
 			strcpy (text, "Generator2");
-		}
-		else
-		{
+			break;
+		case kGenerator3:
 			strcpy (text, "Generator3");
+			break;
 		}
 		break;
 	case kSeed:
-		int2string ((int)Seed, text, kVstMaxParamStrLen);
+		int2string (settings.Seed, text, kVstMaxParamStrLen);
 		break;
 	case kSeedWithTime:
-		if (SeedWithTime >= 0.5)
+		if (settings.SeedWithTime)
 		{
 			strcpy (text, "ON");
 		}
@@ -378,7 +310,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kNoiseShaping:
-		if (NoiseShaping >= 0.5)
+		if (settings.NoiseShaping)
 		{
 			strcpy (text, "ON");
 		}
@@ -388,38 +320,38 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kNoiseShapingFilter:
-		if (NoiseShapingFilter >= 0.0 && NoiseShapingFilter < 0.25)
+		switch(settings.NoiseShapingFilter)
 		{
+		case kFirstOrder:
 			strcpy (text, "First Order");
-		}
-		else if (NoiseShapingFilter >= 0.25 && NoiseShapingFilter < 0.5)
-		{
+			break;
+		case kSecondOrder:
 			strcpy (text, "Second Order");
-		}
-		else
-		{
+			break;
+		case kPsychoacoustic:
 			strcpy (text, "Psychoacoustic");
+			break;
 		}
 		break;
 	case kPsychoacousticCurve:
-		if (PsychoacousticCurve >= 0.0 && PsychoacousticCurve < 0.25)
+		switch(settings.PsychoacousticCurve)
 		{
+		case kWannamaker3Tap:
 			strcpy (text, "Wannamaker 3-tap");
-		}
-		else if (PsychoacousticCurve >= 0.25 && PsychoacousticCurve < 0.5)
-		{
+			break;
+		case kLipshitz:
 			strcpy (text, "Lipshitz");
-		}
-		else
-		{
+			break;
+		case kWannamaker9Tap:
 			strcpy (text, "Wannamaker 9-tap");
+			break;
 		}
 		break;
 	case kNoiseShapingGain:
-		float2string (NoiseShapingGain, text, kVstMaxParamStrLen);
+		float2string ((float)settings.NoiseShapingGain, text, kVstMaxParamStrLen);
 		break;
 	case kAutoBlank:
-		if (AutoBlank >= 0.5)
+		if (settings.AutoBlank)
 		{
 			strcpy (text, "ON");
 		}
@@ -429,7 +361,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kClip:
-		if (Clip >= 0.5)
+		if (settings.Clip)
 		{
 			strcpy (text, "ON");
 		}
@@ -439,10 +371,10 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kClipThreshold:
-		dB2string (ClipThreshold, text, kVstMaxParamStrLen);
+		dB2string ((float)settings.ClipThreshold, text, kVstMaxParamStrLen);
 		break;
 	case kQuantize:
-		if (Quantize >= 0.5)
+		if (settings.Quantize)
 		{
 			strcpy (text, "ON");
 		}
@@ -452,25 +384,24 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kQuantizationMode:
-		if (QuantizationMode >= 0.0 && QuantizationMode < 0.25)
+		switch(settings.QuantizationMode)
 		{
+		case kFloor:
 			strcpy (text, "Floor");
-		}
-		else if (QuantizationMode >= 0.25 && QuantizationMode < 0.5)
-		{
+			break;
+		case kCeiling:
 			strcpy (text, "Ceiling");
-		}
-		else if (QuantizationMode >= 0.5 && QuantizationMode < 0.75)
-		{
+			break;
+		case kTruncate:
 			strcpy (text, "Truncate");
-		}
-		else
-		{
+			break;
+		case kRound:
 			strcpy (text, "Round");
+			break;
 		}
 		break;
 	case kClip0dB:
-		if (Clip0dB >= 0.5)
+		if (settings.Clip0dB)
 		{
 			strcpy (text, "ON");
 		}
@@ -480,7 +411,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kDitherInError:
-		if (DitherInError >= 0.5)
+		if (settings.DitherInError)
 		{
 			strcpy (text, "ON");
 		}
@@ -490,7 +421,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kOnlyError:
-		if (OnlyError >= 0.5)
+		if (settings.OnlyError)
 		{
 			strcpy (text, "ON");
 		}
@@ -674,7 +605,9 @@ VstPlugCategory C1Bitcrusher::getPlugCategory ()
 
 void C1Bitcrusher::resume ()
 {
-	Reset();
+	C1ResetPRNG(&state);
+	C1ResetChannel(&channel[0]);
+	C1ResetChannel(&channel[1]);
 }
 
 void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 sampleFrames)
@@ -688,14 +621,14 @@ void C1Bitcrusher::processReplacing (float** inputs, float** outputs, VstInt32 s
 	{
 		for (i = 0; i < sampleFrames; i++)
 		{
-			out1[i] = (float)ProcessSample(in1[i], 0);
+			out1[i] = (float)C1ProcessSample(&state, &channel[0], in1[i]);
 		}
 	}
 	if (in2 && out2)
 	{
 		for (i = 0; i < sampleFrames; i++)
 		{
-			out2[i] = (float)ProcessSample(in2[i], 1);
+			out2[i] = (float)C1ProcessSample(&state, &channel[1], in2[i]);
 		}
 	}
 }
@@ -711,14 +644,14 @@ void C1Bitcrusher::processDoubleReplacing (double** inputs, double** outputs, Vs
 	{
 		for (i = 0; i < sampleFrames; i++)
 		{
-			out1[i] = ProcessSample(in1[i], 0);
+			out1[i] = C1ProcessSample(&state, &channel[0], in1[i]);
 		}
 	}
 	if (in2 && out2)
 	{
 		for (i = 0; i < sampleFrames; i++)
 		{
-			out2[i] = ProcessSample(in2[i], 1);
+			out2[i] = C1ProcessSample(&state, &channel[1], in2[i]);
 		}
 	}
 }
