@@ -499,7 +499,7 @@ double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 			quantized = QuantizeSample(state, sample);
 		}
 		error = quantized - sample;
-		if (state->settings.NoiseShaping)
+		if (state->settings.NoiseShaping && cs)
 		{
 			switch(state->settings.NoiseShapingFilter)
 			{
