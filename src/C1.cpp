@@ -343,7 +343,8 @@ static double NoiseShapeSampleSecondOrder(C1State *state, C1ChannelState *cs, do
 	{
 		return 0;
 	}
-	sample = sample - (((cs->error[0] * 2) - cs->error[1]) * state->settings.NoiseShapingGain);
+	sample = sample - (cs->error[0] * (2 * state->settings.NoiseShapingGain));
+	sample = sample - (cs->error[1] * (-1 * state->settings.NoiseShapingGain));
 	return sample;
 }
 
