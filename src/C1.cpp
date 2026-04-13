@@ -319,36 +319,7 @@ static double DitherSample(C1State *state, C1ChannelState *cs, double sample)
 	return sample;
 }
 
-static double NoiseShapeSampleFirstOrder(C1State *state, C1ChannelState *cs, double sample)
-{
-	if (!state || !cs)
-	{
-		return sample;
-	}
-	if (sample == 0 && state->settings.AutoBlank)
-	{
-		return 0;
-	}
-	sample = sample - (cs->error[0] * state->settings.NoiseShapingGain);
-	return sample;
-}
-
-static double NoiseShapeSampleSecondOrder(C1State *state, C1ChannelState *cs, double sample)
-{
-	if (!state || !cs)
-	{
-		return sample;
-	}
-	if (sample == 0 && state->settings.AutoBlank)
-	{
-		return 0;
-	}
-	sample = sample - (cs->error[0] * (2 * state->settings.NoiseShapingGain));
-	sample = sample - (cs->error[1] * (-1 * state->settings.NoiseShapingGain));
-	return sample;
-}
-
-static double NoiseShapeSamplePsycho(C1State *state, C1ChannelState *cs, double sample)
+static double NoiseShapeSample(C1State *state, C1ChannelState *cs, double sample)
 {
 	int i;
 	if (!state || !cs)
@@ -359,9 +330,26 @@ static double NoiseShapeSamplePsycho(C1State *state, C1ChannelState *cs, double 
 	{
 		return 0;
 	}
-	for (i = 0; i < state->num_coeffs; i++)
+	switch(state->settings.NoiseShapingFilter)
 	{
-		sample = sample - (cs->error[i] * (state->coeffs[i] * state->settings.NoiseShapingGain));
+	case kFirstOrder:
+		sample = sample - (cs->error[0] * state->settings.NoiseShapingGain);
+		break;
+	case kSecondOrder:
+		sample = sample - (cs->error[0] * (2 * state->settings.NoiseShapingGain));
+		sample = sample - (cs->error[1] * (-1 * state->settings.NoiseShapingGain));
+		cs->error[1] = cs->error[0];
+		break;
+	case kPsychoacoustic:
+		for (i = 0; i < state->num_coeffs; i++)
+		{
+			sample = sample - (cs->error[i] * (state->coeffs[i] * state->settings.NoiseShapingGain));
+		}
+		for (i = state->num_coeffs-1; i >= 1; i--)
+		{
+			cs->error[i] = cs->error[i-1];
+		}
+		break;
 	}
 	return sample;
 }
@@ -477,18 +465,7 @@ double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 		double error;
 		if (state->settings.NoiseShaping)
 		{
-			switch(state->settings.NoiseShapingFilter)
-			{
-			case kFirstOrder:
-				sample = NoiseShapeSampleFirstOrder(state, cs, sample);
-				break;
-			case kSecondOrder:
-				sample = NoiseShapeSampleSecondOrder(state, cs, sample);
-				break;
-			case kPsychoacoustic:
-				sample = NoiseShapeSamplePsycho(state, cs, sample);
-				break;
-			}
+			sample = NoiseShapeSample(state, cs, sample);
 		}
 		if (state->settings.Dither && state->settings.DitherInError)
 		{
@@ -499,20 +476,8 @@ double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 			quantized = QuantizeSample(state, sample);
 		}
 		error = quantized - sample;
-		if (state->settings.NoiseShaping && cs)
+		if (cs)
 		{
-			switch(state->settings.NoiseShapingFilter)
-			{
-			case kSecondOrder:
-				cs->error[1] = cs->error[0];
-				break;
-			case kPsychoacoustic:
-				for (i = state->num_coeffs-1; i >= 1; i--)
-				{
-					cs->error[i] = cs->error[i-1];
-				}
-				break;
-			}
 			cs->error[0] = error;
 		}
 		if (state->settings.OnlyError)
