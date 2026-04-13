@@ -1,5 +1,5 @@
-@ECHO OFF
-set path="C:\Program Files\7-Zip";"C:\Program Files\Inno Setup 5"
+@echo off
+set path="C:\Program Files\7-Zip";"C:\Program Files\Inno Setup 5";%path%
 call "c:\program files\microsoft visual studio 8\vc\bin\vcvars32.bat"
 call "C:\program files\Microsoft Platform SDK\SetEnv.Cmd" /SRV32 /RETAIL
 cl /nologo -c /D _CRT_SECURE_NO_DEPRECATE /I ".\VST2_SDK" /O2 src\*.cpp VST2_SDK\public.sdk\source\vst2.x\*.cpp
