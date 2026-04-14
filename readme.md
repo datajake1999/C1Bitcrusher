@@ -27,7 +27,7 @@ This is a bitcrusher VST plug-in with an emphasis on accuracy. It processes audi
 * ClipThreshold: Sets the threshold for Clip.
 * Quantize: Enables or disables bit reduction.
 * QuantizationMode: The type of math that is used for quantization. The available options are Floor, Ceiling, Truncate, and Round.
-* Clip0dB: Clips audio that is over 0 dB as part of the quantization process. If this is enabled, the quantized output can fit perfectly in a fixed point format if the output gain isn't changed.
+* Clip0dB: Clips audio that is over 0 dB after the quantization process. If this is enabled, the quantized output can fit perfectly in a fixed point format if the output gain isn't changed.
 * DitherInError: Treats dithering as part of the quantization process. This makes combined dithering and noise shaping more effective.
 * OnlyError: Sends the quantization error to the output instead of the quantized signal.
 * NormalizeError: If OnlyError is enabled, this option normalizes quantization error to -30 dBFS.
