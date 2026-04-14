@@ -101,6 +101,9 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kOnlyError:
 		settings.OnlyError = (int)value;
 		break;
+	case kNormalizeError:
+		settings.NormalizeError = (int)value;
+		break;
 	}
 	C1LoadSettings(&state, &settings);
 }
@@ -191,6 +194,9 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 		break;
 	case kOnlyError:
 		value = settings.OnlyError;
+		break;
+	case kNormalizeError:
+		value = settings.NormalizeError;
 		break;
 	}
 	return value;
@@ -430,6 +436,16 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 			strcpy (text, "OFF");
 		}
 		break;
+	case kNormalizeError:
+		if (settings.NormalizeError)
+		{
+			strcpy (text, "ON");
+		}
+		else
+		{
+			strcpy (text, "OFF");
+		}
+		break;
 	}
 }
 
@@ -551,6 +567,9 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 		break;
 	case kOnlyError:
 		strcpy (text, "OnlyError");
+		break;
+	case kNormalizeError:
+		strcpy (text, "NormalizeError");
 		break;
 	}
 }

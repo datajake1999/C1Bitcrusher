@@ -75,12 +75,14 @@ typedef struct
 	int Clip0dB;
 	int DitherInError;
 	int OnlyError;
+	int NormalizeError;
 }C1Settings;
 
 typedef struct
 {
 	C1Settings settings;
 	double scale;
+	double error_norm_gain;
 	double coeffs[9];
 	int num_coeffs;
 }C1State;

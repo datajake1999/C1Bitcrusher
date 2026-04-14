@@ -70,6 +70,7 @@ void C1Init(C1State *state)
 	settings.Clip0dB = 1;
 	settings.DitherInError = 1;
 	settings.OnlyError = 0;
+	settings.NormalizeError = 0;
 	C1LoadSettings(state, &settings);
 	C1ResetPRNG(state);
 }
@@ -93,6 +94,7 @@ void C1LoadSettings(C1State *state, C1Settings *settings)
 		state->settings.BitDepth = 1;
 	}
 	state->scale = pow(2.0, state->settings.BitDepth) / 2;
+	state->error_norm_gain = pow(10.0, -30.0 / 20.0) / (1.0 / state->scale);
 	state->settings.DCBias = settings->DCBias;
 	if (state->settings.DCBias > 2)
 	{
@@ -147,6 +149,7 @@ void C1LoadSettings(C1State *state, C1Settings *settings)
 	state->settings.Clip0dB = settings->Clip0dB;
 	state->settings.DitherInError = settings->DitherInError;
 	state->settings.OnlyError = settings->OnlyError;
+	state->settings.NormalizeError = settings->NormalizeError;
 }
 
 void C1GetSettings(C1State *state, C1Settings *settings)
@@ -444,7 +447,6 @@ static double QuantizeSample(C1State *state, double sample)
 
 double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 {
-	int i;
 	if (!state || state->settings.Disable)
 	{
 		return sample;
@@ -483,6 +485,10 @@ double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 		if (state->settings.OnlyError)
 		{
 			sample = error;
+			if (state->settings.NormalizeError)
+			{
+				sample = sample * state->error_norm_gain;
+			}
 		}
 		else
 		{

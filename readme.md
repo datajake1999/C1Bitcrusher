@@ -30,6 +30,7 @@ This is a bitcrusher VST plug-in with an emphasis on accuracy. It processes audi
 * Clip0dB: Clips audio that is over 0 dB as part of the quantization process. If this is enabled, the quantized output can fit perfectly in a fixed point format if the output gain isn't changed.
 * DitherInError: Treats dithering as part of the quantization process. This makes combined dithering and noise shaping more effective.
 * OnlyError: Sends the quantization error to the output instead of the quantized signal.
+* NormalizeError: If OnlyError is enabled, this option normalizes quantization error to -30 dBFS.
 
 # Extra Notes
 

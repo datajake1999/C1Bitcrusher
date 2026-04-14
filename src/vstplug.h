@@ -37,6 +37,7 @@ enum
 	kClip0dB,
 	kDitherInError,
 	kOnlyError,
+	kNormalizeError,
 
 	kNumParams
 };
