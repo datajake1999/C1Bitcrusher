@@ -430,17 +430,6 @@ static double QuantizeSample(C1State *state, double sample)
 		}
 		break;
 	}
-	if (state->settings.Clip0dB)
-	{
-		if (sample > state->scale-1)
-		{
-			sample = state->scale-1;
-		}
-		else if (sample < state->scale * -1)
-		{
-			sample = state->scale * -1;
-		}
-	}
 	sample = sample / state->scale;
 	return sample;
 }
@@ -493,6 +482,19 @@ double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 		else
 		{
 			sample = quantized;
+			if (state->settings.Clip0dB)
+			{
+				sample = sample * state->scale;
+				if (sample > state->scale-1)
+				{
+					sample = state->scale-1;
+				}
+				else if (sample < state->scale * -1)
+				{
+					sample = state->scale * -1;
+				}
+				sample = sample / state->scale;
+			}
 		}
 	}
 	sample = sample * state->settings.OutGain;
