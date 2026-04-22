@@ -18,7 +18,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 
 void C1Bitcrusher::setParameter (VstInt32 index, float value)
 {
-	switch(index)
+	switch (index)
 	{
 	case kDisable:
 		settings.Disable = (int)value;
@@ -112,7 +112,7 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 {
 	float value = 0;
 	C1GetSettings(&state, &settings);
-	switch(index)
+	switch (index)
 	{
 	case kDisable:
 		value = settings.Disable;
@@ -204,7 +204,7 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 
 void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 {
-	switch(index)
+	switch (index)
 	{
 	case kDisable:
 		if (settings.Disable)
@@ -239,7 +239,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kDitherType:
-		switch(settings.DitherType)
+		switch (settings.DitherType)
 		{
 		case kRectangular:
 			strcpy (text, "Rectangular");
@@ -289,7 +289,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kMersenneGenerator:
-		switch(settings.MersenneGenerator)
+		switch (settings.MersenneGenerator)
 		{
 		case kGenerator1:
 			strcpy (text, "Generator1");
@@ -326,7 +326,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kNoiseShapingFilter:
-		switch(settings.NoiseShapingFilter)
+		switch (settings.NoiseShapingFilter)
 		{
 		case kFirstOrder:
 			strcpy (text, "First Order");
@@ -340,7 +340,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kPsychoacousticCurve:
-		switch(settings.PsychoacousticCurve)
+		switch (settings.PsychoacousticCurve)
 		{
 		case kWannamaker3Tap:
 			strcpy (text, "Wannamaker 3-tap");
@@ -390,7 +390,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 		}
 		break;
 	case kQuantizationMode:
-		switch(settings.QuantizationMode)
+		switch (settings.QuantizationMode)
 		{
 		case kFloor:
 			strcpy (text, "Floor");
@@ -451,7 +451,7 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 
 void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 {
-	switch(index)
+	switch (index)
 	{
 	case kInGain:
 		strcpy (label, "F");
@@ -485,7 +485,7 @@ void C1Bitcrusher::getParameterLabel (VstInt32 index, char* label)
 
 void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 {
-	switch(index)
+	switch (index)
 	{
 	case kDisable:
 		strcpy (text, "Disable");

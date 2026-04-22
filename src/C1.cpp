@@ -121,7 +121,7 @@ void C1LoadSettings(C1State *state, C1Settings *settings)
 	state->settings.NoiseShaping = settings->NoiseShaping;
 	state->settings.NoiseShapingFilter = settings->NoiseShapingFilter%kNumNoiseShapingFilters;
 	state->settings.PsychoacousticCurve = settings->PsychoacousticCurve%kNumPsychoacousticCurves;
-	switch(state->settings.PsychoacousticCurve)
+	switch (state->settings.PsychoacousticCurve)
 	{
 	case kWannamaker3Tap:
 		state->num_coeffs = 3;
@@ -196,7 +196,7 @@ static double PRNG(C1State *state)
 	}
 	if (state->settings.MersenneTwister)
 	{
-		switch(state->settings.MersenneGenerator)
+		switch (state->settings.MersenneGenerator)
 		{
 		case kGenerator1:
 			return genrand_real1();
@@ -283,7 +283,7 @@ static double DitherSample(C1State *state, C1ChannelState *cs, double sample)
 	{
 		return 0;
 	}
-	switch(state->settings.DitherType)
+	switch (state->settings.DitherType)
 	{
 	case kRectangular:
 		noise = RPDF(state);
@@ -333,7 +333,7 @@ static double NoiseShapeSample(C1State *state, C1ChannelState *cs, double sample
 	{
 		return 0;
 	}
-	switch(state->settings.NoiseShapingFilter)
+	switch (state->settings.NoiseShapingFilter)
 	{
 	case kFirstOrder:
 		sample = sample - (cs->error[0] * state->settings.NoiseShapingGain);
@@ -401,7 +401,7 @@ static double QuantizeSample(C1State *state, double sample)
 		return sample;
 	}
 	sample = sample * state->scale;
-	switch(state->settings.QuantizationMode)
+	switch (state->settings.QuantizationMode)
 	{
 	case kFloor:
 		sample = floor(sample);
