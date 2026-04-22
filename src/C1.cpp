@@ -190,6 +190,7 @@ void C1ResetChannel(C1ChannelState *cs)
 
 static double PRNG(C1State *state)
 {
+	double n = 0;
 	if (!state)
 	{
 		return 0;
@@ -199,18 +200,21 @@ static double PRNG(C1State *state)
 		switch (state->settings.MersenneGenerator)
 		{
 		case kGenerator1:
-			return genrand_real1();
+			n = genrand_real1();
+			break;
 		case kGenerator2:
-			return genrand_real2();
+			n = genrand_real2();
+			break;
 		case kGenerator3:
-			return genrand_real3();
+			n = genrand_real3();
+			break;
 		}
 	}
 	else
 	{
-		return rand() / (double)RAND_MAX;
+		n = rand() / (double)RAND_MAX;
 	}
-	return 0;
+	return n;
 }
 
 static double RPDF(C1State *state)
@@ -274,7 +278,7 @@ static double AWGN_generator(C1State *state)
 
 static double DitherSample(C1State *state, C1ChannelState *cs, double sample)
 {
-	double noise;
+	double noise = 0;
 	if (!state)
 	{
 		return sample;
