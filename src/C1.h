@@ -1,9 +1,7 @@
 #ifndef C1_H
 #define C1_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "rnd.h"
 
 enum
 {
@@ -15,10 +13,11 @@ enum
 
 enum
 {
-	kGenerator1 = 0,
-	kGenerator2,
-	kGenerator3,
-	kNumMersenneGenerators
+	kPCG = 0,
+	kWELL,
+	kGameRand,
+	kXorShift,
+	kNumRandomGenerators
 };
 
 enum
@@ -59,8 +58,7 @@ typedef struct
 	int HighpassDither;
 	double HighpassGain;
 	double DitherGain;
-	int MersenneTwister;
-	int MersenneGenerator;
+	int RandomGenerator;
 	int Seed;
 	int SeedWithTime;
 	int NoiseShaping;
@@ -83,8 +81,13 @@ typedef struct
 	C1Settings settings;
 	double scale;
 	double error_norm_gain;
+	double dc;
 	double coeffs[9];
 	int num_coeffs;
+	rnd_pcg_t pcg_state;
+	rnd_well_t well_state;
+	rnd_gamerand_t gamerand_state;
+	rnd_xorshift_t xorshift_state;
 }C1State;
 
 typedef struct
@@ -93,7 +96,11 @@ typedef struct
 	double error[9];
 }C1ChannelState;
 
-void C1Init(C1State *state);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void C1Init(C1State *state, C1Settings *defaults);
 void C1LoadSettings(C1State *state, C1Settings *settings);
 void C1GetSettings(C1State *state, C1Settings *settings);
 void C1ResetPRNG(C1State *state);

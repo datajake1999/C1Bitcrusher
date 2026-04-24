@@ -14,8 +14,7 @@ This is a bitcrusher VST plug-in with an emphasis on accuracy. It processes audi
 * HighpassDither: Applies a highpass filter to the dither noise.
 * HighpassGain: controls the over all effect of the aforementioned highpass filter.
 * DitherGain: controls the over all effect of dithering.
-* MersenneTwister: Switches to using the Mersenne Twister pseudorandom number generator instead of the PRNG provided by the standard library.
-* MersenneGenerator: The Mersenne Twister generator function to use.
+* RandomGenerator: The pseudorandom number generator to use for dithering. The available options are PCG, WELL, GameRand, and XorShift.
 * Seed: The value that is used to reset the pseudorandom number generators.
 * SeedWithTime: Resets the pseudorandom number generators with the current time. When this is enabled, the value set by Seed is ignored.
 * NoiseShaping: Enables or disables noise shaping.

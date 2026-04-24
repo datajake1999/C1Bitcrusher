@@ -10,8 +10,7 @@ C1Bitcrusher::C1Bitcrusher (audioMasterCallback audioMaster)
 	canProcessReplacing ();
 	canDoubleReplacing ();
 	strcpy (ProgramName, "Default");
-	C1Init(&state);
-	C1GetSettings(&state, &settings);
+	C1Init(&state, &settings);
 	C1ResetChannel(&channel[0]);
 	C1ResetChannel(&channel[1]);
 }
@@ -53,11 +52,8 @@ void C1Bitcrusher::setParameter (VstInt32 index, float value)
 	case kDitherGain:
 		settings.DitherGain = value;
 		break;
-	case kMersenneTwister:
-		settings.MersenneTwister = (int)value;
-		break;
-	case kMersenneGenerator:
-		settings.MersenneGenerator = (int)(value*(kNumMersenneGenerators-1));
+	case kRandomGenerator:
+		settings.RandomGenerator = (int)(value*(kNumRandomGenerators-1));
 		break;
 	case kSeed:
 		settings.Seed = (int)(value*1000);
@@ -147,11 +143,8 @@ float C1Bitcrusher::getParameter (VstInt32 index)
 	case kDitherGain:
 		value = (float)settings.DitherGain;
 		break;
-	case kMersenneTwister:
-		value = settings.MersenneTwister;
-		break;
-	case kMersenneGenerator:
-		value = settings.MersenneGenerator/(float)(kNumMersenneGenerators-1);
+	case kRandomGenerator:
+		value = settings.RandomGenerator/(float)(kNumRandomGenerators-1);
 		break;
 	case kSeed:
 		value = settings.Seed/1000.0f;
@@ -278,27 +271,20 @@ void C1Bitcrusher::getParameterDisplay (VstInt32 index, char* text)
 	case kDitherGain:
 		float2string ((float)settings.DitherGain, text, kVstMaxParamStrLen);
 		break;
-	case kMersenneTwister:
-		if (settings.MersenneTwister)
+	case kRandomGenerator:
+		switch (settings.RandomGenerator)
 		{
-			strcpy (text, "ON");
-		}
-		else
-		{
-			strcpy (text, "OFF");
-		}
-		break;
-	case kMersenneGenerator:
-		switch (settings.MersenneGenerator)
-		{
-		case kGenerator1:
-			strcpy (text, "Generator1");
+		case kPCG:
+			strcpy (text, "PCG");
 			break;
-		case kGenerator2:
-			strcpy (text, "Generator2");
+		case kWELL:
+			strcpy (text, "WELL");
 			break;
-		case kGenerator3:
-			strcpy (text, "Generator3");
+		case kGameRand:
+			strcpy (text, "GameRand");
+			break;
+		case kXorShift:
+			strcpy (text, "XorShift");
 			break;
 		}
 		break;
@@ -520,11 +506,8 @@ void C1Bitcrusher::getParameterName (VstInt32 index, char* text)
 	case kDitherGain:
 		strcpy (text, "DitherGain");
 		break;
-	case kMersenneTwister:
-		strcpy (text, "MersenneTwister");
-		break;
-	case kMersenneGenerator:
-		strcpy (text, "MersenneGenerator");
+	case kRandomGenerator:
+		strcpy (text, "RandomGenerator");
 		break;
 	case kSeed:
 		strcpy (text, "Seed");

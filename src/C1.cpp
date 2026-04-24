@@ -1,8 +1,7 @@
-#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <time.h>
-#include "mt19937ar.h"
+#define RND_IMPLEMENTATION
 #include "C1.h"
 
 static const double psycho3[3] =
@@ -34,7 +33,7 @@ static const double psycho9[9] =
 	0.0847
 };
 
-void C1Init(C1State *state)
+void C1Init(C1State *state, C1Settings *defaults)
 {
 	C1Settings settings;
 	if (!state)
@@ -54,8 +53,7 @@ void C1Init(C1State *state)
 	settings.HighpassDither = 0;
 	settings.HighpassGain = 1;
 	settings.DitherGain = 1;
-	settings.MersenneTwister = 1;
-	settings.MersenneGenerator = kGenerator3;
+	settings.RandomGenerator = kPCG;
 	settings.Seed = 0;
 	settings.SeedWithTime = 0;
 	settings.NoiseShaping = 0;
@@ -72,6 +70,10 @@ void C1Init(C1State *state)
 	settings.OnlyError = 0;
 	settings.NormalizeError = 0;
 	C1LoadSettings(state, &settings);
+	if (defaults)
+	{
+		C1GetSettings(state, defaults);
+	}
 	C1ResetPRNG(state);
 }
 
@@ -104,14 +106,22 @@ void C1LoadSettings(C1State *state, C1Settings *settings)
 	{
 		state->settings.DCBias = -2;
 	}
+	state->dc = state->settings.DCBias / state->scale;
+	if (state->dc > 1)
+	{
+		state->dc = 1;
+	}
+	else if (state->dc < -1)
+	{
+		state->dc = -1;
+	}
 	state->settings.Dither = settings->Dither;
 	state->settings.DitherType = settings->DitherType%kNumDitherTypes;
 	state->settings.InvertDither = settings->InvertDither;
 	state->settings.HighpassDither = settings->HighpassDither;
 	state->settings.HighpassGain = settings->HighpassGain;
 	state->settings.DitherGain = settings->DitherGain;
-	state->settings.MersenneTwister = settings->MersenneTwister;
-	state->settings.MersenneGenerator = settings->MersenneGenerator%kNumMersenneGenerators;
+	state->settings.RandomGenerator = settings->RandomGenerator%kNumRandomGenerators;
 	state->settings.Seed = settings->Seed;
 	if (state->settings.Seed < 0)
 	{
@@ -163,20 +173,23 @@ void C1GetSettings(C1State *state, C1Settings *settings)
 
 void C1ResetPRNG(C1State *state)
 {
+	int seed;
 	if (!state)
 	{
 		return;
 	}
 	if (state->settings.SeedWithTime )
 	{
-		srand(time(NULL));
-		init_genrand(time(NULL));
+		seed = time(NULL);
 	}
 	else
 	{
-		srand(state->settings.Seed);
-		init_genrand(state->settings.Seed);
+		seed = state->settings.Seed;
 	}
+	rnd_pcg_seed(&state->pcg_state, seed);
+	rnd_well_seed(&state->well_state, seed);
+	rnd_gamerand_seed(&state->gamerand_state, seed);
+	rnd_xorshift_seed(&state->xorshift_state, seed);
 }
 
 void C1ResetChannel(C1ChannelState *cs)
@@ -195,24 +208,20 @@ static double PRNG(C1State *state)
 	{
 		return 0;
 	}
-	if (state->settings.MersenneTwister)
+	switch (state->settings.RandomGenerator)
 	{
-		switch (state->settings.MersenneGenerator)
-		{
-		case kGenerator1:
-			n = genrand_real1();
-			break;
-		case kGenerator2:
-			n = genrand_real2();
-			break;
-		case kGenerator3:
-			n = genrand_real3();
-			break;
-		}
-	}
-	else
-	{
-		n = rand() / (double)RAND_MAX;
+	case kPCG:
+		n = rnd_pcg_nextf(&state->pcg_state);
+		break;
+	case kWELL:
+		n = rnd_well_nextf(&state->well_state);
+		break;
+	case kGameRand:
+		n = rnd_gamerand_nextf(&state->gamerand_state);
+		break;
+	case kXorShift:
+		n = rnd_xorshift_nextf(&state->xorshift_state);
+		break;
 	}
 	return n;
 }
@@ -361,43 +370,6 @@ static double NoiseShapeSample(C1State *state, C1ChannelState *cs, double sample
 	return sample;
 }
 
-static double DCSample(C1State *state, double sample)
-{
-	double DC;
-	if (!state)
-	{
-		return sample;
-	}
-	DC = state->settings.DCBias / state->scale;
-	if (DC > 1)
-	{
-		DC = 1;
-	}
-	else if (DC < -1)
-	{
-		DC = -1;
-	}
-	sample = sample + DC;
-	return sample;
-}
-
-static double ClipSample(C1State *state, double sample)
-{
-	if (!state)
-	{
-		return sample;
-	}
-	if (sample > state->settings.ClipThreshold)
-	{
-		sample = state->settings.ClipThreshold;
-	}
-	else if (sample < state->settings.ClipThreshold * -1)
-	{
-		sample = state->settings.ClipThreshold * -1;
-	}
-	return sample;
-}
-
 static double QuantizeSample(C1State *state, double sample)
 {
 	if (!state)
@@ -445,14 +417,21 @@ double C1ProcessSample(C1State *state, C1ChannelState *cs, double sample)
 		return sample;
 	}
 	sample = sample * state->settings.InGain;
-	sample = DCSample(state, sample);
+	sample = sample + state->dc;
 	if (state->settings.Dither && !state->settings.DitherInError)
 	{
 		sample = DitherSample(state, cs, sample);
 	}
 	if (state->settings.Clip)
 	{
-		sample = ClipSample(state, sample);
+		if (sample > state->settings.ClipThreshold)
+		{
+			sample = state->settings.ClipThreshold;
+		}
+		else if (sample < state->settings.ClipThreshold * -1)
+		{
+			sample = state->settings.ClipThreshold * -1;
+		}
 	}
 	if (state->settings.Quantize)
 	{
